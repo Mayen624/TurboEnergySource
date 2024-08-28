@@ -1,0 +1,44 @@
+---
+import MainLayout from "@/layouts/MainLayout.astro";
+import HeroSection from "@/components/sections/landing/HeroSection.astro";
+import heroImage from "@images/ingeniera.jpg";
+import { SITE } from "@data/constants";
+
+const pageTitle: string = `About | ${SITE.title}`;
+---
+
+<MainLayout
+  title={pageTitle}
+  structuredData={{
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": "https://screwfast.uk/contact",
+    "url": "https://screwfast.uk/contact",
+    "name": "About us | Turbo Energy Source",
+    "description":
+      "Have questions or want to discuss a project? Reach out, and let's craft the perfect solution with our tools and services.",
+    "isPartOf": {
+      "@type": "WebSite",
+      "url": "https://screwfast.uk",
+      "name": "TurboEnergy",
+      "description":
+        "ScrewFast offers top-tier hardware tools and expert construction services to meet all your project needs.",
+    },
+    "inLanguage": "en-US"
+  }}
+>
+
+<div class="mx-auto mt-10 max-w-2xl lg:max-w-5xl">
+    <div class="text-center">
+      <h1
+        class="text-balance text-2xl font-bold tracking-tight text-neutral-800 dark:text-neutral-200 md:text-4xl md:leading-tight"
+      >
+        {'About us'}
+      </h1>
+      <p class="mt-1 text-pretty text-neutral-600 dark:text-neutral-400">
+        {'Contacta y consultanos la informacion que nesecites sobre nuestros servicios y productos'}
+      </p>
+</div>
+
+  
+</MainLayout>
