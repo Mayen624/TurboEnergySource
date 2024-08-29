@@ -1,0 +1,73 @@
+---
+import Navbar from "@components/sections/navbar&footer/Navbar.astro";
+import Header from "@/components/admin/Header.astro";
+import Sidebar from "@/components/admin/Sidebar.astro";
+
+const {title, lang = 'es'} = Astro.props
+
+interface Props {
+  title?: string;
+  lang?: string
+}
+
+---
+
+<html lang={lang} class="scrollbar-hide lenis lenis-smooth scroll-pt-16">
+  <head>
+
+    <!-- Define the title of the page -->
+    <title>{title}</title>
+    <script is:inline>
+      // Script to handle dark mode. It will check if the theme is stored in localStorage or if dark theme is preferred by system settings
+      if (
+        localStorage.getItem("hs_theme") === "dark" ||
+        (!("hs_theme" in localStorage) &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    </script>
+    <script>
+      import "@scripts/lenisSmoothScroll.js";
+    </script>
+  </head>
+  <body
+    class="bg-neutral-200 selection:bg-yellow-400 selection:text-neutral-700 dark:bg-neutral-800"
+  >
+    <!--
+    Setting up the main structure of the page.
+    The Navbar is placed at the top, with a slot for the main content and FooterSection at the bottom.
+    -->
+    
+    <Header />
+    <Sidebar />
+    <main>
+        <slot />
+    </main>
+    <style>
+      /* CSS rules for the page scrollbar */
+      .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+      }
+
+      .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    </style>
+  </body>
+
+  <script>
+    // document.addEventListener('DOMContentLoaded', async () => {
+    //     const token = localStorage.getItem('authToken');
+
+    //     if (!token) {
+    //     // Redirige al usuario si no hay token
+    //     window.location.href = '/';
+    //     return;
+    //     }
+    // });
+  </script>
+</html>
