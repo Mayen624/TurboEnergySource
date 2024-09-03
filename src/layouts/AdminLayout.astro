@@ -2,6 +2,7 @@
 import Navbar from "@components/sections/navbar&footer/Navbar.astro";
 import Header from "@/components/admin/Header.astro";
 import Sidebar from "@/components/admin/Sidebar.astro";
+import 'simple-notify/dist/simple-notify.css';
 
 const {title, lang = 'es'} = Astro.props
 
@@ -18,11 +19,12 @@ interface Props {
     <!-- Define the title of the page -->
     <title>{title}</title>
     <script src="@node_modules/preline/dist/preline.js"></script>
+    <!-- CSS -->
     <script is:inline>
       // Script to handle dark mode. It will check if the theme is stored in localStorage or if dark theme is preferred by system settings
       if (
         localStorage.getItem("hs_theme") === "dark" ||
-        (!("hs_theme" in localStorage) &&
+        (!("|" in localStorage) &&
           window.matchMedia("(prefers-color-scheme: dark)").matches)
       ) {
         document.documentElement.classList.add("dark");
@@ -59,16 +61,4 @@ interface Props {
       }
     </style>
   </body>
-
-  <script>
-    // document.addEventListener('DOMContentLoaded', async () => {
-    //     const token = localStorage.getItem('authToken');
-
-    //     if (!token) {
-    //     // Redirige al usuario si no hay token
-    //     window.location.href = '/';
-    //     return;
-    //     }
-    // });
-  </script>
 </html>

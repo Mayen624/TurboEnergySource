@@ -1,12 +1,17 @@
 ---
 import AdminLayout from "@/layouts/AdminLayout.astro";
-import HeroSection from "@/components/sections/landing/HeroSection.astro";
-import heroImage from "@images/ingeniera.jpg";
-import Header from "@/components/admin/Header.astro";
-import Sidebar from "@/components/admin/Sidebar.astro";
+import { authMiddleware } from '@middlewares/auth.ts';
+
+const response = await authMiddleware(Astro, () => {
+  return Promise.resolve(new Response());
+});
+
+if (response.status === 401) {
+  return Astro.redirect('/');
+}
 ---
 
-<AdminLayout>
-    
+<AdminLayout title="Dashboard">
+    <h1 class="text-center mt-10 dark:text-neutral-200">Dasboard</h1>
 </AdminLayout>
   

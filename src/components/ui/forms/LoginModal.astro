@@ -5,8 +5,8 @@ import PasswordInput from "./input/PasswordInput.astro";
 import Checkbox from "./input/Checkbox.astro";
 import AuthBtn from "@components/ui/buttons/AuthBtn.astro";
 
-// Variables for customization of the LoginModal Component
 
+// Variables for customization of the LoginModal Component 
 const config = {
   id: "hs-toggle-between-modals-login-modal", // Modal IDENTIFIER
   title: "Sign in", // Main HEADING
@@ -16,6 +16,11 @@ const config = {
 };
 ---
 
+<!-- CSS -->
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-notify@1.0.4/dist/simple-notify.css" /> -->
+
+<!-- JS -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/simple-notify@1.0.4/dist/simple-notify.min.js"></script> -->
 <div
   id={config.id}
   class="hs-overlay absolute start-0 top-0 z-50 hidden h-full w-full hs-overlay-backdrop-open:bg-neutral-900/90"
@@ -34,25 +39,15 @@ const config = {
             >
               {config.title}
             </h2>
-            <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
-              {config.subTitle}
-              <button
-                class="rounded-lg p-1 font-medium text-orange-400 decoration-2 outline-none ring-zinc-500 hover:underline focus-visible:ring dark:text-orange-400 dark:ring-zinc-200 dark:focus:outline-none"
-                data-hs-overlay={config.registerBtnDataHS}
-              >
-                {config.registerBtn}
-              </button>
-            </p>
           </div>
           <div class="mt-5">
-
-            <div
+             <div
               class="flex items-center py-3 text-xs uppercase text-neutral-400 before:me-6 before:flex-[1_1_0%] before:border-t before:border-neutral-200 after:ms-6 after:flex-[1_1_0%] after:border-t after:border-neutral-200 dark:text-neutral-500 dark:before:border-neutral-600 dark:after:border-neutral-600"
             >
               Or
             </div>
             <!-- The container for the form -->
-            <form>
+            <form method="POST" id="authForm">
               <!-- A grid layout for the form fields -->
               <div class="grid gap-y-4">
                 <!-- The email input field -->
@@ -64,10 +59,8 @@ const config = {
                   errorId="login-password-error"
                   content="8+ characters required"
                 />
-                <!-- The remember-me checkbox -->
-                <Checkbox id="remember-me" />
                 <!-- The sign-in button -->
-                <AuthBtn title="Sign in" />
+                <AuthBtn id="logIngBtn" title="Iniciar sesion" />
               </div>
             </form>
           </div>
@@ -76,3 +69,23 @@ const config = {
     </div>
   </div>
 </div>
+
+<script>
+  import { handleLogin } from "@/API/login.ts";
+
+  const authForm = document.getElementById('authForm');
+  
+  if (authForm) {
+    authForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target as HTMLFormElement);
+      const email = formData.get('email') as string;
+      const password = formData.get('password') as string;
+      await handleLogin(email, password);
+    });
+
+  } else {
+    console.error("El formulario de autenticación no se encontró en el DOM");
+  }
+</script>
+

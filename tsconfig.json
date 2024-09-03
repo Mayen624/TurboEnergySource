@@ -6,6 +6,7 @@
       "@/*": ["src/*"],
       "@components/*": ["src/components/*"],
       "@node_modules/*": ["node_modules/*"],
+      "@middlewares/*": ["src/middleware/*"],
       "@content/*": ["src/content/*"],
       "@data/*": ["src/data_files/*"],
       "@images/*": ["src/images/*"],
