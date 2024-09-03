@@ -2,14 +2,6 @@
 import AdminLayout from "@/layouts/AdminLayout.astro";
 import { authMiddleware } from '@middlewares/auth.ts';
 
-// const response = await authMiddleware(Astro, () => {
-//   return Promise.resolve(new Response());
-// });
-
-// if (response.status === 401) {
-//   return Astro.redirect('/');
-// }
-
 // Aplicar el middleware
 const response = await authMiddleware(Astro, async () => {
   // Si el middleware pasa, renderiza la página
@@ -25,4 +17,16 @@ if (response instanceof Response && response.headers.get('Location')) {
 <AdminLayout title="Dashboard">
     <h1 class="text-center mt-10 dark:text-neutral-200">Dasboard</h1>
 </AdminLayout>
+
+
+<script>
+    import {successToast, errorToast} from "@utils/notify.ts";
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const message = urlParams.get('message');
+
+     if (message === 'authorized') {
+        successToast('Bienvenido', 'Sesión iniciada.');
+    }
+</script>
   

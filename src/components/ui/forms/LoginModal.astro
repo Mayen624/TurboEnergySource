@@ -67,6 +67,7 @@ const config = {
 
 <script>
   import { handleLogin } from "@/API/login.ts";
+  import {successToast, errorToast} from "@utils/notify.ts";
 
   const authForm = document.getElementById('authForm');
   
@@ -82,5 +83,12 @@ const config = {
   } else {
     console.error("El formulario de autenticación no se encontró en el DOM");
   }
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const message = urlParams.get('message');
+  if (message === 'unauthorized') {
+    errorToast('Acceso Denegado', 'No estás autorizado para acceder a esta página.');
+  }
+      
 </script>
 
