@@ -2,12 +2,23 @@
 import AdminLayout from "@/layouts/AdminLayout.astro";
 import { authMiddleware } from '@middlewares/auth.ts';
 
-const response = await authMiddleware(Astro, () => {
-  return Promise.resolve(new Response());
+// const response = await authMiddleware(Astro, () => {
+//   return Promise.resolve(new Response());
+// });
+
+// if (response.status === 401) {
+//   return Astro.redirect('/');
+// }
+
+// Aplicar el middleware
+const response = await authMiddleware(Astro, async () => {
+  // Si el middleware pasa, renderiza la página
+  return new Response(null, {status: 200});
 });
 
-if (response.status === 401) {
-  return Astro.redirect('/');
+// Si el middleware devuelve una redirección, seguirla
+if (response instanceof Response && response.headers.get('Location')) {
+  return Astro.redirect(response.headers.get('Location') || '/', response.status);
 }
 ---
 

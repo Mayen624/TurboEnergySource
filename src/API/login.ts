@@ -20,8 +20,8 @@ export const handleLogin = async (email: string, password: string) => {
         if (data.token) {
             // Almacena el token en localStorage o sessionStorage
             //localStorage.setItem('authToken', data.token);
-            document.cookie = `authToken=${data.token}; path=/;`;
-            
+            document.cookie = `authToken=${data.token}; path=/; max-age=3600; SameSite=Strict; Secure`;
+            console.log('Cookie set:', document.cookie);
             successToast('¡Exito!', data.success);
 
             // Redirigir al dashboard o actualizar la UI
