@@ -1,6 +1,7 @@
 ---
 import AdminLayout from "@/layouts/AdminLayout.astro";
 import { authMiddleware } from '@middlewares/auth.ts';
+export const prerender = false;
 
 // Aplicar el middleware
 const response = await authMiddleware(Astro, async () => {
@@ -26,7 +27,7 @@ if (response instanceof Response && response.headers.get('Location')) {
     const message = urlParams.get('message');
 
      if (message === 'authorized') {
-        successToast('Bienvenido', 'Sesión iniciada.');
+        successToast('Bienvenido/a', 'Sesión iniciada.');
     }
 </script>
   
