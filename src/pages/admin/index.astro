@@ -1,4 +1,5 @@
 ---
+import MainAdminCard from "@/components/admin/cards/MainAdminCard.astro";
 import AdminLayout from "@/layouts/AdminLayout.astro";
 import { authMiddleware } from '@middlewares/auth.ts';
 export const prerender = false;
@@ -16,7 +17,7 @@ if (response instanceof Response && response.headers.get('Location')) {
 ---
 
 <AdminLayout title="Dashboard">
-    <h1 class="text-center mt-10 dark:text-neutral-200">Dasboard</h1>
+  <MainAdminCard></MainAdminCard>
 </AdminLayout>
 
 

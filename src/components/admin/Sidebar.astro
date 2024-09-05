@@ -1,3 +1,4 @@
+<!-- Sidebar -->
 <div
   id="hs-application-sidebar"
   class="hs-overlay fixed inset-y-0 start-0 z-[60] hidden h-full w-[260px] -translate-x-full transform border-e border-gray-200 bg-white transition-all duration-300 [--auto-close:lg] hs-overlay-open:translate-x-0 dark:border-neutral-700 dark:bg-neutral-800 lg:bottom-0 lg:end-auto lg:block lg:translate-x-0"
@@ -10,7 +11,7 @@
       <!-- Logo -->
       <a
         class="inline-block flex-none rounded-xl text-xl font-semibold focus:opacity-80 focus:outline-none"
-        href="#"
+        href="/admin"
         aria-label="Preline"
       >
         <svg
@@ -55,7 +56,7 @@
         data-hs-accordion-always-open
       >
         <ul class="flex flex-col space-y-1">
-          <li>
+          <li id="dashboard-accordion">
             <a
               class="flex items-center gap-x-3.5 rounded-lg bg-gray-100 px-2.5 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:bg-neutral-700 dark:text-white"
               href="/admin"
@@ -71,17 +72,16 @@
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                ><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
-                ></path><polyline points="9 22 9 12 15 12 15 22"
-                ></polyline></svg
               >
+                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
               Dashboard
             </a>
           </li>
-
-          <li class="hs-accordion" id="users-accordion">
+          <li id="users-accordion">
             <a
-              class="flex w-full items-center gap-x-3.5 rounded-lg px-2.5 py-2 text-sm text-gray-800 hover:bg-gray-100 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:hover:text-neutral-300"
+              class="flex w-full items-center gap-x-3.5 rounded-lg px-2.5 py-2 text-sm text-gray-800 hover:bg-gray-100 dark:text-neutral-200 dark:hover:bg-neutral-900 dark:hover:text-neutral-300"
               href="/admin/users"
             >
               <svg
@@ -103,11 +103,10 @@
               Usuarios
             </a>
           </li>
-
           <li id="products-accordion">
             <a
               class="flex w-full items-center gap-x-3.5 rounded-lg px-2.5 py-2 text-sm text-gray-800 hover:bg-gray-100 dark:text-neutral-200 dark:hover:bg-neutral-900 dark:hover:text-neutral-300"
-              href="products"
+              href="/admin/products"
             >
               <svg
                 class="size-4 shrink-0"
@@ -127,7 +126,7 @@
           <li id="services-accordion">
             <a
               class="flex w-full items-center gap-x-3.5 rounded-lg px-2.5 py-2 text-sm text-gray-800 hover:bg-gray-100 dark:text-neutral-200 dark:hover:bg-neutral-900 dark:hover:text-neutral-300"
-              href="services"
+              href="/admin/services"
             >
               <svg
                 class="size-4 shrink-0"
@@ -144,10 +143,10 @@
               Servicios
             </a>
           </li>
-          <li id="possible-clients-accordion">
+          <li id="pissible-clients-accordion">
             <a
               class="flex w-full items-center gap-x-3.5 rounded-lg px-2.5 py-2 text-sm text-gray-800 hover:bg-gray-100 dark:text-neutral-200 dark:hover:bg-neutral-900 dark:hover:text-neutral-300"
-              href="possible_clients"
+               href="possible_clients"
             >
               <svg
                 class="size-4 shrink-0"
@@ -160,7 +159,7 @@
                   d="M48 48h88c13.3 0 24-10.7 24-24S149.3 0 136 0H32C14.3 0 0 14.3 0 32v104c0 13.3 10.7 24 24 24s24-10.7 24-24zm127.8 176a48 48 0 1 0 0-96a48 48 0 1 0 0 96m-26.5 32c-29.4 0-53.3 23.9-53.3 53.3c0 14.7 11.9 26.7 26.7 26.7h56.1c8-34.1 32.8-61.7 65.2-73.6c-7.5-4.1-16.2-6.4-25.3-6.4h-69.3zm368 80c14.7 0 26.7-11.9 26.7-26.7c0-29.5-23.9-53.3-53.3-53.3h-69.3c-9.2 0-17.8 2.3-25.3 6.4c32.4 11.9 57.2 39.5 65.2 73.6h56.1zm-89.4 0c-8.6-24.3-29.9-42.6-55.9-47c-3.9-.7-7.9-1-12-1h-80c-4.1 0-8.1.3-12 1c-26 4.4-47.3 22.7-55.9 47c-2.7 7.5-4.1 15.6-4.1 24c0 13.3 10.7 24 24 24h176c13.3 0 24-10.7 24-24c0-8.4-1.4-16.5-4.1-24M464 224a48 48 0 1 0 0-96a48 48 0 1 0 0 96m-80-32a64 64 0 1 0-128 0a64 64 0 1 0 128 0M504 48h88v88c0 13.3 10.7 24 24 24s24-10.7 24-24V32c0-17.7-14.3-32-32-32H504c-13.3 0-24 10.7-24 24s10.7 24 24 24M48 464v-88c0-13.3-10.7-24-24-24S0 362.7 0 376v104c0 17.7 14.3 32 32 32h104c13.3 0 24-10.7 24-24s-10.7-24-24-24zm456 0c-13.3 0-24 10.7-24 24s10.7 24 24 24h104c17.7 0 32-14.3 32-32V376c0-13.3-10.7-24-24-24s-24 10.7-24 24v88z"
                 ></path></svg
               >
-              Posibles clientes
+              Posible clientes
             </a>
           </li>
         </ul>

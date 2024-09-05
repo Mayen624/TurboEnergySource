@@ -1,8 +1,10 @@
 ---
-import Navbar from "@components/sections/navbar&footer/Navbar.astro";
-import Header from "@/components/admin/Header.astro";
-import Sidebar from "@/components/admin/Sidebar.astro";
 import 'simple-notify/dist/simple-notify.css';
+import Header from "@/components/admin/Header.astro";
+import Breadcrumb from "@components/admin/Breadcrumb.astro"
+import Sidebar from "@/components/admin/Sidebar.astro";
+import MainAdminCard from "@/components/admin/cards/MainAdminCard.astro";
+import UserTable from '@/components/admin/tables/UserTable.astro';
 
 
 const {title, lang = 'es'} = Astro.props
@@ -13,45 +15,42 @@ interface Props {
 }
 
 ---
+<!DOCTYPE html>
+<html lang={lang}>
+<head>
+  <title>{title}</title>
+  <!-- CSS Preline -->
+  <link rel="stylesheet" href="/src/assets/styles/preline-main.min.css">
+  <script is:inline>
+    if (
+      localStorage.getItem("hs_theme") === "dark" ||
+      (!("|" in localStorage) &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches)
+    ) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  </script>
+  <script>
+    import 'preline/preline';
+    import "@scripts/lenisSmoothScroll.js";
+  </script>
+</head>
 
-<html lang={lang} class="scrollbar-hide lenis lenis-smooth scroll-pt-16">
-  <head>
-    <title>{title}</title>
-    
-    <script is:inline>
-      if (
-        localStorage.getItem("hs_theme") === "dark" ||
-        (!("|" in localStorage) &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches)
-      ) {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
-    </script>
-    <script>
-      import 'preline/preline';
-      import "@scripts/lenisSmoothScroll.js";
-    </script>
-  </head>
-  <body class="bg-neutral-200 selection:bg-yellow-400 selection:text-neutral-700 dark:bg-neutral-800">
-    <!-- Estructura principal de la página -->
-    <Header />
-    <div class="flex">
-      <Sidebar/>
-      <main>
-        <slot />
-      </main>
+<body class="bg-gray-50 dark:bg-neutral-900">
+  
+  <Header></Header>
+  <Breadcrumb></Breadcrumb>
+  <Sidebar></Sidebar>
+
+  <!-- Main Content -->
+  <main class="w-full lg:ps-64">
+    <!-- <div class="p-4 sm:p-6 space-y-4 sm:space-y-6"></div> -->
+    <div class="p-4 sm:p-6 space-y-4 sm:space-y-6">
+      <slot />
     </div>
-    <style>
-      .scrollbar-hide::-webkit-scrollbar {
-        display: none;
-      }
-      .scrollbar-hide {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-      }
-    </style>
-  </body>
+  </main>
+  <!-- End Main Content -->
+</body>
 </html>
-
