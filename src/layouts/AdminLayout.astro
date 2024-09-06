@@ -3,8 +3,6 @@ import 'simple-notify/dist/simple-notify.css';
 import Header from "@/components/admin/Header.astro";
 import Breadcrumb from "@components/admin/Breadcrumb.astro"
 import Sidebar from "@/components/admin/Sidebar.astro";
-import MainAdminCard from "@/components/admin/cards/MainAdminCard.astro";
-import UserTable from '@/components/admin/tables/UserTable.astro';
 
 
 const {title, lang = 'es'} = Astro.props
@@ -38,7 +36,7 @@ interface Props {
   </script>
 </head>
 
-<body class="bg-gray-50 dark:bg-neutral-900">
+<body class="bg-neutral-200 selection:bg-yellow-400 selection:text-neutral-700 dark:bg-neutral-800">
   
   <Header></Header>
   <Breadcrumb></Breadcrumb>

@@ -1,22 +1,14 @@
 ---
-const {id, modalTitle} = Astro.props;
+import UploadFileInput from '@/components/ui/forms/input/UploadFileInput.astro';
+import ComboBoxInput from '@/components/ui/forms/input/ComboBoxInput.astro';
+
+const { id, modalTitle } = Astro.props;
 
 interface Props {
-  id: string,
-  modalTitle: string;
+    id: string;
+    modalTitle: string;
 }
 ---
-
-<button
-    type="button"
-    class="bg-blue-600 hover:bg-blue-700 focus:bg-blue-700 inline-flex items-center gap-x-2 rounded-lg border border-transparent px-4 py-3 text-sm font-medium text-white focus:outline-none disabled:pointer-events-none disabled:opacity-50"
-    aria-haspopup="dialog"
-    aria-expanded="false"
-    aria-controls="hs-slide-down-animation-modal"
-    data-hs-overlay=`#${id}`
->
-    Open modal
-</button>
 
 <div
     id={id}
@@ -44,7 +36,7 @@ interface Props {
                     type="button"
                     class="inline-flex size-8 items-center justify-center gap-x-2 rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:bg-neutral-700 dark:text-neutral-400 dark:hover:bg-neutral-600 dark:focus:bg-neutral-600"
                     aria-label="Close"
-                    data-hs-overlay="#hs-slide-down-animation-modal"
+                    data-hs-overlay={`#${id}`}
                 >
                     <span class="sr-only">Close</span>
                     <svg
@@ -65,13 +57,98 @@ interface Props {
                 </button>
             </div>
             <div class="overflow-y-auto p-4">
-                <h1>FORM</h1>
+                <!-- Hire Us -->
+                <div
+                    class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14"
+                >
+                    <div class="mx-auto max-w-xl">
+                        <!-- Form -->
+                        <form>
+                            <div class="grid gap-4 lg:gap-6">
+                                <!-- Grid -->
+                                <div
+                                    class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-6"
+                                >
+                                    <div>
+                                        <label
+                                            for="hs-firstname-hire-us-2"
+                                            class="mb-2 block text-sm font-medium text-gray-700 dark:text-white"
+                                            >Nombre:</label
+                                        >
+                                        <input
+                                            type="text"
+                                            name="hs-firstname-hire-us-2"
+                                            id="hs-firstname-hire-us-2"
+                                            class="focus:border-blue-500 focus:ring-blue-500 block w-full rounded-lg border-gray-200 px-4 py-3 text-sm disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label
+                                            for="hs-lastname-hire-us-2"
+                                            class="mb-2 block text-sm font-medium text-gray-700 dark:text-white"
+                                            >Correo:</label
+                                        >
+                                        <input
+                                            type="text"
+                                            name="hs-lastname-hire-us-2"
+                                            id="hs-lastname-hire-us-2"
+                                            class="focus:border-blue-500 focus:ring-blue-500 block w-full rounded-lg border-gray-200 px-4 py-3 text-sm disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+                                        />
+                                    </div>
+                                </div>
+                                <!-- End Grid -->
+
+                                <div>
+                                    <label
+                                        for="hs-work-email-hire-us-2"
+                                        class="mb-2 block text-sm font-medium text-gray-700 dark:text-white"
+                                        >Contrasena:</label
+                                    >
+                                    <input
+                                        type="email"
+                                        name="hs-work-email-hire-us-2"
+                                        id="hs-work-email-hire-us-2"
+                                        autocomplete="email"
+                                        class="focus:border-blue-500 focus:ring-blue-500 block w-full rounded-lg border-gray-200 px-4 py-3 text-sm disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+                                    />
+                                </div>
+
+                                <!-- Grid -->
+                                <div>
+                                    <label
+                                        for="hs-work-email-hire-us-2"
+                                        class="mb-2 block text-sm font-medium text-gray-700 dark:text-white"
+                                        >Rol:</label
+                                    >
+                                    <ComboBoxInput />
+
+                                </div>
+                                <!-- End Grid -->
+
+                                <div class="">
+                                    <label
+                                        for="hs-about-hire-us-2"
+                                        class="mb-2 block text-sm font-medium text-gray-700 dark:text-white"
+                                        >Imagen:</label
+                                    >
+                                    <UploadFileInput uploadBtnText="Subir imagen" cancelBtnImageText="Cancelar"/>
+                                </div>
+                            </div>
+                            <!-- End Grid -->
+                        </form>
+                        <!-- End Form -->
+                    </div>
+                </div>
+                <!-- End Hire Us -->
             </div>
-            <div class="flex items-center justify-end gap-x-2 border-t px-4 py-3 dark:border-neutral-700">
+            <div
+                class="flex items-center justify-end gap-x-2 border-t px-4 py-3 dark:border-neutral-700"
+            >
                 <button
                     type="button"
                     class="inline-flex items-center gap-x-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-50 focus:bg-gray-50 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-                    data-hs-overlay="#hs-slide-down-animation-modal"
+                    data-hs-overlay={`#${id}`}
                 >
                     Cerrar
                 </button>
