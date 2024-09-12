@@ -1,3 +1,17 @@
+---
+export type ComboBoxOption = {
+    textValue: string;
+    idValue: string;
+};
+
+interface Props {
+    options: ComboBoxOption[];
+    selectedValue?: string;
+}
+
+const { options = [], selectedValue = "" } = Astro.props;
+---
+
 <div class="relative" data-hs-combo-box="">
     <div class="relative">
         <input
@@ -5,7 +19,7 @@
             type="text"
             role="combobox"
             aria-expanded="false"
-            value="Argentina"
+            value={selectedValue}
             data-hs-combo-box-input=""
         />
         <div
@@ -35,231 +49,123 @@
         style="display: none;"
         data-hs-combo-box-output=""
     >
-        <div
-            class="w-full cursor-pointer rounded-lg px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
-            tabindex="0"
-            data-hs-combo-box-output-item=""
-        >
-            <div class="flex w-full items-center justify-between">
-                <span
-                    data-hs-combo-box-search-text="Argentina"
-                    data-hs-combo-box-value="">Argentina</span
-                >
-                <span class="hidden hs-combo-box-selected:block">
-                    <svg
-                        class="text-blue-600 dark:text-blue-500 size-3.5 shrink-0"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+        {options.map((option : any) => (
+            <div
+                class="w-full cursor-pointer rounded-lg px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
+                tabindex="0"
+                data-hs-combo-box-output-item=""
+            >
+                <div class="flex w-full items-center justify-between">
+                    <span
+                        data-hs-combo-box-search-text={option.textValue}
+                        data-hs-combo-box-value={option.idValue}
                     >
-                        <path d="M20 6 9 17l-5-5"></path>
-                    </svg>
-                </span>
+                        {option.textValue}
+                    </span>
+                    <span class="hidden hs-combo-box-selected:block">
+                        <svg
+                            class="text-blue-600 dark:text-blue-500 size-3.5 shrink-0"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path d="M20 6 9 17l-5-5" />
+                        </svg>
+                    </span>
+                </div>
             </div>
-        </div>
-        <div
-            class="w-full cursor-pointer rounded-lg px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
-            tabindex="1"
-            data-hs-combo-box-output-item=""
-        >
-            <div class="flex w-full items-center justify-between">
-                <span
-                    data-hs-combo-box-search-text="Brazil"
-                    data-hs-combo-box-value="">Brazil</span
-                >
-                <span class="hidden hs-combo-box-selected:block">
-                    <svg
-                        class="text-blue-600 dark:text-blue-500 size-3.5 shrink-0"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-                        <path d="M20 6 9 17l-5-5"></path>
-                    </svg>
-                </span>
-            </div>
-        </div>
-        <div
-            class="w-full cursor-pointer rounded-lg px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
-            tabindex="2"
-            data-hs-combo-box-output-item=""
-        >
-            <div class="flex w-full items-center justify-between">
-                <span
-                    data-hs-combo-box-search-text="China"
-                    data-hs-combo-box-value="">China</span
-                >
-                <span class="hidden hs-combo-box-selected:block">
-                    <svg
-                        class="text-blue-600 dark:text-blue-500 size-3.5 shrink-0"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-                        <path d="M20 6 9 17l-5-5"></path>
-                    </svg>
-                </span>
-            </div>
-        </div>
-        <div
-            class="w-full cursor-pointer rounded-lg px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
-            tabindex="3"
-            data-hs-combo-box-output-item=""
-        >
-            <div class="flex w-full items-center justify-between">
-                <span
-                    data-hs-combo-box-search-text="USA"
-                    data-hs-combo-box-value="">USA</span
-                >
-                <span class="hidden hs-combo-box-selected:block">
-                    <svg
-                        class="text-blue-600 dark:text-blue-500 size-3.5 shrink-0"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-                        <path d="M20 6 9 17l-5-5"></path>
-                    </svg>
-                </span>
-            </div>
-        </div>
-        <div
-            class="w-full cursor-pointer rounded-lg px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
-            tabindex="3"
-            data-hs-combo-box-output-item=""
-        >
-            <div class="flex w-full items-center justify-between">
-                <span
-                    data-hs-combo-box-search-text="Italy"
-                    data-hs-combo-box-value="">Italy</span
-                >
-                <span class="hidden hs-combo-box-selected:block">
-                    <svg
-                        class="text-blue-600 dark:text-blue-500 size-3.5 shrink-0"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-                        <path d="M20 6 9 17l-5-5"></path>
-                    </svg>
-                </span>
-            </div>
-        </div>
-        <div
-            class="w-full cursor-pointer rounded-lg px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
-            tabindex="3"
-            data-hs-combo-box-output-item=""
-        >
-            <div class="flex w-full items-center justify-between">
-                <span
-                    data-hs-combo-box-search-text="France"
-                    data-hs-combo-box-value="">France</span
-                >
-                <span class="hidden hs-combo-box-selected:block">
-                    <svg
-                        class="text-blue-600 dark:text-blue-500 size-3.5 shrink-0"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-                        <path d="M20 6 9 17l-5-5"></path>
-                    </svg>
-                </span>
-            </div>
-        </div>
+        ))}
     </div>
 </div>
 
 
 <script>
-    document.querySelectorAll('[data-hs-combo-box-output-item]').forEach(function(item) {
-        item.addEventListener('click', function() {
-            // Obtén el combobox más cercano al ítem seleccionado
-            const comboBox = item.closest('[data-hs-combo-box]') as HTMLElement | null;
-            
-            if (comboBox) {
-            const comboBoxToggle = comboBox.querySelector('[data-hs-combo-box-toggle]') as HTMLElement | null;
-            const outputBox = comboBox.querySelector('[data-hs-combo-box-output]') as HTMLElement | null;
-            const input = comboBox.querySelector('[data-hs-combo-box-input]') as HTMLInputElement | null;
+    document
+        .querySelectorAll("[data-hs-combo-box-output-item]")
+        .forEach(function (item) {
+            item.addEventListener("click", function () {
+                // Obtén el combobox más cercano al ítem seleccionado
+                const comboBox = item.closest(
+                    "[data-hs-combo-box]",
+                ) as HTMLElement | null;
 
-            // Verifica si los elementos existen antes de usarlos
-            if (outputBox && comboBoxToggle && input) {
-                // Colapsa el combobox
-                outputBox.style.display = 'none';
-                comboBoxToggle.setAttribute('aria-expanded', 'false');
-                
-                // Actualiza el valor del input con el texto seleccionado
-                const searchText = item.querySelector('[data-hs-combo-box-search-text]') as HTMLElement | null;
-                if (searchText) {
-                input.value = searchText.textContent || '';
+                if (comboBox) {
+                    const comboBoxToggle = comboBox.querySelector(
+                        "[data-hs-combo-box-toggle]",
+                    ) as HTMLElement | null;
+                    const outputBox = comboBox.querySelector(
+                        "[data-hs-combo-box-output]",
+                    ) as HTMLElement | null;
+                    const input = comboBox.querySelector(
+                        "[data-hs-combo-box-input]",
+                    ) as HTMLInputElement | null;
+
+                    // Verifica si los elementos existen antes de usarlos
+                    if (outputBox && comboBoxToggle && input) {
+                        // Colapsa el combobox
+                        outputBox.style.display = "none";
+                        comboBoxToggle.setAttribute("aria-expanded", "false");
+
+                        // Actualiza el valor del input con el texto seleccionado
+                        const searchText = item.querySelector(
+                            "[data-hs-combo-box-search-text]",
+                        ) as HTMLElement | null;
+                        if (searchText) {
+                            input.value = searchText.textContent || "";
+                        }
+                    }
                 }
-            }
-            }
+            });
         });
-    });
 
     // Funcionalidad para mostrar y ocultar el combobox al hacer clic en el input o en el botón
-    document.querySelectorAll('[data-hs-combo-box-toggle], [data-hs-combo-box-input]').forEach(function(toggleElement) {
-        toggleElement.addEventListener('click', function() {
-            const comboBox = toggleElement.closest('[data-hs-combo-box]') as HTMLElement | null;
-            
-            if (comboBox) {
-            const outputBox = comboBox.querySelector('[data-hs-combo-box-output]') as HTMLElement | null;
-            const comboBoxToggle = comboBox.querySelector('[data-hs-combo-box-toggle]') as HTMLElement | null;
+    document
+        .querySelectorAll(
+            "[data-hs-combo-box-toggle], [data-hs-combo-box-input]",
+        )
+        .forEach(function (toggleElement) {
+            toggleElement.addEventListener("click", function () {
+                const comboBox = toggleElement.closest(
+                    "[data-hs-combo-box]",
+                ) as HTMLElement | null;
 
-            // Verifica si el menú desplegable existe
-            if (outputBox && comboBoxToggle) {
-                const isExpanded = comboBoxToggle.getAttribute('aria-expanded') === 'true';
+                if (comboBox) {
+                    const outputBox = comboBox.querySelector(
+                        "[data-hs-combo-box-output]",
+                    ) as HTMLElement | null;
+                    const comboBoxToggle = comboBox.querySelector(
+                        "[data-hs-combo-box-toggle]",
+                    ) as HTMLElement | null;
 
-                if (isExpanded) {
-                // Si está desplegado, lo cerramos
-                outputBox.style.display = 'none';
-                comboBoxToggle.setAttribute('aria-expanded', 'false');
-                } else {
-                // Si está cerrado, lo desplegamos
-                outputBox.style.display = 'block';
-                comboBoxToggle.setAttribute('aria-expanded', 'true');
+                    // Verifica si el menú desplegable existe
+                    if (outputBox && comboBoxToggle) {
+                        const isExpanded =
+                            comboBoxToggle.getAttribute("aria-expanded") ===
+                            "true";
+
+                        if (isExpanded) {
+                            // Si está desplegado, lo cerramos
+                            outputBox.style.display = "none";
+                            comboBoxToggle.setAttribute(
+                                "aria-expanded",
+                                "false",
+                            );
+                        } else {
+                            // Si está cerrado, lo desplegamos
+                            outputBox.style.display = "block";
+                            comboBoxToggle.setAttribute(
+                                "aria-expanded",
+                                "true",
+                            );
+                        }
+                    }
                 }
-            }
-            }
+            });
         });
-    });
-
 </script>
-  

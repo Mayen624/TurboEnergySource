@@ -2,9 +2,22 @@
 import AdminLayout from "@/layouts/AdminLayout.astro"
 import UserTable from "@/components/admin/tables/UserTable.astro"
 import ComboBoxInput from '@/components/ui/forms/input/ComboBoxInput.astro';
+import { authMiddleware } from '@middlewares/auth.ts';
+export const prerender = false;
+
+// Aplicar el middleware
+const response = await authMiddleware(Astro, async () => {
+  // Si el middleware pasa, renderiza la página
+  return new Response(null, {status: 200});
+});
+
+// Si el middleware devuelve una redirección, seguirla
+if (response instanceof Response && response.headers.get('Location')) {
+  return Astro.redirect(response.headers.get('Location') || '/', response.status);
+}
 ---
 
 
 <AdminLayout title="Usuarios">
-    <UserTable></UserTable>
+    <UserTable />
 </AdminLayout>

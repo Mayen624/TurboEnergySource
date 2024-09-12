@@ -5,17 +5,19 @@ import Breadcrumb from "@components/admin/Breadcrumb.astro"
 import Sidebar from "@/components/admin/Sidebar.astro";
 
 
-const {title, lang = 'es'} = Astro.props
+const {title, lang = 'es', codec = 'UTF-8'} = Astro.props
 
 interface Props {
   title?: string;
   lang?: string
+  codec?: string
 }
 
 ---
 <!DOCTYPE html>
 <html lang={lang}>
 <head>
+  <meta charset={codec}>
   <title>{title}</title>
   <!-- CSS Preline -->
   <link rel="stylesheet" href="/src/assets/styles/preline-main.min.css">

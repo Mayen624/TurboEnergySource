@@ -1,6 +1,8 @@
 ---
 import UploadFileInput from '@/components/ui/forms/input/UploadFileInput.astro';
 import ComboBoxInput from '@/components/ui/forms/input/ComboBoxInput.astro';
+import PasswordInput from '@/components/ui/forms/input/PasswordInput.astro';
+import {fetchDataForRoleComboBox} from '@/API/comboBoxDataAdapted.ts'
 
 const { id, modalTitle } = Astro.props;
 
@@ -8,6 +10,9 @@ interface Props {
     id: string;
     modalTitle: string;
 }
+
+const token = Astro.cookies.get("authToken")?.value ?? "";
+const roleOptions = await fetchDataForRoleComboBox(token);
 ---
 
 <div
@@ -105,12 +110,9 @@ interface Props {
                                         class="mb-2 block text-sm font-medium text-gray-700 dark:text-white"
                                         >Contrasena:</label
                                     >
-                                    <input
-                                        type="email"
-                                        name="hs-work-email-hire-us-2"
-                                        id="hs-work-email-hire-us-2"
-                                        autocomplete="email"
-                                        class="focus:border-blue-500 focus:ring-blue-500 block w-full rounded-lg border-gray-200 px-4 py-3 text-sm disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+                                    <PasswordInput 
+                                        label='' forgot={false} id="password"
+                                        defaultClass='focus:border-blue-500 focus:ring-blue-500 block w-full rounded-lg border-gray-200 px-4 py-3 text-sm disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600'
                                     />
                                 </div>
 
@@ -121,17 +123,15 @@ interface Props {
                                         class="mb-2 block text-sm font-medium text-gray-700 dark:text-white"
                                         >Rol:</label
                                     >
-                                    <ComboBoxInput />
+                                    <ComboBoxInput options={roleOptions}/>
 
                                 </div>
                                 <!-- End Grid -->
 
                                 <div class="">
-                                    <label
-                                        for="hs-about-hire-us-2"
-                                        class="mb-2 block text-sm font-medium text-gray-700 dark:text-white"
-                                        >Imagen:</label
-                                    >
+                                    <label for="hs-about-hire-us-2" class="mb-2 block text-sm font-medium text-gray-700 dark:text-white">
+                                        Imagen:
+                                    </label>
                                     <UploadFileInput uploadBtnText="Subir imagen" cancelBtnImageText="Cancelar"/>
                                 </div>
                             </div>

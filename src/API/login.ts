@@ -1,6 +1,9 @@
 import {successToast, errorToast} from "@utils/notify.ts";
 
 export const handleLogin = async (email: string, password: string) => {
+
+    const tokenTime = 3600;
+
     try {
         const response = await fetch('http://localhost:3000/api/v1/auth', {
             method: 'POST',
@@ -18,7 +21,7 @@ export const handleLogin = async (email: string, password: string) => {
         }
 
         if (data.token) {
-            document.cookie = `authToken=${data.token}; path=/; max-age=3600; SameSite=Strict; Secure`;
+            document.cookie = `authToken=${data.token}; path=/; max-age=${tokenTime}; SameSite=Strict; Secure`;
             return window.location.href = '/admin?message=authorized';
         } else {
             throw new Error('Token no recibido');
