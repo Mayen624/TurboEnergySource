@@ -68,7 +68,7 @@ const roleOptions = await fetchDataForRoleComboBox(token);
                 >
                     <div class="mx-auto max-w-xl">
                         <!-- Form -->
-                        <form>
+                        <form id="UserForm">
                             <div class="grid gap-4 lg:gap-6">
                                 <!-- Grid -->
                                 <div
@@ -123,7 +123,7 @@ const roleOptions = await fetchDataForRoleComboBox(token);
                                         class="mb-2 block text-sm font-medium text-gray-700 dark:text-white"
                                         >Rol:</label
                                     >
-                                    <ComboBoxInput options={roleOptions}/>
+                                    <ComboBoxInput id='roleSelect' name="idRole" options={roleOptions}/>
 
                                 </div>
                                 <!-- End Grid -->
@@ -132,7 +132,7 @@ const roleOptions = await fetchDataForRoleComboBox(token);
                                     <label for="hs-about-hire-us-2" class="mb-2 block text-sm font-medium text-gray-700 dark:text-white">
                                         Imagen:
                                     </label>
-                                    <UploadFileInput uploadBtnText="Subir imagen" cancelBtnImageText="Cancelar"/>
+                                    <UploadFileInput id="uploadFile" name='uploadFile' selectFileText="Selecionar archivo:"/>
                                 </div>
                             </div>
                             <!-- End Grid -->

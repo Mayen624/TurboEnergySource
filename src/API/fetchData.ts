@@ -1,5 +1,5 @@
 
-
+//======================== Users ======================== //
 export const getUsers = async (token: string) => {
     try {
         const response = await fetch('http://localhost:3000/api/v1/users', {
@@ -22,6 +22,9 @@ export const getUsers = async (token: string) => {
         return { error: error }; 
     }
 };
+
+
+//======================== Roles ======================== //
 
 export const getRoles = async (token: string) => {
     try {
