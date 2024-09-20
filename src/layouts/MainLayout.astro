@@ -72,3 +72,10 @@ We set the language of the page to English and add classes for scrollbar and scr
     </style>
   </body>
 </html>
+
+<script>
+  import {getURLParams, getURLMessage} from "@utils/functions.ts"
+
+  const message = getURLParams();
+  getURLMessage(message);
+</script>

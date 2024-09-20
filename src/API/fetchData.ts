@@ -1,21 +1,26 @@
 
 //======================== Users ======================== //
-export const getUsers = async (token: string) => {
+export const getUsers = async (token: string, realTime: boolean = false) => {
     try {
-        const response = await fetch('http://localhost:3000/api/v1/users', {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        });
-
-        const data = await response.json();
-
-        if (!response.ok || data.error) {
-            return { error: data.error == undefined || null ? 'Error fetching users' : data.error }; 
+        
+        if(realTime){
+            
+        }else{
+            const response = await fetch('http://localhost:3000/api/v1/users', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+    
+            const data = await response.json();
+    
+            if (!response.ok || data.error) {
+                return { error: data.error == undefined || null ? 'Error fetching users' : data.error }; 
+            }
+    
+            return data.users; 
         }
-
-        return data.users;
 
     } catch (error) {
         console.error('Error fetching users:', error);

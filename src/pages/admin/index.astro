@@ -19,16 +19,3 @@ if (response instanceof Response && response.headers.get('Location')) {
 <AdminLayout title="Dashboard">
   <MainAdminCard></MainAdminCard>
 </AdminLayout>
-
-
-<script>
-    import {successToast, errorToast} from "@utils/notify.ts";
-    import {getURLParams} from "@utils/functions.ts"
-
-    const message = getURLParams();
-
-    if (message === 'authorized') {
-      successToast('Bienvenido/a', 'Sesión iniciada.');
-    }
-</script>
-  

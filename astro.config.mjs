@@ -4,6 +4,7 @@ import node from "@astrojs/node";
 import sitemap from "@astrojs/sitemap";
 import compressor from "astro-compressor";
 import starlight from "@astrojs/starlight";
+import vue from '@astrojs/vue';
 
 export default defineConfig({
   site: "https://screwfast.uk",
@@ -13,6 +14,12 @@ export default defineConfig({
   prefetch: true,
   integrations: [
     tailwind(),
+    vue({
+      jsx: {
+        // treat any tag that starts with ion- as custom elements
+        isCustomElement: (tag) => tag.startsWith('ion-'),
+      },
+    }),
     sitemap({
       i18n: {
         defaultLocale: "en",

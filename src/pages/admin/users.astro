@@ -1,9 +1,9 @@
 ---
 import AdminLayout from "@/layouts/AdminLayout.astro"
-import UserTable from "@/components/admin/tables/UserTable.astro"
-import ComboBoxInput from '@/components/ui/forms/input/ComboBoxInput.astro';
+import UserTable from "@/components/admin/tables/UserTable.vue"
 import { authMiddleware } from '@middlewares/auth.ts';
 export const prerender = false;
+
 
 // Aplicar el middleware
 const response = await authMiddleware(Astro, async () => {
@@ -19,5 +19,5 @@ if (response instanceof Response && response.headers.get('Location')) {
 
 
 <AdminLayout title="Usuarios">
-    <UserTable />
+  <UserTable titleCard="Usuarios en el sistema" client:load/>
 </AdminLayout>
