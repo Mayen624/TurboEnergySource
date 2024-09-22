@@ -17,9 +17,9 @@
       </span>
       <input 
         ref="fileInput" 
+        :name="name"
         type="file" 
         :id="id" 
-        :name="name" 
         @change="handleFileSelect" 
         class="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
       />

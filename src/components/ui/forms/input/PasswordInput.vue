@@ -18,7 +18,7 @@
           :id="id"
           name="password"
           :class="defaultClass"
-          required
+          required=""
           :aria-describedby="errorId"
         />
         <button

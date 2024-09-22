@@ -52,7 +52,7 @@
             >
               <div class="mx-auto max-w-xl">
                 <!-- Form -->
-                <form id="UserForm">
+                <form id="UserForm" enctype="application/json">
                   <div class="grid gap-4 lg:gap-6">
                     <!-- Grid -->
                     <div
@@ -67,7 +67,8 @@
                         </label>
                         <input
                           type="text"
-                          name="hs-firstname-hire-us-2"
+                          name="name"
+                          required=""
                           id="hs-firstname-hire-us-2"
                           class="focus:border-blue-500 focus:ring-blue-500 block w-full rounded-lg border-gray-200 px-4 py-3 text-sm disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
                         />
@@ -82,7 +83,8 @@
                         </label>
                         <input
                           type="text"
-                          name="hs-lastname-hire-us-2"
+                          name="email"
+                          required=""
                           id="hs-lastname-hire-us-2"
                           class="focus:border-blue-500 focus:ring-blue-500 block w-full rounded-lg border-gray-200 px-4 py-3 text-sm disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
                         />
@@ -115,26 +117,11 @@
                       </label>
                       <ComboBoxInput
                         :options="comboOptions"
-                        v-model="selectedOption"
                         name="idRole"
                         id="idRole"
                       />
                     </div>
                     <!-- End Grid -->
-  
-                    <div>
-                      <label
-                        for="hs-about-hire-us-2"
-                        class="mb-2 block text-sm font-medium text-gray-700 dark:text-white"
-                      >
-                        Imagen:
-                      </label>
-                      <UploadFileInput
-                        id="uploadFile"
-                        name="uploadFile"
-                        selectFileText="Seleccionar archivo:"
-                      />
-                    </div>
                   </div>
                   <!-- End Grid -->
                 </form>
@@ -155,6 +142,7 @@
             </button>
             <button
               type="button"
+              @click="saveNewUser"
               class="bg-blue-600 hover:bg-blue-700 focus:bg-blue-700 inline-flex items-center gap-x-2 rounded-lg border border-transparent px-3 py-2 text-sm font-medium text-white focus:outline-none disabled:pointer-events-none disabled:opacity-50"
             >
               Guardar cambios
@@ -170,7 +158,9 @@
   import ComboBoxInput from '@/components/ui/forms/input/ComboBoxInput.vue';
   import PasswordInput from '@/components/ui/forms/input/PasswordInput.vue';
   import { fetchDataForRoleComboBox } from '@/API/comboBoxDataAdapted.ts';
+  import {successToast, errorToast} from '@/utils/notify.ts'
   import { getCookie } from '@/utils/functions.ts';
+  import {addUser} from '@/API/pushData.ts';
   
   export default {
     name: 'UserModal',
@@ -188,10 +178,6 @@
         type: String,
         required: true
       },
-      idButton: {
-        type:String,
-        required: true
-      }
     },
     data() {
       return {
@@ -206,6 +192,29 @@
       async setComboBoxData(){
         const token = getCookie('authToken');
         this.comboOptions = await fetchDataForRoleComboBox(token);
+      },
+      async saveNewUser(){
+        event.preventDefault();
+        let form = document.getElementById('UserForm');
+        let formData = new FormData(form);
+
+        const data = {
+          name: formData.get('name'),
+          email: formData.get('email'),
+          password: formData.get('password'),
+          idRole: formData.get('idRole')
+        };
+
+        const res = await addUser(data, getCookie('authToken'));
+
+        if(res.errors){
+          const concatenatedErrorMessages = res.errors.join(', <br/>');
+          return errorToast('Solucionar los siguientes errores: ', concatenatedErrorMessages, 10000, false, false);
+        }else if(res.success){
+          form.reset();
+          return successToast('Exito!', res.success);
+        }
+        
       }
     },
   };

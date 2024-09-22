@@ -14,9 +14,7 @@ interface Props {
 }
 
 const token = Astro.cookies.get("authToken")?.value ?? "";
-if (!token) {
-  return context.redirect('/?message=sessionExpired', 302);
-}
+if (!token) { return Astro.redirect('/?message=sessionExpired', 302); }
 
 ---
 <!DOCTYPE html>
