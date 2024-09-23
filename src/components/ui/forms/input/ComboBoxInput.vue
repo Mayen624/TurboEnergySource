@@ -6,7 +6,7 @@
           :id="id"
           :name="name"
           class="focus:border-blue-500 focus:ring-blue-500 block w-full rounded-lg border-gray-200 py-3 px-4 text-sm disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
-          :value="selectedValue"
+          :value="value === null || '' ? selectedValue : value"
           @change="onChange"
           aria-label="Select an option"
         >
@@ -58,6 +58,10 @@
       id: {
         type: String,
         required: true
+      },
+      value: {
+        type: String,
+        default: ''
       }
     },
     methods: {

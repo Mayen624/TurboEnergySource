@@ -52,8 +52,9 @@
             >
               <div class="mx-auto max-w-xl">
                 <!-- Form -->
-                <form id="UserForm" enctype="application/json">
+                <form id="UserEditForm" enctype="application/json">
                   <div class="grid gap-4 lg:gap-6">
+                    <input id="id" type="hidden" name="id" readonly>
                     <!-- Grid -->
                     <div
                       class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-6"
@@ -70,7 +71,7 @@
                           name="name"
                           v-model="name"
                           required=""
-                          id="name"
+                          id="nameEdit"
                           class="focus:border-blue-500 focus:ring-blue-500 block w-full rounded-lg border-gray-200 px-4 py-3 text-sm disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
                         />
                       </div>
@@ -87,7 +88,7 @@
                           name="email"
                           v-model="email"
                           required=""
-                          id="email"
+                          id="emailEdit"
                           class="focus:border-blue-500 focus:ring-blue-500 block w-full rounded-lg border-gray-200 px-4 py-3 text-sm disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
                         />
                       </div>
@@ -104,7 +105,7 @@
                       <PasswordInput
                         label=""
                         :forgot="false"
-                        id="password"
+                        id="passwordEdit"
                         defaultClass="focus:border-blue-500 focus:ring-blue-500 block w-full rounded-lg border-gray-200 px-4 py-3 text-sm disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
                       />
                     </div>
@@ -121,7 +122,7 @@
                         :options="comboOptions"
                         :value="selectedOption"
                         name="idRole"
-                        id="idRole"
+                        id="idRoleEdit"
                       />
                     </div>
                     <!-- End Grid -->
@@ -145,10 +146,10 @@
             </button>
             <button
               type="button"
-              @click="saveNewUser"
+              @click=""
               class="bg-blue-600 hover:bg-blue-700 focus:bg-blue-700 inline-flex items-center gap-x-2 rounded-lg border border-transparent px-3 py-2 text-sm font-medium text-white focus:outline-none disabled:pointer-events-none disabled:opacity-50"
             >
-              Guardar cambios
+              Actualizar cambios
             </button>
           </div>
         </div>
@@ -166,7 +167,7 @@
   import {addUser} from '@/API/pushData.ts';
   
   export default {
-    name: 'UserModal',
+    name: 'UserEditModal',
     components: {
       UploadFileInput,
       ComboBoxInput,
@@ -196,28 +197,12 @@
         const token = getCookie('authToken');
         this.comboOptions = await fetchDataForRoleComboBox(token);
       },
-      async saveNewUser(){
-        event.preventDefault();
-        let form = document.getElementById('UserForm');
-        let formData = new FormData(form);
+      getDataToUpdate(){
 
-        const data = {
-          name: formData.get('name'),
-          email: formData.get('email'),
-          password: formData.get('password'),
-          idRole: formData.get('idRole')
-        };
-
-        const res = await addUser(data, getCookie('authToken'));
-
-        if(res.errors){
-          const concatenatedErrorMessages = res.errors.join(', <br/>');
-          return errorToast('Solucionar los siguientes errores: ', concatenatedErrorMessages, 10000, false, false);
-        }else if(res.success){
-          form.reset();
-          return successToast('Exito!', res.success);
-        }
       },
+      async updateUser(idData){
+        //open modal & set data with request
+      }
     },
   };
   </script>

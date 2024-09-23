@@ -13,6 +13,7 @@
             </div>
             <div>
               <div class="inline-flex gap-x-2">
+                <EditButton id="usdfsd" triggerIdBtn="userEditModal"/>
                 <AddButton id="addBtnUser" triggerIdBtn="userModal" buttonText="Nuevo usuario" />
               </div>
             </div>
@@ -69,7 +70,7 @@
                   <WarningAlert title="Error al obtener registros:" subTitle="No hay datos disponibles" />
                 </td>
               </tr>
-              <tr v-for="(user, index) in users" :key="user.id">
+              <tr v-for="(user, index) in users" :key="user._id">
                 <td class="py-3 ps-6 dark:text-neutral-200">
                   {{ index + 1 }}
                 </td>
@@ -108,7 +109,7 @@
                   </span>
                 </td>
                 <td class="px-6 py-1.5">
-                  <EditButton />
+                  <EditButton :id="user._id" :triggerIdBtn="`userEditModal-${user._id}`" />
                   <DisabledButton />
                 </td>
               </tr>
@@ -147,6 +148,7 @@
   </div>
 
   <UserModal id="userModal" modalTitle="Nuevo usuario" />
+  <UserEditModal id="userEditModal" modalTitle="Actualizar usuario" />
 </template>
 
 <script>
@@ -156,6 +158,7 @@
   import DisabledButton from '@components/admin/buttons/DisabledButton.vue';
   import WarningAlert from '@components/ui/alerts/WarningAlert.vue';
   import UserModal from '@components/admin/forms/UserModal.vue';
+  import UserEditModal from '@components/admin/forms/UserEditModal.vue';
   import { getCookie } from '@/utils/functions.ts';
 
 
@@ -168,7 +171,8 @@
       EditButton,
       DisabledButton,
       WarningAlert,
-      UserModal
+      UserModal,
+      UserEditModal
     },
     data() {
       return {

@@ -1,7 +1,12 @@
 <template>
     <button
-      type="button"
+    type="button"
+      @click="$emit('open-modal', id)" 
       class="m-1 hover:bg-yellow-600 focus:bg-yellow-600 inline-flex items-center gap-x-2 rounded-lg border border-transparent bg-yellow-500 px-4 py-3 text-sm font-medium text-white focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+      aria-haspopup="dialog"
+      aria-expanded="false"
+      aria-controls="hs-slide-down-animation-modal"
+      :data-hs-overlay="`#${triggerIdBtn}`"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -20,5 +25,9 @@
 <script>
   export default {
     name: 'EditButton',
+    props: {
+      id: {type: String, required: true},
+      triggerIdBtn: {type: String, required: true}
+    },
   };
 </script>
