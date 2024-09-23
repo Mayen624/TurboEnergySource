@@ -20,7 +20,7 @@
     "@astrojs/vue": "^4.5.1",
     "@preline/accordion": "^2.3.0",
     "@preline/collapse": "^2.3.0",
-    "@preline/dropdown": "^2.3.0",
+    "@preline/dropdown": "^2.4.1",
     "@preline/overlay": "^2.3.0",
     "@preline/tabs": "^2.3.0",
     "@vitejs/plugin-vue": "^5.1.4",
