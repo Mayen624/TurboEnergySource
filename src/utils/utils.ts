@@ -12,4 +12,11 @@ function capitalize(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export { formatDate, capitalize };
+function getApiUrl() : string {
+  return import.meta.env.MODE === 'production'
+    ? import.meta.env.PUBLIC_API_PRODUCTION_URL
+    : import.meta.env.PUBLIC_API_LOCAL_URL;
+};
+
+
+export { formatDate, capitalize, getApiUrl };

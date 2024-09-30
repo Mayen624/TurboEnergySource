@@ -160,7 +160,7 @@
   import UserModal from '@components/admin/forms/UserModal.vue';
   import UserEditModal from '@components/admin/forms/UserEditModal.vue';
   import { getCookie } from '@/utils/functions.ts';
-
+  import { getApiUrl } from "@/utils/utils";
 
   export default defineComponent({
     props: {
@@ -186,7 +186,7 @@
       initEventSource() {
 
         const token = getCookie('authToken');
-        const eventSource = new EventSource(`${import.meta.env.PUBLIC_API_LOCAL_URL}/v1/users/realtime_users?token=${encodeURIComponent(token)}`);
+        const eventSource = new EventSource(`${getApiUrl()}/v1/users/realtime_users?token=${encodeURIComponent(token)}`);
 
         eventSource.onmessage = (event) => {
           const data = JSON.parse(event.data);

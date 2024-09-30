@@ -1,3 +1,4 @@
+import { getApiUrl } from "@/utils/utils";
 
 //======================== Users ======================== //
 export const getUsers = async (token: string, realTime: boolean = false) => {
@@ -6,7 +7,7 @@ export const getUsers = async (token: string, realTime: boolean = false) => {
         if(realTime){
             
         }else{
-            const response = await fetch(`${import.meta.env.PUBLIC_API_LOCAL_URL}/v1/users`, {
+            const response = await fetch(`${getApiUrl()}/v1/users`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -33,7 +34,7 @@ export const getUsers = async (token: string, realTime: boolean = false) => {
 
 export const getRoles = async (token: string) => {
     try {
-        const response = await fetch(`${import.meta.env.PUBLIC_API_LOCAL_URL}/api/v1/roles`, {
+        const response = await fetch(`${getApiUrl()}/v1/roles`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,

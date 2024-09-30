@@ -1,9 +1,9 @@
-
+import {getApiUrl} from '@utils/utils.ts'
 
 export const addUser = async (data: object, token: string) => {
     try {
 
-        const response = await fetch(`${import.meta.env.PUBLIC_API_LOCAL_URL}/v1/users/new_user`, {
+        const response = await fetch(`${getApiUrl()}/v1/users/new_user`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
