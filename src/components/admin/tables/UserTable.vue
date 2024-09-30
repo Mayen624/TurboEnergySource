@@ -186,7 +186,7 @@
       initEventSource() {
 
         const token = getCookie('authToken');
-        const eventSource = new EventSource(`http://localhost:3000/api/v1/users/realtime_users?token=${encodeURIComponent(token)}`);
+        const eventSource = new EventSource(`${import.meta.env.PUBLIC_API_LOCAL_URL}/v1/users/realtime_users?token=${encodeURIComponent(token)}`);
 
         eventSource.onmessage = (event) => {
           const data = JSON.parse(event.data);

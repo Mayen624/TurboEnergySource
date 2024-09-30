@@ -5,6 +5,9 @@ import sitemap from "@astrojs/sitemap";
 import compressor from "astro-compressor";
 import starlight from "@astrojs/starlight";
 import vue from '@astrojs/vue';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export default defineConfig({
   site: "https://screwfast.uk",

@@ -28,6 +28,7 @@
     "astro-compressor": "^0.4.1",
     "clipboard": "^2.0.11",
     "datatables.net-dt": "^2.1.6",
+    "dotenv": "^16.4.5",
     "dropzone": "^6.0.0-beta.2",
     "globby": "^14.0.2",
     "gsap": "^3.12.5",

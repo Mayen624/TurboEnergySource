@@ -5,7 +5,7 @@ export const handleLogin = async (email: string, password: string) => {
     const tokenTime = 3600;
 
     try {
-        const response = await fetch('http://localhost:3000/api/v1/auth', {
+        const response = await fetch(`${import.meta.env.PUBLIC_API_LOCAL_URL}/v1/auth`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

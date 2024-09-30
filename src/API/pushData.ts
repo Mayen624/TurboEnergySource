@@ -3,7 +3,7 @@
 export const addUser = async (data: object, token: string) => {
     try {
 
-        const response = await fetch('http://localhost:3000/api/v1/users/new_user', {
+        const response = await fetch(`${import.meta.env.PUBLIC_API_LOCAL_URL}/v1/users/new_user`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
