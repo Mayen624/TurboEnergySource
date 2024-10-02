@@ -13,7 +13,6 @@
             </div>
             <div>
               <div class="inline-flex gap-x-2">
-                <EditButton id="usdfsd" triggerIdBtn="userEditModal"/>
                 <AddButton id="addBtnUser" triggerIdBtn="userModal" buttonText="Nuevo usuario" />
               </div>
             </div>
