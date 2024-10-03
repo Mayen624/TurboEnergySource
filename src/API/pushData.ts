@@ -20,3 +20,24 @@ export const addUser = async (data: object, token: string) => {
 
     }
 }
+
+export const enabledOrDisabled = async (id: string, enabled: boolean, token: string) => {
+    try {
+
+        const response = await fetch(`${getApiUrl()}/v1/users/enabledOrDesabled/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({enabled})
+        });
+
+        const res = await response.json();
+        return res;
+
+    } catch (error) {
+        console.error('Error en la solicitud:', error);
+
+    }
+}

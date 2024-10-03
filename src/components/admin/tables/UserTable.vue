@@ -2,9 +2,11 @@
   <div class="flex flex-col">
     <div class="-m-1.5 overflow-x-auto">
       <div class="inline-block min-w-full p-1.5 align-middle">
-        <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-neutral-700 dark:bg-neutral-800">
+        <div
+          class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-neutral-700 dark:bg-neutral-800">
           <!-- Header -->
-          <div class="grid gap-3 border-b border-gray-200 px-6 py-4 dark:border-neutral-700 md:flex md:items-center md:justify-between">
+          <div
+            class="grid gap-3 border-b border-gray-200 px-6 py-4 dark:border-neutral-700 md:flex md:items-center md:justify-between">
             <div>
               <h2 class="text-xl font-semibold text-gray-800 dark:text-neutral-200">
                 {{ titleCard }}
@@ -75,7 +77,11 @@
                 </td>
                 <td class="py-3 pe-6 ps-6">
                   <div class="flex items-center gap-x-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="inline-block size-[38px] rounded-full dark:text-neutral-200" viewBox="0 0 718 669"><path fill="currentColor" d="M646 516c47 26 74 70 71 115c-3 28-3 29-39 33c-23 3-163 5-307 5c-163 0-333-2-346-5c-48-13-22-102 43-143c50-33 152-82 179-88c38-8 43-31 1-106c-10-17-22-68-23-122c-2-86 16-145 91-173c14-5 30-8 45-8c50 0 97 28 116 69c27 55 16 199-13 251c-32 60-29 78 8 88c24 6 99 43 174 84"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                      class="inline-block size-[38px] rounded-full dark:text-neutral-200" viewBox="0 0 718 669">
+                      <path fill="currentColor"
+                        d="M646 516c47 26 74 70 71 115c-3 28-3 29-39 33c-23 3-163 5-307 5c-163 0-333-2-346-5c-48-13-22-102 43-143c50-33 152-82 179-88c38-8 43-31 1-106c-10-17-22-68-23-122c-2-86 16-145 91-173c14-5 30-8 45-8c50 0 97 28 116 69c27 55 16 199-13 251c-32 60-29 78 8 88c24 6 99 43 174 84" />
+                    </svg>
                     <div>
                       <span class="block text-sm font-semibold dark:text-neutral-200">
                         {{ user.name }}
@@ -87,12 +93,17 @@
                   </div>
                 </td>
                 <td class="px-6 py-3">
-                  <span :class="['py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium rounded-full', user.enabled ? 'bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500' : 'bg-red-100 text-red-800 dark:bg-red-500/10 dark:text-red-500']">
-                    <svg v-if="user.enabled" class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                      <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                  <span
+                    :class="['py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium rounded-full', user.enabled ? 'bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500' : 'bg-red-100 text-red-800 dark:bg-red-500/10 dark:text-red-500']">
+                    <svg v-if="user.enabled" class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                      fill="currentColor" viewBox="0 0 16 16">
+                      <path
+                        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
                     </svg>
-                    <svg v-else class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                      <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+                    <svg v-else class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                      fill="currentColor" viewBox="0 0 16 16">
+                      <path
+                        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z" />
                     </svg>
                     {{ user.enabled ? 'Activo' : 'Inactivo' }}
                   </span>
@@ -108,8 +119,15 @@
                   </span>
                 </td>
                 <td class="px-6 py-1.5">
-                  <EditButton :id="user._id" :triggerIdBtn="`userEditModal-${user._id}`" />
-                  <DisabledButton />
+                  <button type="button" @click="disabledAndEnabledUser(user._id, user.enabled)"
+                    class="m-1 hover:bg-red-600 focus:bg-red-600 inline-flex items-center gap-x-2 rounded-lg border border-transparent bg-red-500 px-4 py-3 text-sm font-medium text-white focus:outline-none disabled:pointer-events-none disabled:opacity-50">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24">
+                      <path fill="none" stroke="currentColor" stroke-width="2"
+                        d="M18 12H6M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2z"></path>
+                    </svg>
+                  </button>
+                  <!-- <EditButton :id="user._id" :triggerIdBtn="`userEditModal-${user._id}`" /> -->
+                  <!-- <DisabledButton /> -->
                 </td>
               </tr>
             </tbody>
@@ -117,7 +135,8 @@
           <!-- End Table -->
 
           <!-- Footer -->
-          <div class="grid gap-3 border-t border-gray-200 px-6 py-4 dark:border-neutral-700 md:flex md:items-center md:justify-between">
+          <div
+            class="grid gap-3 border-t border-gray-200 px-6 py-4 dark:border-neutral-700 md:flex md:items-center md:justify-between">
             <div>
               <p class="text-sm text-gray-600 dark:text-neutral-400">
                 <span class="font-semibold text-gray-800 dark:text-neutral-200">12</span> results
@@ -125,15 +144,21 @@
             </div>
             <div>
               <div class="inline-flex gap-x-2">
-                <button type="button" class="inline-flex items-center gap-x-2 rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-50 focus:bg-gray-50 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-transparent dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800">
-                  <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <button type="button"
+                  class="inline-flex items-center gap-x-2 rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-50 focus:bg-gray-50 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-transparent dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800">
+                  <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
                     <path d="m15 18-6-6 6-6"></path>
                   </svg>
                   Prev
                 </button>
-                <button type="button" class="inline-flex items-center gap-x-2 rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-50 focus:bg-gray-50 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-transparent dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800">
+                <button type="button"
+                  class="inline-flex items-center gap-x-2 rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-50 focus:bg-gray-50 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-transparent dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800">
                   Next
-                  <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
                     <path d="m9 18 6-6-6-6"></path>
                   </svg>
                 </button>
@@ -158,6 +183,8 @@
   import WarningAlert from '@components/ui/alerts/WarningAlert.vue';
   import UserModal from '@components/admin/forms/UserModal.vue';
   import UserEditModal from '@components/admin/forms/UserEditModal.vue';
+  import {successToast, errorToast} from '@utils/notify.ts'
+  import {disabledAndEnabled} from '@/API/fetchData.ts'
   import { getCookie } from '@/utils/functions.ts';
   import { getApiUrl } from "@/utils/utils";
 
@@ -183,7 +210,6 @@
     },
     methods: {
       initEventSource() {
-
         const token = getCookie('authToken');
         const eventSource = new EventSource(`${getApiUrl()}/v1/users/realtime_users?token=${encodeURIComponent(token)}`);
 
@@ -191,6 +217,21 @@
           const data = JSON.parse(event.data);
           this.users = data;
         };
+      },
+      async disabledAndEnabledUser(id){
+        const token = getCookie('authToken');
+
+          if(!id){
+            errorToast('¡Error!', 'Registro no valido')
+          }else{
+            const res = disabledAndEnabled(id, enabled, token);
+            
+            if(res.error){
+              errorToast('¡Error!', res.error);
+            }else if(res.success){
+              successToast('¡Exito!', res.success);
+            }
+          }
       }
     }
   });
