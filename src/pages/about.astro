@@ -55,7 +55,7 @@ const pagetitle = `Sobre Nosotros | ${SITE.title}`;
 
 {
 sections.map(section => {
-  return section.isRightSection ? (
+  return section.isRightSection && (
     <RightSection
       title={section.title}
       subTitle={section.subtitle}
@@ -64,9 +64,8 @@ sections.map(section => {
      imgOneAlt={section.imageAlt}
      imgTwo={section.imgTwo}
     imgTwoAlt={section.imgTwoAlt}     
-
     />
-  ) : null;
+  ) ;
 })
 }
 
