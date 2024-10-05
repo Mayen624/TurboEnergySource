@@ -30,7 +30,7 @@ export const enabledOrDisabled = async (id: string, enabled: boolean, token: str
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({enabled})
+            body: JSON.stringify({enabled: enabled})
         });
 
         const res = await response.json();

@@ -119,11 +119,18 @@
                   </span>
                 </td>
                 <td class="px-6 py-1.5">
-                  <button type="button" @click="disabledAndEnabledUser(user._id, user.enabled)"
-                    class="m-1 hover:bg-red-600 focus:bg-red-600 inline-flex items-center gap-x-2 rounded-lg border border-transparent bg-red-500 px-4 py-3 text-sm font-medium text-white focus:outline-none disabled:pointer-events-none disabled:opacity-50">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24">
+                  <button :title="user.enabled ? 'Desactivar' : 'Activar'" type="button" @click="disabledAndEnabledUser(user._id, !user.enabled)"
+                    :class="[
+                      'm-1 inline-flex items-center gap-x-2 rounded-lg border border-transparent px-4 py-3 text-sm font-medium text-white focus:outline-none disabled:pointer-events-none disabled:opacity-50',
+                      user.enabled ? 'bg-red-500 hover:bg-red-600 focus:bg-red-600' :'bg-green-500 hover:bg-green-600 focus:bg-green-600'
+                    ]">
+                    <svg v-if="user.enabled" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24">
                       <path fill="none" stroke="currentColor" stroke-width="2"
                         d="M18 12H6M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2z"></path>
+                    </svg>
+                    <svg v-else xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 20 20">
+                      <path fill="currentColor"
+                        d="M1.818 1.364a.455.455 0 0 0-.454.454v16.364c0 .25.203.454.454.454h16.364a.455.455 0 0 0 .454-.454V1.818a.455.455 0 0 0-.454-.454zM18.182 0C19.186 0 20 .814 20 1.818v16.364A1.82 1.82 0 0 1 18.182 20H1.818A1.82 1.82 0 0 1 0 18.182V1.818C0 .814.814 0 1.818 0zm-7.884 4.91a.68.68 0 0 0-.682.682L9.615 9.3H5.909a.68.68 0 0 0-.674.581l-.008.1c0 .378.306.683.682.683l3.706-.001v3.707c0 .343.253.626.582.675l.1.007a.68.68 0 0 0 .682-.682v-3.707h3.707a.68.68 0 0 0 .675-.58l.007-.101a.68.68 0 0 0-.682-.682H10.98V5.592a.68.68 0 0 0-.58-.674Z" />
                     </svg>
                   </button>
                   <!-- <EditButton :id="user._id" :triggerIdBtn="`userEditModal-${user._id}`" /> -->
@@ -184,7 +191,7 @@
   import UserModal from '@components/admin/forms/UserModal.vue';
   import UserEditModal from '@components/admin/forms/UserEditModal.vue';
   import {successToast, errorToast} from '@utils/notify.ts'
-  import {disabledAndEnabled} from '@/API/fetchData.ts'
+  import {enabledOrDisabled} from '@/API/pushData.ts'
   import { getCookie } from '@/utils/functions.ts';
   import { getApiUrl } from "@/utils/utils";
 
@@ -218,13 +225,13 @@
           this.users = data;
         };
       },
-      async disabledAndEnabledUser(id){
+      async disabledAndEnabledUser(id, enabled){
         const token = getCookie('authToken');
 
           if(!id){
             errorToast('¡Error!', 'Registro no valido')
           }else{
-            const res = disabledAndEnabled(id, enabled, token);
+            const res = await enabledOrDisabled(id, enabled, token);
             
             if(res.error){
               errorToast('¡Error!', res.error);
