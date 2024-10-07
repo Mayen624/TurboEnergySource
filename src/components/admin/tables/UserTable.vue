@@ -191,7 +191,7 @@
   import UserModal from '@components/admin/forms/UserModal.vue';
   import UserEditModal from '@components/admin/forms/UserEditModal.vue';
   import {successToast, errorToast} from '@utils/notify.ts'
-  import {enabledOrDisabled} from '@/API/pushData.ts'
+  import {enabledOrDisabledUser} from '@/API/pushData.ts'
   import { getCookie } from '@/utils/functions.ts';
   import { getApiUrl } from "@/utils/utils";
 
@@ -231,7 +231,7 @@
           if(!id){
             errorToast('¡Error!', 'Registro no valido')
           }else{
-            const res = await enabledOrDisabled(id, enabled, token);
+            const res = await enabledOrDisabledUser(id, enabled, token);
             
             if(res.error){
               errorToast('¡Error!', res.error);

@@ -1,4 +1,4 @@
-import { getUsers, getRoles } from '@/API/fetchData.ts';
+import { getUsers, getRoles, getActions } from '@/API/fetchData.ts';
 
 export const fetchDataForUserComboBox = async (token: string) => {
 
@@ -25,7 +25,8 @@ export const fetchDataForRoleComboBox = async (token: string) => {
 
         const roles = await getRoles(token);
 
-        const data = roles.map((role: any) => ({
+        const filteredRoles = roles.filter((role: any) => role.enabled === true);
+        const data = filteredRoles.map((role: any) => ({
             textValue: role.name,
             idValue: role._id,
         }));
@@ -34,6 +35,26 @@ export const fetchDataForRoleComboBox = async (token: string) => {
 
     } catch (e) {
         console.error('Error fetching roles from comboBox:', e);
+    }
+
+}
+
+export const fetchDataForActionsComboBox = async (token: string) => {
+
+    try {
+
+        const actions = await getActions(token);
+        const filteredActions = actions.filter((action: any) => action.enabled === true);
+
+        const data = filteredActions.map((action: any) => ({
+            textValue: action.name,
+            idValue: action._id,
+        }));
+
+        return data;
+
+    } catch (e) {
+        console.error('Error fetching actions from comboBox:', e);
     }
 
 }
