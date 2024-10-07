@@ -1,6 +1,15 @@
 ---
-import AdminLayout from "@/layouts/AdminLayout.astro";
+import AdminLayout from "@/layouts/AdminLayout.astro"
+import { authMiddleware } from "@/middleware/auth";
 export const prerender = false;
+
+const response = await authMiddleware(Astro, async () => {
+  return new Response(null, {status: 200});
+});
+
+if (response instanceof Response && response.headers.get('Location')) {
+  return Astro.redirect(response.headers.get('Location') || '/', response.status);
+}
 ---
 
 
