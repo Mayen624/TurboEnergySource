@@ -35,7 +35,7 @@
     "html-minifier-terser": "^7.2.0",
     "lenis": "^1.1.6",
     "lodash": "^4.17.21",
-    "preline": "^2.4.1",
+    "preline": "^2.5.0",
     "sharp": "^0.33.4",
     "sharp-ico": "^0.1.5",
     "simple-notify": "^1.0.4",
