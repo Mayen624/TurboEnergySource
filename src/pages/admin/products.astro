@@ -1,6 +1,7 @@
 ---
 import AdminLayout from "@/layouts/AdminLayout.astro"
 import { authMiddleware } from "@/middleware/auth";
+import ProductsTable from "@/components/admin/tables/ProductsTable.vue";
 export const prerender = false;
 
 const response = await authMiddleware(Astro, async () => {
@@ -14,5 +15,5 @@ if (response instanceof Response && response.headers.get('Location')) {
 
 
 <AdminLayout title="Productos">
-    <h1 class="text-center mt-10 dark:text-neutral-200">Productos</h1>
+    <ProductsTable title="Productos del sistema" client:load/>
 </AdminLayout>
