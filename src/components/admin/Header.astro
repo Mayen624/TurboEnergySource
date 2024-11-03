@@ -205,11 +205,16 @@ import ThemeIcon from "../ThemeIcon.astro";
             aria-expanded="false"
             aria-label="Dropdown"
           >
-            <img
-              class="size-[38px] shrink-0 rounded-full"
-              src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80"
-              alt="Avatar"
-            />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="inline-block size-[38px] rounded-full dark:text-neutral-200"
+              viewBox="0 0 718 669"
+            >
+              <path
+                fill="currentColor"
+                d="M646 516c47 26 74 70 71 115c-3 28-3 29-39 33c-23 3-163 5-307 5c-163 0-333-2-346-5c-48-13-22-102 43-143c50-33 152-82 179-88c38-8 43-31 1-106c-10-17-22-68-23-122c-2-86 16-145 91-173c14-5 30-8 45-8c50 0 97 28 116 69c27 55 16 199-13 251c-32 60-29 78 8 88c24 6 99 43 174 84"
+              ></path>
+            </svg>
           </button>
 
           <div
@@ -352,16 +357,15 @@ import ThemeIcon from "../ThemeIcon.astro";
 <!-- ========== END HEADER ========== -->
 
 <script>
+  import { deleteCookie } from "@utils/functions.ts";
 
-    import {deleteCookie} from '@utils/functions.ts';
+  let logOut = document.getElementById("logOut");
 
-    let logOut = document.getElementById('logOut');
-
-    if(logOut){
-      logOut.addEventListener('click', () => {
-        deleteCookie('authToken');
-        history.replaceState(null, '', "/");
-        window.location.replace("/?message=sessionClosed");
-      })
-    }
+  if (logOut) {
+    logOut.addEventListener("click", () => {
+      deleteCookie("authToken");
+      history.replaceState(null, "", "/");
+      window.location.replace("/?message=sessionClosed");
+    });
+  }
 </script>
