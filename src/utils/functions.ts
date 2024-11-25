@@ -43,3 +43,25 @@ export function deleteCookie(name: string) {
   }
 }
 
+export const isFormDataEmpty = (formData: FormData): boolean => {
+  for (const [key, value] of formData.entries()) {
+    if (typeof value === 'string' && value.trim() === '') {
+      return true;
+    }
+  }
+  return false;
+};
+
+export const checkContactFormData = (email: string, phone: string): boolean => {
+
+  const emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+  const phoneRegex = /^\+\d{1,3}\s\d{7,15}$/;
+
+  if (!emailRegex.test(email)) {
+    return true;
+  }else if(!phoneRegex.test(phone)){
+    return true;
+  }
+  return false;
+};
+

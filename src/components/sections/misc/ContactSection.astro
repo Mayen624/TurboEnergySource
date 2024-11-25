@@ -9,12 +9,17 @@ import TextAreaInput from "@components/ui/forms/input/TextAreaInput.astro";
 import Icon from "@components/ui/icons/Icon.astro";
 
 // Define the variables that will be used in this component
+const reCaptchaPublicKey = import.meta.env.RE_CAPTCHA_PUBLIC_KEY;
 const title: string = "Contactenos";
 const subTitle: string =
   "Tiene preguntas o quiere discutir un proyecto? Comuníquese y creemos la solución perfecta con nuestras herramientas y servicios.";
-const formTitle: string = "Rellene el siguiente formulario";
+const formTitle: string = "Rellene el siguiente formulario:";
 const formSubTitle: string = "Lo contactaremos en 1-2 días hábiles.";
+
 ---
+
+<!-- <script src="../../../assets/scripts/recaptcha-api.js"></script> -->
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 <!-- Contact Us -->
 <section class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
@@ -29,7 +34,7 @@ const formSubTitle: string = "Lo contactaremos en 1-2 días hábiles.";
         {subTitle}
       </p>
     </div>
-  <!-- </div> -->
+    <!-- </div> -->
 
     <div class="mt-12 grid items-center gap-6 lg:grid-cols-2 lg:gap-16">
       <div class="flex flex-col rounded-xl p-4 sm:p-6 lg:p-8">
@@ -40,31 +45,31 @@ const formSubTitle: string = "Lo contactaremos en 1-2 días hábiles.";
         </h2>
         <!-- Form for user input with various input fields.-->
         <!-- Each field utilizes a different input component for the specific type of input (text, email, phone, and textarea)-->
-        <form>
+        <form id="contactForm" method="POST">
           <div class="grid gap-4">
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <TextInput
-                id="hs-firstname-contacts"
-                label="First Name"
-                name="hs-firstname-contacts"
+                id="firstName"
+                label="Primer nombre"
+                name="firstName"
               />
-              <TextInput
-                id="hs-lastname-contacts"
-                label="Last Name"
-                name="hs-firstname-contacts"
-              />
+              <TextInput id="lastName" label="Segundo nombre" name="lastName" />
             </div>
-            <EmailContactInput id="hs-email-contacts" />
-            <PhoneInput id="hs-phone-number" />
+            <EmailContactInput id="email" name="email" placeholder="Correo" />
+            <PhoneInput id="phone" name="phone" label="+0 0000000" />
             <TextAreaInput
               id="hs-about-contacts"
-              label="Details"
-              name="hs-about-contacts"
+              label="Detalles..."
+              name="details"
             />
           </div>
 
           <div class="mt-4 grid">
-            <AuthBtn title="Send Message" />
+            <div class="g-recaptcha" data-sitekey={reCaptchaPublicKey} data-action="submit_contact_form"></div>
+          </div>
+
+          <div class="mt-4 grid">
+            <AuthBtn id="authBtn" title="Enviar" />
           </div>
 
           <div class="mt-3 text-center">
@@ -117,3 +122,56 @@ const formSubTitle: string = "Lo contactaremos en 1-2 días hábiles.";
     </div>
   </div>
 </section>
+
+<script>
+  import { sendContactForm } from "@/API/pushData.ts";
+  import { errorToast, successToast } from "@utils/notify.ts";
+  import { isFormDataEmpty, checkContactFormData} from "@utils/functions.ts";
+
+  declare const grecaptcha: any;
+  let form = document.getElementById("contactForm") as HTMLFormElement;
+  let authBtn = document.getElementById("authBtn");
+
+  authBtn?.addEventListener("click", async (e) => {
+    e.preventDefault();
+
+    if (form) {
+      const formData = new FormData(form);
+      const email = formData.get('email') as string;
+      const phone = formData.get('phone') as string;
+
+      const captchaResponse = grecaptcha.getResponse();
+      if (!captchaResponse) {
+        return errorToast("Error", "Por favor, complete el reCAPTCHA.", undefined, true, false);
+      }
+
+      if (!isFormDataEmpty(formData) && !checkContactFormData(email, phone)) {
+
+        const data = {
+          firstName : formData.get('firstName'),
+          lastName  : formData.get('lastName'),
+          email     : email,
+          phone     : phone,
+          details   : formData.get('details'),
+          captchaResponse: captchaResponse
+        }
+        const res = await sendContactForm(data);
+
+        try {
+          if (res.success) {
+            return successToast("¡Solicitud enviada!", res.success);
+          } else if (res.error) {
+            return errorToast("¡Ha acurrido un error inesperado!", res.error);
+          }
+        } catch (e) {
+          const errorMessage = (e as Error).message;
+          return errorToast("¡Ha acurrido un error inesperado!", errorMessage);
+        }
+      }else{
+        return errorToast("Corrigue lo siguiente:", 'Formato de correo/telefono invalidos o campos requeridos faltanes.', undefined, true, false);
+      }
+    } else {
+      return errorToast("¡Error!", "Ha acurrido un error inesperado.");
+    }
+  });
+</script>

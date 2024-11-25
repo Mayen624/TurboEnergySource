@@ -22,7 +22,7 @@ export const handleLogin = async (email: string, password: string) => {
         }
 
         if (data.token) {
-            document.cookie = `authToken=${data.token}; path=/; max-age=${tokenTime}; SameSite=Strict; Secure`;
+            document.cookie = `authToken=${data.token}; path=/; max-age=${tokenTime}; SameSite=Strict; Secure;`;
             return window.location.href = '/admin?message=authorized';
         } else {
             throw new Error('Token no recibido');

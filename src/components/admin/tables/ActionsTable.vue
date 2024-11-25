@@ -179,7 +179,6 @@
     </div>
   
     <ActionsModal id="actionModal" modalTitle="Nueva acción" />
-    <UserEditModal id="userEditModal" modalTitle="Actualizar usuario" />
   </template>
   
   <script>

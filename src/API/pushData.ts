@@ -131,3 +131,28 @@ export const enabledOrDisabledRole = async (id: string, enabled: boolean, token:
 
     }
 }
+
+//======================== Contact ======================== //
+
+export const sendContactForm = async (data: Object, img: File, token: string) => {
+    try {
+
+        const formData = new FormData();
+        formData.append('img', img);
+        formData.append('product', JSON.stringify(data));
+
+        const response = await fetch(`${getApiUrl()}/v1/products/new_product`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+            body: formData
+        });
+
+        const res = await response.json();
+        return res;
+
+    } catch (e) {
+        return {error: e};
+    }
+}

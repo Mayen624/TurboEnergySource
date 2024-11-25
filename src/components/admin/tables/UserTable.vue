@@ -179,7 +179,7 @@
   </div>
 
   <UserModal id="userModal" modalTitle="Nuevo usuario" />
-  <UserEditModal id="userEditModal" modalTitle="Actualizar usuario" />
+  <!-- <UserEditModal id="userEditModal" modalTitle="Actualizar usuario" /> -->
 </template>
 
 <script>

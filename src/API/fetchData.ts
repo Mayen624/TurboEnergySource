@@ -75,3 +75,28 @@ export const getRoles = async (token: string) => {
     }
 };
 
+//======================== Products ======================== //
+
+export const getProducts = async (token: string) => {
+    try {
+        const response = await fetch(`${getApiUrl()}/v1/products`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || data.error) {
+            return { error: data.error == undefined || null ? 'Error fetching products' : data.error }; 
+        }
+
+        return data.products;
+
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        return { error: error }; 
+    }
+};
+

@@ -87,31 +87,31 @@
               </thead>
   
               <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
-                <tr v-if="actions.length <= 0">
-                  <td colspan="7" class="px-6 py-3 text-center">
+                <tr v-if="products.length <= 0">
+                  <td colspan="10" class="px-6 py-3 text-center">
                     <WarningAlert title="Error al obtener registros:" subTitle="No hay datos disponibles" />
                   </td>
                 </tr>
-                <tr v-for="(action, index) in actions" :key="action._id">
+                <tr v-for="(product, index) in products" :key="product._id">
                   <td class="py-3 ps-6 dark:text-neutral-200">
                     {{ index + 1 }}
                   </td>
                   <td class="py-3 pe-6 ps-6">
                     <div class="flex items-center gap-x-3">
                         <span class="block text-sm font-semibold dark:text-neutral-200">
-                          {{ action.name }}
+                          {{ product.title }}
                         </span>
                     </div>
                   </td>
                   <td class="px-6 py-3">
                     <span class="text-sm text-gray-500">
-                      {{ action.description }}
+                      {{ product.description }}
                     </span>
                   </td>
                   <td class="px-6 py-3">
                     <span
-                      :class="['py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium rounded-full', action.enabled ? 'bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500' : 'bg-red-100 text-red-800 dark:bg-red-500/10 dark:text-red-500']">
-                      <svg v-if="action.enabled" class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                      :class="['py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium rounded-full', product.enabled ? 'bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500' : 'bg-red-100 text-red-800 dark:bg-red-500/10 dark:text-red-500']">
+                      <svg v-if="product.enabled" class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                         fill="currentColor" viewBox="0 0 16 16">
                         <path
                           d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
@@ -121,26 +121,26 @@
                         <path
                           d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z" />
                       </svg>
-                      {{ action.enabled ? 'Activo' : 'Inactivo' }}
+                      {{ product.enabled ? 'Activo' : 'Inactivo' }}
                     </span>
                   </td>
                   <td class="px-6 py-3">
                     <span class="text-sm text-gray-500">
-                      {{ new Date(action.createdAt).toLocaleDateString() }}
+                      {{ new Date(product.createdAt).toLocaleDateString() }}
                     </span>
                   </td>
                   <td class="px-6 py-3">
                     <span class="text-sm text-gray-500">
-                      {{ new Date(action.updatedAt).toLocaleDateString() }}
+                      {{ new Date(product.updatedAt).toLocaleDateString() }}
                     </span>
                   </td>
                   <td class="px-6 py-1.5">
-                    <button :title="action.enabled ? 'Desactivar' : 'Activar'" type="button" @click="disabledAndEnabledAction(action._id, !action.enabled)"
+                    <button :title="product.enabled ? 'Desactivar' : 'Activar'" type="button" @click="disabledAndEnabledAction(product._id, !product.enabled)"
                       :class="[
                         'm-1 inline-flex items-center gap-x-2 rounded-lg border border-transparent px-4 py-3 text-sm font-medium text-white focus:outline-none disabled:pointer-events-none disabled:opacity-50',
-                        action.enabled ? 'bg-red-500 hover:bg-red-600 focus:bg-red-600' :'bg-green-500 hover:bg-green-600 focus:bg-green-600'
+                        product.enabled ? 'bg-red-500 hover:bg-red-600 focus:bg-red-600' :'bg-green-500 hover:bg-green-600 focus:bg-green-600'
                       ]">
-                      <svg v-if="action.enabled" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24">
+                      <svg v-if="product.enabled" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24">
                         <path fill="none" stroke="currentColor" stroke-width="2"
                           d="M18 12H6M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2z"></path>
                       </svg>
@@ -193,7 +193,6 @@
     </div>
   
     <ProductModal id="productModal" modalTitle="Nuevo producto" />
-    <UserEditModal id="userEditModal" modalTitle="Actualizar usuario" />
   </template>
   
   <script>
@@ -208,7 +207,7 @@
     import {enabledOrDisabledAction} from '@/API/pushData.ts'
     import { getCookie } from '@/utils/functions.ts';
     import { getApiUrl } from "@/utils/utils";
-    import {getActions} from "@/API/fetchData.ts";
+    import {getProducts} from "@/API/fetchData.ts";
   
     export default defineComponent({
       props: {
@@ -224,18 +223,18 @@
       },
       data() {
         return {
-          actions: []
+          products: [],
         };
       },
       mounted() {
-        this.displayActions();
+        this.displayProducts();
       },
       methods: {
-        async displayActions() {
+        async displayProducts() {
           const token = getCookie('authToken');
           
-          const actions = await getActions(token);
-          this.actions = actions;
+          const products = await getProducts(token);
+          this.products = products;
         
         },
         async disabledAndEnabledAction(id, enabled){
