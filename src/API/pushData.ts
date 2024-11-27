@@ -97,7 +97,7 @@ export const addRole = async (data: object, token: string) => {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json', // Agrega el Content-Type
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify(data)
         });
@@ -133,8 +133,27 @@ export const enabledOrDisabledRole = async (id: string, enabled: boolean, token:
 }
 
 //======================== Contact ======================== //
+export const sendContactForm = async (data: object) => {
+    try {
 
-export const sendContactForm = async (data: Object, img: File, token: string) => {
+        const response = await fetch(`${getApiUrl()}/v1/contacts/new_contact`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+
+        const res = await response.json();
+        return res;
+
+    } catch (e) {
+        return {error: e};
+    }
+}
+
+//======================== Products ======================== //
+export const addProduct = async (data: object, img: File, token: string) => {
     try {
 
         const formData = new FormData();
