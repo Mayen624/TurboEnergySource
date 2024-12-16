@@ -100,3 +100,29 @@ export const getProducts = async (token: string) => {
     }
 };
 
+//======================== Contact ======================== //
+
+export const getContacts = async (token: string) => {
+    try {
+        
+        const response = await fetch(`${getApiUrl()}/v1/contacts`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || data.error) {
+            console.log(data.error);
+            return { error: data.error == undefined || null ? 'Error fetching contact' : data.error }; 
+        }
+
+        return data.contacts; 
+
+    } catch (error) {
+        console.error('Error fetching contact:', error);
+        return { error: error }; 
+    }
+};
