@@ -130,7 +130,7 @@ import UploadFileInput from '@/components/ui/forms/input/UploadFileInput.vue';
 import ProductPreviewCard from '../cards/ProductPreviewCard.vue';
 import { successToast, errorToast } from '@/utils/notify.ts'
 import { getCookie } from '@/utils/functions.ts';
-import { sendContactForm } from '@/API/pushData.ts';
+import { addProduct } from '@/API/pushData.ts';
 
 export default {
   name: 'ProductModal',
@@ -228,6 +228,7 @@ export default {
     }
   },
   mounted() {
+    this.previewData.longDescription.btnURL = '/contact';
     console.log()
   },
   methods: {
@@ -245,7 +246,8 @@ export default {
       event.preventDefault();
 
       const data = this.previewData;
-      const res = await sendContactForm(data, this.img ,getCookie('authToken'));
+      const token = getCookie('authToken');
+      const res = await addProduct(data, this.img ,token);
 
 
       if (res.errors) {
@@ -254,11 +256,10 @@ export default {
       } else if(res.error){
         return errorToast('Error', res.error, 10000, true, false);
       } else if (res.success) {
-        form.reset();
         successToast('Exito!', res.success);
         setTimeout(() => {
           location.reload();
-        }, 3500);
+        }, 6000);
       }
     }
   },

@@ -159,6 +159,7 @@ export const addProduct = async (data: object, img: File, token: string) => {
         const formData = new FormData();
         formData.append('img', img);
         formData.append('product', JSON.stringify(data));
+        formData.append('token', token);
 
         const response = await fetch(`${getApiUrl()}/v1/products/new_product`, {
             method: 'POST',
@@ -173,5 +174,27 @@ export const addProduct = async (data: object, img: File, token: string) => {
 
     } catch (e) {
         return {error: e};
+    }
+}
+
+export const enabledOrDisabledProduct = async (id: string, enabled: boolean, token: string) => {
+    try {
+
+        const response = await fetch(`${getApiUrl()}/v1/products/enabledOrDesabled/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({enabled: enabled})
+        });
+
+        const res = await response.json();
+        return res;
+
+    } catch (error) {
+        console.log(error)
+        console.error('Error en la solicitud:', error);
+
     }
 }

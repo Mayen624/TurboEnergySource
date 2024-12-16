@@ -29,7 +29,14 @@
                   <th scope="col" class="py-3 pe-6 ps-6 text-start lg:ps-3 xl:ps-0">
                     <div class="flex items-center gap-x-2">
                       <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                        NOMBRE
+                        IMAGEN
+                      </span>
+                    </div>
+                  </th>
+                  <th scope="col" class="py-3 pe-6 ps-6 text-start lg:ps-3 xl:ps-0">
+                    <div class="flex items-center gap-x-2">
+                      <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                        TITULO
                       </span>
                     </div>
                   </th>
@@ -98,6 +105,11 @@
                   </td>
                   <td class="py-3 pe-6 ps-6">
                     <div class="flex items-center gap-x-3">
+                        <img :src="product.mainContent.img.src" alt="img" style="height: 55px;">
+                    </div>
+                  </td>
+                  <td class="py-3 pe-6 ps-6">
+                    <div class="flex items-center gap-x-3">
                         <span class="block text-sm font-semibold dark:text-neutral-200">
                           {{ product.title }}
                         </span>
@@ -126,6 +138,16 @@
                   </td>
                   <td class="px-6 py-3">
                     <span class="text-sm text-gray-500">
+                      {{ product.createdBy.name }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-3">
+                    <span class="text-sm text-gray-500">
+                      {{ product.updatedBy?.name || 'N/A' }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-3">
+                    <span class="text-sm text-gray-500">
                       {{ new Date(product.createdAt).toLocaleDateString() }}
                     </span>
                   </td>
@@ -135,7 +157,7 @@
                     </span>
                   </td>
                   <td class="px-6 py-1.5">
-                    <button :title="product.enabled ? 'Desactivar' : 'Activar'" type="button" @click="disabledAndEnabledAction(product._id, !product.enabled)"
+                    <button :title="product.enabled ? 'Desactivar' : 'Activar'" type="button" @click="disabledAndEnabledProduct(product._id, !product.enabled)"
                       :class="[
                         'm-1 inline-flex items-center gap-x-2 rounded-lg border border-transparent px-4 py-3 text-sm font-medium text-white focus:outline-none disabled:pointer-events-none disabled:opacity-50',
                         product.enabled ? 'bg-red-500 hover:bg-red-600 focus:bg-red-600' :'bg-green-500 hover:bg-green-600 focus:bg-green-600'
@@ -204,7 +226,7 @@
     import ProductModal from '@components/admin/forms/ProductModal.vue';
     import UserEditModal from '@components/admin/forms/UserEditModal.vue';
     import {successToast, errorToast} from '@utils/notify.ts'
-    import {enabledOrDisabledAction} from '@/API/pushData.ts'
+    import {enabledOrDisabledProduct} from '@/API/pushData.ts'
     import { getCookie } from '@/utils/functions.ts';
     import { getApiUrl } from "@/utils/utils";
     import {getProducts} from "@/API/fetchData.ts";
@@ -237,24 +259,24 @@
           this.products = products;
         
         },
-        async disabledAndEnabledAction(id, enabled){
+        async disabledAndEnabledProduct(id, enabled){
           const token = getCookie('authToken');
   
           if(!id){
             errorToast('¡Error!', 'Registro no valido')
           }else{
-            const res = await enabledOrDisabledAction(id, enabled, token);
+            console.log(id, enabled, token)
+            const res = await enabledOrDisabledProduct(id, enabled, token);
               
             if(res.error){
               errorToast('¡Error!', res.error);
             }else if(res.success){
               successToast('¡Exito!', res.success);
+              setTimeout(() => {
+                location.reload();  
+              }, 4000);
             }
           }
-
-          setTimeout(() => {
-            location.reload();  
-          }, 4000);
         }
         
       }
