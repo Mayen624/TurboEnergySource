@@ -1,5 +1,15 @@
 ---
+import {getCookieValue} from "@utils/utils.ts";
 import ThemeIcon from "../ThemeIcon.astro";
+import jwt from "jsonwebtoken";
+
+interface userToken {
+  userInfo: {
+    email: string
+  }
+}
+const token = getCookieValue(Astro.request,'authToken');
+const decode = jwt.verify(token || '', import.meta.env.JWT_PRIVATE_KEY) as userToken;
 ---
 
 <!-- ========== HEADER ========== -->
@@ -225,12 +235,12 @@ import ThemeIcon from "../ThemeIcon.astro";
           >
             <div class="rounded-t-lg bg-gray-100 px-5 py-3 dark:bg-neutral-700">
               <p class="text-sm text-gray-500 dark:text-neutral-500">
-                Signed in as
+                Sesión iniciad/@ como:
               </p>
               <p
                 class="text-sm font-medium text-gray-800 dark:text-neutral-200"
-              >
-                james@site.com
+              > 
+                {decode.userInfo.email}
               </p>
             </div>
             <div class="space-y-0.5 p-1.5">
@@ -254,76 +264,6 @@ import ThemeIcon from "../ThemeIcon.astro";
                   <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
                 </svg>
                 Newsletter
-              </a>
-              <a
-                class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
-                href="#"
-              >
-                <svg
-                  class="size-4 shrink-0"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"
-                  ></path>
-                  <path d="M3 6h18"></path>
-                  <path d="M16 10a4 4 0 0 1-8 0"></path>
-                </svg>
-                Purchases
-              </a>
-              <a
-                class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
-                href="#"
-              >
-                <svg
-                  class="size-4 shrink-0"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path
-                    d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"
-                  ></path>
-                  <path d="M12 12v9"></path>
-                  <path d="m8 17 4 4 4-4"></path>
-                </svg>
-                Downloads
-              </a>
-              <a
-                class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
-                href="#"
-              >
-                <svg
-                  class="size-4 shrink-0"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="9" cy="7" r="4"></circle>
-                  <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                </svg>
-                Team Account
               </a>
               <a
                 id="logOut"
