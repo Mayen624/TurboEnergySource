@@ -146,12 +146,12 @@
               class="grid gap-3 border-t border-gray-200 px-6 py-4 dark:border-neutral-700 md:flex md:items-center md:justify-between">
               <div>
                 <p class="text-sm text-gray-600 dark:text-neutral-400">
-                  <span class="font-semibold text-gray-800 dark:text-neutral-200">12</span> results
+                  Mostrando página {{ currentPage }} de <span class="font-semibold text-gray-800 dark:text-neutral-200">{{ totalPages }}</span>
                 </p>
               </div>
               <div>
                 <div class="inline-flex gap-x-2">
-                  <button type="button"
+                  <button :disabled="currentPage === 1"  @click="displayActions(currentPage - 1, itemsPerPage)" type="button"
                     class="inline-flex items-center gap-x-2 rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-50 focus:bg-gray-50 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-transparent dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800">
                     <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                       viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -160,7 +160,7 @@
                     </svg>
                     Prev
                   </button>
-                  <button type="button"
+                  <button @click="displayActions(currentPage + 1, itemsPerPage)" type="button" 
                     class="inline-flex items-center gap-x-2 rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-50 focus:bg-gray-50 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-transparent dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800">
                     Next
                     <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -209,18 +209,27 @@
       },
       data() {
         return {
-          actions: []
+          actions: [],
+          totalPages: 1
         };
       },
       mounted() {
         this.displayActions();
       },
       methods: {
-        async displayActions() {
+        async displayActions(page = 1, limit = 10) {
           const token = getCookie('authToken');
           
-          const actions = await getActions(token);
-          this.actions = actions;
+          const actions = await getActions(token, page, limit);
+
+          if (actions.error) {
+            errorToast('¡Error!', actions.error);
+          } else {
+            console.log()
+            this.actions = actions.actions; // Actualiza las acciones
+            this.currentPage = page; // Actualiza la página actual
+            this.totalPages = actions.totalPages;
+          }
         
         },
         async disabledAndEnabledAction(id, enabled){

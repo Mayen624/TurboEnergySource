@@ -206,6 +206,8 @@
           idRole: formData.get('idRole')
         };
 
+        console.log(data)
+
         const res = await addUser(data, getCookie('authToken'));
 
         if(res.errors){

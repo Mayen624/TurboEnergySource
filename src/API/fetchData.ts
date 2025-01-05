@@ -27,9 +27,9 @@ export const getUsers = async (token: string) => {
 
 //======================== Actions ======================== //
 
-export const getActions = async (token: string) => {
+export const getActions = async (token: string, page: number = 1, limit: number = 10) => {
     try {
-        const response = await fetch(`${getApiUrl()}/v1/actions`, {
+        const response = await fetch(`${getApiUrl()}/v1/actions?page=${page}&limit=${limit}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -37,12 +37,12 @@ export const getActions = async (token: string) => {
         });
 
         const data = await response.json();
-
+        console.log(data)
         if (!response.ok || data.error) {
             return { error: data.error == undefined || null ? 'Error fetching actions' : data.error }; 
         }
 
-        return data.actions;
+        return data;  
 
     } catch (error) {
         console.error('Error fetching actions:', error);
@@ -52,9 +52,9 @@ export const getActions = async (token: string) => {
 
 //======================== Roles ======================== //
 
-export const getRoles = async (token: string) => {
+export const getRoles = async (token: string, id: string = '6769abaebe9895436b7e1532') => {
     try {
-        const response = await fetch(`${getApiUrl()}/v1/roles`, {
+        const response = await fetch(`${getApiUrl()}/v1/roles?id=${id}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
