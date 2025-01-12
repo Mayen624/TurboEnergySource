@@ -37,7 +37,7 @@ export const getActions = async (token: string, page: number = 1, limit: number 
         });
 
         const data = await response.json();
-        console.log(data)
+        
         if (!response.ok || data.error) {
             return { error: data.error == undefined || null ? 'Error fetching actions' : data.error }; 
         }
@@ -52,9 +52,9 @@ export const getActions = async (token: string, page: number = 1, limit: number 
 
 //======================== Roles ======================== //
 
-export const getRoles = async (token: string, id: string = '6769abaebe9895436b7e1532') => {
+export const getRoles = async (token: string, page: number = 1, limit: number = 10) => {
     try {
-        const response = await fetch(`${getApiUrl()}/v1/roles?id=${id}`, {
+        const response = await fetch(`${getApiUrl()}/v1/roles?page=${page}&limit=${limit}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -67,7 +67,7 @@ export const getRoles = async (token: string, id: string = '6769abaebe9895436b7e
             return { error: data.error == undefined || null ? 'Error fetching roles' : data.error }; 
         }
 
-        return data.roles;
+        return data;
 
     } catch (error) {
         console.error('Error fetching roles:', error);
@@ -77,9 +77,9 @@ export const getRoles = async (token: string, id: string = '6769abaebe9895436b7e
 
 //======================== Products ======================== //
 
-export const getProducts = async (token: string) => {
+export const getProducts = async (token: string, page: number = 1, limit: number = 10) => {
     try {
-        const response = await fetch(`${getApiUrl()}/v1/products`, {
+        const response = await fetch(`${getApiUrl()}/v1/products?page=${page}&limit=${limit}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -92,7 +92,7 @@ export const getProducts = async (token: string) => {
             return { error: data.error == undefined || null ? 'Error fetching products' : data.error }; 
         }
 
-        return data.products;
+        return data;
 
     } catch (error) {
         console.error('Error fetching products:', error);
