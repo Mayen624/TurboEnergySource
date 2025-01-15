@@ -58,6 +58,23 @@
                                     <span v-if="key === '_id'">
                                         <p class="truncate-id dark:text-neutral-200">{{ row['_id'] }}</p>
                                     </span>
+                                    <span v-else-if="key === 'fullNameEmail'">
+                                        <div class="flex items-center gap-x-3">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="inline-block size-[38px] rounded-full dark:text-neutral-200" viewBox="0 0 718 669">
+                                            <path fill="currentColor"
+                                                d="M646 516c47 26 74 70 71 115c-3 28-3 29-39 33c-23 3-163 5-307 5c-163 0-333-2-346-5c-48-13-22-102 43-143c50-33 152-82 179-88c38-8 43-31 1-106c-10-17-22-68-23-122c-2-86 16-145 91-173c14-5 30-8 45-8c50 0 97 28 116 69c27 55 16 199-13 251c-32 60-29 78 8 88c24 6 99 43 174 84" />
+                                            </svg>
+                                            <div>
+                                                <span class="block text-sm font-semibold dark:text-neutral-200">
+                                                    {{ row.fullNameEmail.split('/')[0] }} <!-- Nombre -->
+                                                </span>
+                                                <span class="block text-sm text-gray-500">
+                                                    {{ row.fullNameEmail.split('/')[1] }} <!-- Correo electrónico -->
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </span>
                                     <span v-else-if="key === 'mainContent'">
                                         <div class="flex items-center gap-x-3">
                                             <img :src="row.mainContent.img.src" alt="img" style="height: 55px;">
@@ -94,6 +111,7 @@
                                 </td>
                                 <!-- Columna de acciones -->
                                 <td class="px-6 py-3 text-sm text-gray-500">
+                                    <!-- habilitar o deshabilitar -->
                                     <button :title="row.enabled ? 'Desactivar' : 'Activar'" type="button"
                                         @click="disabledOrEnabled(row._id, !row.enabled)" :class="['m-1 inline-flex items-center gap-x-2 rounded-lg border border-transparent px-4 py-3 text-sm font-medium text-white focus:outline-none disabled:pointer-events-none disabled:opacity-50',
                                             row.enabled ? 'bg-red-500 hover:bg-red-600 focus:bg-red-600' : 'bg-green-500 hover:bg-green-600 focus:bg-green-600'
@@ -110,6 +128,7 @@
                                                 d="M1.818 1.364a.455.455 0 0 0-.454.454v16.364c0 .25.203.454.454.454h16.364a.455.455 0 0 0 .454-.454V1.818a.455.455 0 0 0-.454-.454zM18.182 0C19.186 0 20 .814 20 1.818v16.364A1.82 1.82 0 0 1 18.182 20H1.818A1.82 1.82 0 0 1 0 18.182V1.818C0 .814.814 0 1.818 0zm-7.884 4.91a.68.68 0 0 0-.682.682L9.615 9.3H5.909a.68.68 0 0 0-.674.581l-.008.1c0 .378.306.683.682.683l3.706-.001v3.707c0 .343.253.626.582.675l.1.007a.68.68 0 0 0 .682-.682v-3.707h3.707a.68.68 0 0 0 .675-.58l.007-.101a.68.68 0 0 0-.682-.682H10.98V5.592a.68.68 0 0 0-.58-.674Z" />
                                         </svg>
                                     </button>
+                                    <!-- editar -->
                                 </td>
                             </tr>
                         </tbody>
@@ -183,7 +202,7 @@ export default {
         },
         allowedFields: {
             type: Array,
-            default: () => [],
+            default: () =>  ['_id', 'fullNameEmail', 'enabled', 'createdAt'],
         },
         addButton: {
             type: Object,

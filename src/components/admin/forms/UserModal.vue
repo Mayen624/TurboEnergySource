@@ -206,13 +206,13 @@
           idRole: formData.get('idRole')
         };
 
-        console.log(data)
-
         const res = await addUser(data, getCookie('authToken'));
 
         if(res.errors){
           const concatenatedErrorMessages = res.errors.join(', <br/>');
           return errorToast('Solucionar los siguientes errores: ', concatenatedErrorMessages, 10000, false, false);
+        }else if (res.error){
+          return errorToast('Error: ', res.error, 10000, true, false);
         }else if(res.success){
           form.reset();
           return successToast('Exito!', res.success);
