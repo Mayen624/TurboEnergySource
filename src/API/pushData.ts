@@ -198,3 +198,49 @@ export const enabledOrDisabledProduct = async (id: string, enabled: boolean, tok
 
     }
 }
+//======================== Services ======================== //
+export const addService = async (data: object, img: File, token: string) => {
+    try {
+
+        const formData = new FormData();
+        formData.append('img', img);
+        formData.append('product', JSON.stringify(data));
+        formData.append('token', token);
+
+        const response = await fetch(`${getApiUrl()}/v1/services/new_service`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+            body: formData
+        });
+
+        const res = await response.json();
+        return res;
+
+    } catch (e) {
+        return {error: e};
+    }
+}
+
+export const enabledOrDisabledService = async (id: string, enabled: boolean, token: string) => {
+    try {
+
+        const response = await fetch(`${getApiUrl()}/v1/service/enabledOrDesabled/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({enabled: enabled})
+        });
+
+        const res = await response.json();
+        return res;
+
+    } catch (error) {
+        console.log(error)
+        console.error('Error en la solicitud:', error);
+
+    }
+}

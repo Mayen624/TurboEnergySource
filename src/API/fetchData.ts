@@ -126,3 +126,28 @@ export const getContacts = async (token: string) => {
         return { error: error }; 
     }
 };
+
+//======================== Services ======================== //
+
+export const getServices = async (token: string, page: number = 1, limit: number = 10) => {
+    try {
+        const response = await fetch(`${getApiUrl()}/v1/services?page=${page}&limit=${limit}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || data.error) {
+            return { error: data.error == undefined || null ? 'Error fetching services' : data.error }; 
+        }
+
+        return data.services;
+
+    } catch (error) {
+        console.error('Error fetching services:', error);
+        return { error: error }; 
+    }
+};
