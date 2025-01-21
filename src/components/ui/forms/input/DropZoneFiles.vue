@@ -1,126 +1,188 @@
 <template>
-    <div>
-      <div id="file-upload-container" data-hs-file-upload='{
-        "maxFiles": 2,
-        "maxFilesize": 2,
-        "extensions": {
-          "default": { "class": "shrink-0 size-5" },
-          "jpg": { "class": "shrink-0 size-5" },
-          "png": { "class": "shrink-0 size-5" }
-        }
-      }'>
-        <template data-hs-file-upload-preview="">
-          <div class="p-3 bg-white border border-solid border-gray-300 rounded-xl dark:bg-neutral-800 dark:border-neutral-600">
-            <div class="mb-1 flex justify-between items-center">
-              <div class="flex items-center gap-x-3">
-                <img class="rounded-lg hidden" data-dz-thumbnail="" />
-                <div>
-                  <p class="text-sm font-medium text-gray-800 dark:text-white">
-                    <span
-                      class="truncate inline-block max-w-[300px] align-bottom"
-                      data-hs-file-upload-file-name=""
-                    ></span>
-                    .<span data-hs-file-upload-file-ext=""></span>
-                  </p>
-                  <p
-                    class="text-xs text-gray-500 dark:text-neutral-500"
-                    data-hs-file-upload-file-size=""
-                  ></p>
-                  <p
-                    class="text-xs text-red-500"
-                    style="display: none;"
-                    data-hs-file-upload-file-error=""
-                  >
-                    File exceeds size limit.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </template>
-  
-        <div
-          class="cursor-pointer p-12 flex justify-center bg-white border border-dashed border-gray-300 rounded-xl dark:bg-neutral-800 dark:border-neutral-600"
-          data-hs-file-upload-trigger=""
+  <div class="max-w-full">
+    <div
+      id="file-upload-container"
+      class="relative block w-full cursor-pointer appearance-none rounded-lg border-2 border-dashed border-gray-300 bg-white px-3 py-8 text-center hover:border-gray-400 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600"
+    >
+      <div class="dz-message flex flex-col items-center">
+        <svg
+          class="size-10 text-gray-400 dark:text-gray-600"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
         >
-          <div class="text-center">
-            <div class="mt-4 text-sm text-gray-600">
-              <span class="pe-1 font-medium text-gray-800 dark:text-neutral-200">
-                Drop your images here or
-              </span>
-              <span
-                class="bg-white font-semibold text-blue-600 hover:text-blue-700 rounded-lg decoration-2 hover:underline focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-600 focus-within:ring-offset-2 dark:bg-neutral-800 dark:text-blue-500 dark:hover:text-blue-600"
-                >browse</span
-              >
-            </div>
-            <p class="mt-1 text-xs text-gray-400 dark:text-neutral-400">
-              Pick up to 2 images, 2MB max.
-            </p>
-          </div>
-        </div>
+          <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 1 1 0 9h-1"></path>
+          <path d="M12 12v9"></path>
+          <path d="m16 16-4-4-4 4"></path>
+        </svg>
+        <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+          <span class="font-semibold">Haz clic para subir</span> o arrastra y suelta
+        </p>
+        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+          Solo imágenes (máximo 2 archivos, 2MB cada uno)
+        </p>
       </div>
-  
-      <button
-        @click="submitImages"
-        class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg"
-      >
-        Submit Images
-      </button>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        images: [], // Array to store the selected images
-      };
+
+    <!-- Preview de imágenes -->
+    <div v-if="previewImages.length > 0" class="mt-4 grid gap-3 sm:grid-cols-2">
+      <div v-for="(image, index) in previewImages" :key="index" class="relative">
+        <img
+          :src="image.preview"
+          class="h-32 w-full rounded-lg object-cover"
+          alt="Preview"
+        />
+        <button
+          @click="removeImage(index)"
+          class="absolute right-2 top-2 inline-flex size-8 items-center justify-center rounded-full bg-gray-800/50 text-white hover:bg-gray-800/75"
+        >
+          <span class="sr-only">Eliminar</span>
+          <svg
+            class="size-4"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import Dropzone from "dropzone";
+import "dropzone/dist/dropzone.css";
+import { successToast, errorToast } from '@/utils/notify.ts';
+
+export default {
+  name: "DropZoneFiles",
+  props: {
+    modelValue: {
+      type: Array,
+      default: () => [],
     },
-    mounted() {
-      // Initialize HSFileUpload
-      const { element } = HSFileUpload.getInstance("#file-upload-container", true);
-  
-      element.dropzone.on("addedfile", (file) => {
-        if (this.images.length < 2) {
-          this.images.push(file); // Add the file to the images array
-        } else {
-          element.dropzone.removeFile(file); // Prevent more than 2 files
-          alert("You can only add up to 2 images.");
+  },
+  emits: ["update:modelValue"],
+  data() {
+    return {
+      previewImages: [],
+      dropzone: null,
+      isProcessingFile: false
+    };
+  },
+  mounted() {
+    this.initDropzone();
+  },
+  methods: {
+    initDropzone() {
+      this.dropzone = new Dropzone("#file-upload-container", {
+        url: "/fake-url",
+        autoProcessQueue: false,
+        addRemoveLinks: false,
+        maxFiles: 2,
+        maxFilesize: 2,
+        acceptedFiles: "image/*",
+        previewsContainer: false,
+        clickable: true,
+        accept: (file, done) => {
+          // Validación inicial de cantidad de archivos
+          if (this.previewImages.length >= 2) {
+            done("Solo puedes subir hasta 2 imágenes.");
+            return;
+          }
+          done();
         }
       });
-  
-      element.dropzone.on("removedfile", (file) => {
-        // Remove the file from the images array
-        this.images = this.images.filter((img) => img !== file);
+
+      // Configurar eventos
+      this.dropzone.on("addedfile", this.handleAddedFile);
+      this.dropzone.on("error", this.handleError);
+      
+      // Prevenir drop nativo cuando ya hay 2 imágenes
+      const dropzoneElement = document.getElementById("file-upload-container");
+      dropzoneElement.addEventListener("dragover", (e) => {
+        if (this.previewImages.length >= 2) {
+          e.preventDefault();
+          return false;
+        }
       });
     },
-    methods: {
-      submitImages() {
-        if (this.images.length === 0) {
-          alert("No images selected.");
+
+    async handleAddedFile(file) {
+      // Evitar procesamiento múltiple
+      if (this.isProcessingFile) return;
+      this.isProcessingFile = true;
+
+      try {
+        // Verificar límite estricto
+        if (this.previewImages.length >= 2) {
+          this.dropzone.removeFile(file);
+          errorToast('¡Error!', 'Solo puedes subir hasta 2 imágenes.', 10000, false, false);
           return;
         }
-  
-        // Prepare a FormData object to send the images
-        const formData = new FormData();
-        this.images.forEach((image, index) => {
-          formData.append(`image${index + 1}`, image);
-        });
-  
-        // Send the formData to your API or handle it as needed
-        console.log("Images ready for submission:", this.images);
-  
-        // Example of sending via fetch:
-        // fetch('/upload-endpoint', {
-        //   method: 'POST',
-        //   body: formData
-        // }).then(response => {
-        //   console.log('Upload response:', response);
-        // }).catch(error => {
-        //   console.error('Upload error:', error);
-        // });
-      },
+
+        // Procesar archivo solo si estamos bajo el límite
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          if (this.previewImages.length < 2) {
+            this.previewImages.push({
+              file: file,
+              preview: e.target.result,
+            });
+            
+            // Emitir actualización
+            const files = this.previewImages.map(item => item.file);
+            this.$emit("update:modelValue", files);
+          } else {
+            this.dropzone.removeFile(file);
+            errorToast('¡Error!', 'Solo puedes subir hasta 2 imágenes.', 10000, false, false);
+          }
+        };
+        reader.readAsDataURL(file);
+
+      } catch (error) {
+        console.error('Error processing file:', error);
+        errorToast('¡Error!', 'Error al procesar el archivo.', 10000, false, false);
+        this.dropzone.removeFile(file);
+      } finally {
+        this.isProcessingFile = false;
+      }
     },
-  };
-  </script>
-  
+
+    removeImage(index) {
+      const removedFile = this.previewImages[index].file;
+      this.dropzone.removeFile(removedFile);
+      this.previewImages.splice(index, 1);
+      
+      // Emitir archivos actualizados
+      const files = this.previewImages.map(item => item.file);
+      this.$emit("update:modelValue", files);
+    },
+
+    handleError(file, message) {
+      errorToast('¡Error!', message, 10000, false, false);
+      this.dropzone.removeFile(file);
+    }
+  },
+  beforeUnmount() {
+    if (this.dropzone) {
+      this.dropzone.destroy();
+    }
+  },
+};
+</script>
