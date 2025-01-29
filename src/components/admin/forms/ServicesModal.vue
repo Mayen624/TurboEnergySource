@@ -32,73 +32,46 @@
                       <div class="grid grid-cols-1 gap-4">
   
                         <div>
-                          <label for="introduction"
-                            class="mb-2 block text-sm font-medium text-gray-700 dark:text-white">Introducción:</label>
-                          <TextArea v-model="mainContent.introduction" id="introduction" name="introduction" />
+                          <label for="updatefor"
+                            class="mb-2 block text-sm font-medium text-gray-700 dark:text-white">Actualizado por :</label>
+                          <TextArea v-model="mainContent.updatefor" id="updatefor" name="updatefor" />
                         </div>
-  
+                          
                         <div>
                           <label for="title"
-                            class="mb-2 block text-sm font-medium text-gray-700 dark:text-white">Titulo:</label>
-                          <input type="text" name="title" v-model="title" id="title"
+                            class="mb-2 block text-sm font-medium text-gray-700 dark:text-white">Titulo :</label>
+                          <input type="text" name="titulo" v-model="titulo" id="title"
+                            class="focus:border-blue-500 focus:ring-blue-500 block w-full rounded-lg border-gray-200 px-4 py-3 text-sm dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400" />
+                        </div>
+
+
+                        <div>
+                          <label for="createdby"
+                            class="mb-2 block text-sm font-medium text-gray-700 dark:text-white">Creado por:</label>
+                          <input type="text" name="createdby" v-model="createdby" id="createdby"
                             class="focus:border-blue-500 focus:ring-blue-500 block w-full rounded-lg border-gray-200 px-4 py-3 text-sm dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400" />
                         </div>
   
                         <div>
                           <label for="description"
-                            class="mb-2 block text-sm font-medium text-gray-700 dark:text-white">Descripción corta:</label>
+                            class="mb-2 block text-sm font-medium text-gray-700 dark:text-white">Descripción :</label>
                           <input type="text" name="description" v-model="description" id="description"
                             class="focus:border-blue-500 focus:ring-blue-500 block w-full rounded-lg border-gray-200 px-4 py-3 text-sm dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400" />
+                        </div>
+
+                        <div>
+                          <DropZoneFiles v-model="DropZoneFiles"/>
                         </div>
   
                         <div>
                           <label for="image" class="mb-2 block text-sm font-medium text-gray-700 dark:text-white">Imagen del producto:</label>
                           <UploadFileInput id="uploadFile" name="img" @change="onFileChange" selectFileText="Seleccione una imagen" />
                         </div>
-  
-                        <div id="descripcion-detallada">
-                          <label for="longDescriptionTitle"
-                            class="mb-2 block text-sm font-medium text-gray-700 dark:text-white">Titulo de descripción detallada:</label>
-                          <input type="text" name="longDescriptionTitle" v-model="longDescription.longDescriptionTitle"
-                            id="longDescriptionTitle"
-                            class="focus:border-blue-500 focus:ring-blue-500 block w-full rounded-lg border-gray-200 px-4 py-3 text-sm dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400" />
-  
-                          <label for="longDescriptionSubTitle"
-                            class="mb-2 block text-sm font-medium text-gray-700 dark:text-white">Descripción detallada:</label>
-                          <TextArea v-model="longDescription.longDescriptionSubTitle" id="longDescriptionSubTitle"
-                            name="longDescriptionSubTitle" />
-  
-                          <label for="btnTitle"
-                            class="mb-2 block text-sm font-medium text-gray-700 dark:text-white">Titulo de boton:</label>
-                          <input type="text" name="btnTitle" v-model="longDescription.btnTitle" id="btnTitle"
-                            class="focus:border-blue-500 focus:ring-blue-500 block w-full rounded-lg border-gray-200 px-4 py-3 text-sm dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400" />
-                        </div>
-  
-                        <div id="descriptionList-section">
-                          <div v-for="(item, index) in descriptionList" :key="index" class="grid grid-cols-2 gap-4 mb-4">
-                            <div>
-                              <label :for="'title' + index"
-                                class="mb-2 block text-sm font-medium text-gray-700 dark:text-white">
-                                Título {{ index + 1 }}:
-                              </label>
-                              <input type="text" :id="'title' + index" v-model="item.title" :name="'title' + index"
-                                class="focus:border-blue-500 focus:ring-blue-500 block w-full rounded-lg border-gray-200 px-4 py-3 text-sm dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400" />
-                            </div>
-                            <div>
-                              <label :for="'subTitle' + index"
-                                class="mb-2 block text-sm font-medium text-gray-700 dark:text-white">
-                                Descripción del elemento {{ index + 1 }}:
-                              </label>
-                              <TextArea :id="'subTitle' + index" v-model="item.subTitle" :name="'subTitle' + index" />
-                            </div>
-                          </div>
-                        </div>
-  
                         <div class="flex">
                           <input id="hasSpecification" name="haveSpecification" v-model="haveSpecification"  :value="haveSpecification ? true : false" type="checkbox" class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 dark:bg-neutral-800 dark:border-neutral-700" />
-                          <label for="hasSpecification" class="text-sm text-gray-500 ms-3 dark:text-neutral-400">¿Tiene especificaciones?</label>
+                          <label for="hasSpecification" class="text-sm text-gray-500 ms-3 dark:text-neutral-400">enabled</label>
                           <input id="hasBluePrints" name="haveluePrints" v-model="haveluePrints"  :value="haveluePrints ? true : false" type="checkbox" class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 dark:bg-neutral-800 dark:border-neutral-700 ml-5" />
-                          <label for="hasBluePrints" class="text-sm text-gray-500 ms-3 dark:text-neutral-400">¿Tiene planos o diseño?</label>
+                          <label for="hasBluePrints" class="text-sm text-gray-500 ms-3 dark:text-neutral-400">disabled</label>
                         </div>
   
                       </div>
@@ -127,17 +100,21 @@
   <script>
   import TextArea from '@/components/ui/forms/input/TextArea.vue';
   import UploadFileInput from '@/components/ui/forms/input/UploadFileInput.vue';
-  import ProductPreviewCard from '../cards/ProductPreviewCard.vue';
+  import ServicePreviewCard from '../cards/ServicePreviewCard.vue';
   import { successToast, errorToast } from '@/utils/notify.ts'
+  import DropZoneFiles from '@/components/ui/forms/input/DropZoneFiles.vue';
   import { getCookie } from '@/utils/functions.ts';
-  import { addProduct } from '@/API/pushData.ts';
+import { title } from 'node:process';
+  
   
   export default {
-    name: 'ProductModal',
+    name: 'ServiceModal',
     components: {
       TextArea,
       UploadFileInput,
-      ProductPreviewCard
+      ServicePreviewCard,
+      DropZoneFiles,
+     
     },
     props: {
       id: {
@@ -151,35 +128,16 @@
     },
     data() {
       return {
+        createdby: '',
         title: '',
         description: '',
         mainContent: {
-          introduction: '',
+        updatefor: '',
           img: "",
         },
         haveSpecification: false,
         haveluePrints: false,
         tabs: [],
-        longDescription: {
-          longDescriptionTitle: '',
-          longDescriptionSubTitle: '',
-          btnTitle: "",
-          btnURL: ""
-        },
-        descriptionList: [
-        {
-            title: '',
-            subTitle: ''
-          },
-          {
-            title: '',
-            subTitle: ''
-          },
-          {
-            title: '',
-            subTitle: ''
-          }
-        ],
         specificationsLeft: [
           {
             title: 'Material',
@@ -213,11 +171,13 @@
       previewData() {
         return {
           mainContent: this.mainContent,
+          createdby: this.createdby,
           title: this.title,
           description: this.description,
+          updatefor: this.mainContent.updatefor,
           haveSpecification: this.haveSpecification,
           haveluePrints: this.haveluePrints,
-          longDescription: this.longDescription,
+          
           tabs : this.tabs,
           descriptionList : this.descriptionList,
           specificationsLeft: this.specificationsLeft,
@@ -227,10 +187,7 @@
         };
       }
     },
-    mounted() {
-      this.previewData.longDescription.btnURL = '/contact';
-      console.log()
-    },
+    
     methods: {
       onFileChange(event) {
         const file = event.target.files[0];
