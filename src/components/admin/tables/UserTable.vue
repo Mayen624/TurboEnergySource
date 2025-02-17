@@ -3,7 +3,8 @@
 <Table
     :headers="['#','NOMBRE Y CORREO','ESTADO','CREADO EN','ACTUALIZADO EN','ACCIONES']"
     :allowedFields="['_id','fullNameEmail','enabled','createdAt','updatedAt']"
-    :add-button="AddButtonComponent"
+    :addButton="AddButtonComponent"
+    :editButton="EditButtonComponent"
     :data="users"
     :currentPage="currentPage" 
     :totalPages="totalPages"   
@@ -56,7 +57,8 @@
         totalPages: 1,
         currentPage: 1,
         limit: 10,
-        AddButtonComponent: AddButton
+        AddButtonComponent: AddButton,
+        EditButtonComponent : EditButton
       };
     },
     mounted() {

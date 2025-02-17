@@ -129,6 +129,8 @@
                                         </svg>
                                     </button>
                                     <!-- editar -->
+                                     <!-- Poner editButton que habre modal desde parametro -->
+                                     <component :is="editButton" @click="handleEditButton(row._id)"/>
                                 </td>
                             </tr>
                         </tbody>
@@ -175,6 +177,7 @@
 </template>
 
 <script>
+import EditButton from '@/components/admin/buttons/EditButton.vue';
 import WarningAlert from '@components/ui/alerts/WarningAlert.vue';
 import ComboBoxNumber from '@components/ui/forms/input/ComboBoxNumber.vue';
 export default {
@@ -208,6 +211,10 @@ export default {
             type: Object,
             default: null,
         },
+        editButton: {
+            type: Object,
+            default: null
+        },
         buttonProps: {
             type: Object,
             required: false,
@@ -223,7 +230,8 @@ export default {
     },
     components: {
         WarningAlert,
-        ComboBoxNumber
+        ComboBoxNumber,
+        EditButton
     },
     mounted() {
     },
@@ -256,6 +264,9 @@ export default {
         },
         onChange() {
             this.$emit('limit-changed', this.selectedLimit);
+        },
+        handleEditButton(event){
+            console.log(event)
         }
     },
 };
