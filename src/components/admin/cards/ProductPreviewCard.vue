@@ -13,9 +13,7 @@
             class="block text-4xl font-bold tracking-tighter text-neutral-800 dark:text-neutral-200 sm:text-5xl md:text-6xl lg:text-7xl">
             {{ data.title }}
           </h1>
-          <p class="text-lg text-neutral-600 dark:text-neutral-400">
-            {{ data.description }}
-          </p>
+         
         </div>
         <div>
           <img id="fadeInMoveRight" :src="imagenSrc" class="w-[250px]" alt="img" loading="eager" />
@@ -161,7 +159,6 @@ export default {
     return {
       activeTab: "",
       title: "",
-      description: "",
       mainContent: {
         id: "",
         introduction: "",

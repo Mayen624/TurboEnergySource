@@ -52,8 +52,8 @@
                         </div>
   
                         <div>
-                          <label for="image" class="mb-2 block text-sm font-medium text-gray-700 dark:text-white">Imagen del producto:</label>
-                          <UploadFileInput id="uploadFile" name="img" @change="onFileChange" selectFileText="Seleccione una imagen" />
+                          <label for="image" class="mb-2 block text-sm font-medium text-gray-700 dark:text-white">Imagen/es servicios:</label>
+                          <DropZoneFiles v-model="images"/>
                         </div>
   
                         <div id="descripcion-detallada">
@@ -128,6 +128,7 @@
   import TextArea from '@/components/ui/forms/input/TextArea.vue';
   import UploadFileInput from '@/components/ui/forms/input/UploadFileInput.vue';
   import ProductPreviewCard from '../cards/ProductPreviewCard.vue';
+  import DropZoneFiles from '@components/ui/forms/input/DropZoneFiles.vue';
   import { successToast, errorToast } from '@/utils/notify.ts'
   import { getCookie } from '@/utils/functions.ts';
   import { addProduct } from '@/API/pushData.ts';
@@ -137,7 +138,8 @@
     components: {
       TextArea,
       UploadFileInput,
-      ProductPreviewCard
+      ProductPreviewCard,
+      DropZoneFiles
     },
     props: {
       id: {
@@ -151,6 +153,7 @@
     },
     data() {
       return {
+        images: [],
         title: '',
         description: '',
         mainContent: {
@@ -223,7 +226,8 @@
           specificationsLeft: this.specificationsLeft,
           specificationTableData: this.specificationTableData,
           blueprints: this.blueprints,
-          img: this.img
+          img: this.img,
+          images: this.images
         };
       }
     },
@@ -246,21 +250,22 @@
         event.preventDefault();
   
         const data = this.previewData;
-        const token = getCookie('authToken');
-        const res = await addProduct(data, this.img ,token);
+        console.log(data)
+        // const token = getCookie('authToken');
+        // const res = await addProduct(data, this.img ,token);
   
   
-        if (res.errors) {
-          const concatenatedErrorMessages = res.errors.join(', <br/>');
-          return errorToast('Solucionar los siguientes errores: ', concatenatedErrorMessages, 10000, false, false);
-        } else if(res.error){
-          return errorToast('Error', res.error, 10000, true, false);
-        } else if (res.success) {
-          successToast('Exito!', res.success);
-          setTimeout(() => {
-            location.reload();
-          }, 6000);
-        }
+        // if (res.errors) {
+        //   const concatenatedErrorMessages = res.errors.join(', <br/>');
+        //   return errorToast('Solucionar los siguientes errores: ', concatenatedErrorMessages, 10000, false, false);
+        // } else if(res.error){
+        //   return errorToast('Error', res.error, 10000, true, false);
+        // } else if (res.success) {
+        //   successToast('Exito!', res.success);
+        //   setTimeout(() => {
+        //     location.reload();
+        //   }, 6000);
+        // }
       }
     },
     watch: {

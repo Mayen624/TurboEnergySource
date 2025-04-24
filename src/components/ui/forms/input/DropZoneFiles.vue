@@ -168,16 +168,16 @@ export default {
       const removedFile = this.previewImages[index].file;
       this.dropzone.removeFile(removedFile);
       this.previewImages.splice(index, 1);
-      
+        
       // Emitir archivos actualizados
       const files = this.previewImages.map(item => item.file);
       this.$emit("update:modelValue", files);
     },
 
-    handleError(file, message) {
-      errorToast('¡Error!', message, 10000, false, false);
-      this.dropzone.removeFile(file);
-    }
+    // handleError(file, message) {
+    //   errorToast('¡Error!', message, 10000, false, false);
+    //   this.dropzone.removeFile(file);
+    // }
   },
   beforeUnmount() {
     if (this.dropzone) {

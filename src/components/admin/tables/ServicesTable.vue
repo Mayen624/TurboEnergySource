@@ -19,7 +19,7 @@
       @limit-changed="handleLimitChange"
     />
     
-      <ProductModal id="serviceModal" modalTitle="Nuevo servicio" />
+      <ServicesModal id="serviceModal" modalTitle="Nuevo servicio" />
     </template>
     
     <script>
@@ -29,7 +29,7 @@
       import EditButton from '@components/admin/buttons/EditButton.vue';
       import DisabledButton from '@components/admin/buttons/DisabledButton.vue';
       import WarningAlert from '@components/ui/alerts/WarningAlert.vue';
-      import ProductModal from '@components/admin/forms/ProductModal.vue';
+      import ServicesModal from '@components/admin/forms/ServicesModal.vue';
       import UserEditModal from '@components/admin/forms/UserEditModal.vue';
       import {successToast, errorToast} from '@utils/notify.ts'
       import {enabledOrDisabledService} from '@/API/pushData.ts'
@@ -42,7 +42,7 @@
           EditButton,
           DisabledButton,
           WarningAlert,
-          ProductModal,
+          ServicesModal,
           UserEditModal,
           Table
         },
