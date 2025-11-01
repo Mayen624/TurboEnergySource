@@ -229,9 +229,7 @@ import ContactSection from '@/components/sections/misc/ContactSection.astro';
       },
       methods: {
         async displayContact() {
-          const token = getCookie('authToken');
-          
-          const clients = await getContacts(token);
+          const clients = await getContacts();
           this.clients= clients;
         
           console.log(this.clients);

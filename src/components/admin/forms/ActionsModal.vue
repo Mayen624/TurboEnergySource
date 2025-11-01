@@ -158,7 +158,7 @@
           description: formData.get('description'),
         };
 
-        const res = await addAction(data, getCookie('authToken'));
+        const res = await addAction(data);
         
         if(res.errors){
           const concatenatedErrorMessages = res.errors.join(', <br/>');

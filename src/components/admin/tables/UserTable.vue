@@ -9,7 +9,7 @@
     :currentPage="currentPage" 
     :totalPages="totalPages"   
     :itemsPerPage="limit"  
-    :displayData="initEventSource"
+    :displayData="fetchUsers"
     :disabledOrEnabled="disabledAndEnabledUser"
     :button-props="{
       id: 'addUser',
@@ -57,12 +57,18 @@
         totalPages: 1,
         currentPage: 1,
         limit: 10,
+        pollingInterval: null,
         AddButtonComponent: AddButton,
         EditButtonComponent : EditButton
       };
     },
     mounted() {
-      this.initEventSource();
+      this.initPolling(this.currentPage, this.limit);
+    },
+    beforeUnmount() {
+      if (this.pollingInterval) {
+        clearInterval(this.pollingInterval);
+      }
     },
     methods: {
       handlePageUpdate(newPage) {
@@ -70,30 +76,55 @@
       },
       handleLimitChange(newLimit) {
         this.limit = newLimit;
-        this.displayProducts(this.currentPage, this.limit);
+        this.fetchUsers(this.currentPage, this.limit);
       },
-      initEventSource(page = 1, limit = 10) {
-        const token = getCookie('authToken');
-        const eventSource = new EventSource(`${getApiUrl()}/v1/users/realtime_users?token=${encodeURIComponent(token)}&page=${page}&limit=${limit}`);
+      async fetchUsers(page = 1, limit = 10) {
+        try {
+          const csrfToken = localStorage.getItem('csrfToken');
 
-        eventSource.onmessage = (event) => {
-          const data = JSON.parse(event.data);
+          const response = await fetch(`${getApiUrl()}/v1/users?page=${page}&limit=${limit}`, {
+            method: 'GET',
+            headers: {
+              'X-CSRF-Token': csrfToken || '',
+            },
+            credentials: 'include',
+          });
 
-          this.users = data.data.map(user => ({
-            ...user,
-            fullNameEmail: `${user.name}/${user.email}` // Combina nombre y correo
-          }));
-          this.currentPage = data.page;
-          this.totalPages = data.totalPages;
-        };
+          const data = await response.json();
+
+          if (data.error) {
+            errorToast('Error', data.error);
+            return;
+          }
+
+          if (data.users && Array.isArray(data.users)) {
+            this.users = data.users.map(user => ({
+              ...user,
+              fullNameEmail: `${user.name}/${user.email}`
+            }));
+            this.currentPage = data.currentPage;
+            this.totalPages = data.totalPages;
+          }
+        } catch (error) {
+          console.error('Error fetching users:', error);
+          errorToast('Error', 'Error al cargar usuarios');
+        }
+      },
+
+      initPolling(page = 1, limit = 10) {
+        // Cargar datos iniciales
+        this.fetchUsers(page, limit);
+
+        // Actualizar cada 5 segundos
+        this.pollingInterval = setInterval(() => {
+          this.fetchUsers(this.currentPage, this.limit);
+        }, 5000);
       },
       async disabledAndEnabledUser(id, enabled){
-        const token = getCookie('authToken');
-
           if(!id){
             errorToast('¡Error!', 'Registro no valido')
           }else{
-            const res = await enabledOrDisabledUser(id, enabled, token);
+            const res = await enabledOrDisabledUser(id, enabled);
             
             if(res.error){
               errorToast('¡Error!', res.error);

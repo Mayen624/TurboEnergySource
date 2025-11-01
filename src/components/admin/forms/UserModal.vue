@@ -191,8 +191,7 @@
     },
     methods: {
       async setComboBoxData(){
-        const token = getCookie('authToken');
-        this.comboOptions = await fetchDataForRoleComboBox(token);
+        this.comboOptions = await fetchDataForRoleComboBox();
       },
       async saveNewUser(){
         event.preventDefault();
@@ -206,7 +205,7 @@
           idRole: formData.get('idRole')
         };
 
-        const res = await addUser(data, getCookie('authToken'));
+        const res = await addUser(data);
 
         if(res.errors){
           const concatenatedErrorMessages = res.errors.join(', <br/>');

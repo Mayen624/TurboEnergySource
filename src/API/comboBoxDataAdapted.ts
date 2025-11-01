@@ -1,12 +1,12 @@
 import { getUsers, getRoles, getActions } from '@/API/fetchData.ts';
 
-export const fetchDataForUserComboBox = async (token: string) => {
+export const fetchDataForUserComboBox = async () => {
 
     try {
 
-        const users = await getUsers(token);
+        const users = await getUsers();
 
-        const data = users.users.map((user: any) => ({
+        const data = users.map((user: any) => ({
             textValue: user.name,
             idValue: user._id,
         }));
@@ -19,13 +19,13 @@ export const fetchDataForUserComboBox = async (token: string) => {
 
 }
 
-export const fetchDataForRoleComboBox = async (token: string) => {
+export const fetchDataForRoleComboBox = async () => {
 
     try {
 
-        const roles = await getRoles(token);
-        
-        const filteredRoles = roles.roles.filter((role: any) => role.enabled === true);
+        const rolesData = await getRoles();
+
+        const filteredRoles = rolesData.roles.filter((role: any) => role.enabled === true);
         const data = filteredRoles.map((role: any) => ({
             textValue: role.name,
             idValue: role._id,
@@ -39,12 +39,12 @@ export const fetchDataForRoleComboBox = async (token: string) => {
 
 }
 
-export const fetchDataForActionsComboBox = async (token: string) => {
+export const fetchDataForActionsComboBox = async () => {
 
     try {
 
-        const actions = await getActions(token);
-        const filteredActions = actions.actions.filter((action: any) => action.enabled === true);
+        const actionsData = await getActions();
+        const filteredActions = actionsData.actions.filter((action: any) => action.enabled === true);
 
         const data = filteredActions.map((action: any) => ({
             textValue: action.name,

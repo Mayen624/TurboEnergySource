@@ -1,16 +1,23 @@
 import {getApiUrl} from '@utils/utils.ts'
 
+// Función auxiliar para obtener CSRF token
+const getCsrfToken = (): string | null => {
+    return localStorage.getItem('csrfToken');
+};
+
 //======================== Users ======================== //
 
-export const addUser = async (data: object, token: string) => {
+export const addUser = async (data: object) => {
     try {
+        const csrfToken = getCsrfToken();
 
         const response = await fetch(`${getApiUrl()}/v1/users/new_user`, {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json', // Agrega el Content-Type
+                'X-CSRF-Token': csrfToken || '',
+                'Content-Type': 'application/json',
             },
+            credentials: 'include',
             body: JSON.stringify(data)
         });
 
@@ -19,19 +26,21 @@ export const addUser = async (data: object, token: string) => {
 
     } catch (error) {
         console.error('Error en la solicitud:', error);
-
+        return { error: error };
     }
 }
 
-export const enabledOrDisabledUser = async (id: string, enabled: boolean, token: string) => {
+export const enabledOrDisabledUser = async (id: string, enabled: boolean) => {
     try {
+        const csrfToken = getCsrfToken();
 
         const response = await fetch(`${getApiUrl()}/v1/users/enabledOrDesabled/${id}`, {
             method: 'PUT',
             headers: {
-                'Authorization': `Bearer ${token}`,
+                'X-CSRF-Token': csrfToken || '',
                 'Content-Type': 'application/json',
             },
+            credentials: 'include',
             body: JSON.stringify({enabled: enabled})
         });
 
@@ -40,21 +49,23 @@ export const enabledOrDisabledUser = async (id: string, enabled: boolean, token:
 
     } catch (error) {
         console.error('Error en la solicitud:', error);
-
+        return { error: error };
     }
 }
 
 //======================== Actions ======================== //
 
-export const addAction = async (data: object, token: string) => {
+export const addAction = async (data: object) => {
     try {
+        const csrfToken = getCsrfToken();
 
         const response = await fetch(`${getApiUrl()}/v1/actions/new_action`, {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json', // Agrega el Content-Type
+                'X-CSRF-Token': csrfToken || '',
+                'Content-Type': 'application/json',
             },
+            credentials: 'include',
             body: JSON.stringify(data)
         });
 
@@ -63,19 +74,21 @@ export const addAction = async (data: object, token: string) => {
 
     } catch (error) {
         console.error('Error en la solicitud:', error);
-
+        return { error: error };
     }
 }
 
-export const enabledOrDisabledAction = async (id: string, enabled: boolean, token: string) => {
+export const enabledOrDisabledAction = async (id: string, enabled: boolean) => {
     try {
+        const csrfToken = getCsrfToken();
 
         const response = await fetch(`${getApiUrl()}/v1/actions/enabledOrDesabled/${id}`, {
             method: 'PUT',
             headers: {
-                'Authorization': `Bearer ${token}`,
+                'X-CSRF-Token': csrfToken || '',
                 'Content-Type': 'application/json',
             },
+            credentials: 'include',
             body: JSON.stringify({enabled: enabled})
         });
 
@@ -84,21 +97,23 @@ export const enabledOrDisabledAction = async (id: string, enabled: boolean, toke
 
     } catch (error) {
         console.error('Error en la solicitud:', error);
-
+        return { error: error };
     }
 }
 
 //======================== Roles ======================== //
 
-export const addRole = async (data: object, token: string) => {
+export const addRole = async (data: object) => {
     try {
+        const csrfToken = getCsrfToken();
 
         const response = await fetch(`${getApiUrl()}/v1/roles/new_role`, {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${token}`,
+                'X-CSRF-Token': csrfToken || '',
                 'Content-Type': 'application/json',
             },
+            credentials: 'include',
             body: JSON.stringify(data)
         });
 
@@ -107,19 +122,21 @@ export const addRole = async (data: object, token: string) => {
 
     } catch (error) {
         console.error('Error en la solicitud:', error);
-
+        return { error: error };
     }
 }
 
-export const enabledOrDisabledRole = async (id: string, enabled: boolean, token: string) => {
+export const enabledOrDisabledRole = async (id: string, enabled: boolean) => {
     try {
+        const csrfToken = getCsrfToken();
 
         const response = await fetch(`${getApiUrl()}/v1/roles/enabledOrDesabled/${id}`, {
             method: 'PUT',
             headers: {
-                'Authorization': `Bearer ${token}`,
+                'X-CSRF-Token': csrfToken || '',
                 'Content-Type': 'application/json',
             },
+            credentials: 'include',
             body: JSON.stringify({enabled: enabled})
         });
 
@@ -128,7 +145,7 @@ export const enabledOrDisabledRole = async (id: string, enabled: boolean, token:
 
     } catch (error) {
         console.error('Error en la solicitud:', error);
-
+        return { error: error };
     }
 }
 
@@ -153,19 +170,20 @@ export const sendContactForm = async (data: object) => {
 }
 
 //======================== Products ======================== //
-export const addProduct = async (data: object, img: File, token: string) => {
+export const addProduct = async (data: object, img: File) => {
     try {
+        const csrfToken = getCsrfToken();
 
         const formData = new FormData();
         formData.append('img', img);
         formData.append('product', JSON.stringify(data));
-        formData.append('token', token);
 
         const response = await fetch(`${getApiUrl()}/v1/products/new_product`, {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${token}`,
+                'X-CSRF-Token': csrfToken || '',
             },
+            credentials: 'include',
             body: formData
         });
 
@@ -177,15 +195,17 @@ export const addProduct = async (data: object, img: File, token: string) => {
     }
 }
 
-export const enabledOrDisabledProduct = async (id: string, enabled: boolean, token: string) => {
+export const enabledOrDisabledProduct = async (id: string, enabled: boolean) => {
     try {
+        const csrfToken = getCsrfToken();
 
         const response = await fetch(`${getApiUrl()}/v1/products/enabledOrDesabled/${id}`, {
             method: 'PUT',
             headers: {
-                'Authorization': `Bearer ${token}`,
+                'X-CSRF-Token': csrfToken || '',
                 'Content-Type': 'application/json',
             },
+            credentials: 'include',
             body: JSON.stringify({enabled: enabled})
         });
 
@@ -195,23 +215,25 @@ export const enabledOrDisabledProduct = async (id: string, enabled: boolean, tok
     } catch (error) {
         console.log(error)
         console.error('Error en la solicitud:', error);
-
+        return { error: error };
     }
 }
+
 //======================== Services ======================== //
-export const addService = async (data: object, img: File, token: string) => {
+export const addService = async (data: object, img: File) => {
     try {
+        const csrfToken = getCsrfToken();
 
         const formData = new FormData();
         formData.append('img', img);
         formData.append('product', JSON.stringify(data));
-        formData.append('token', token);
 
         const response = await fetch(`${getApiUrl()}/v1/services/new_service`, {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${token}`,
+                'X-CSRF-Token': csrfToken || '',
             },
+            credentials: 'include',
             body: formData
         });
 
@@ -223,15 +245,17 @@ export const addService = async (data: object, img: File, token: string) => {
     }
 }
 
-export const enabledOrDisabledService = async (id: string, enabled: boolean, token: string) => {
+export const enabledOrDisabledService = async (id: string, enabled: boolean) => {
     try {
+        const csrfToken = getCsrfToken();
 
         const response = await fetch(`${getApiUrl()}/v1/service/enabledOrDesabled/${id}`, {
             method: 'PUT',
             headers: {
-                'Authorization': `Bearer ${token}`,
+                'X-CSRF-Token': csrfToken || '',
                 'Content-Type': 'application/json',
             },
+            credentials: 'include',
             body: JSON.stringify({enabled: enabled})
         });
 
@@ -241,6 +265,6 @@ export const enabledOrDisabledService = async (id: string, enabled: boolean, tok
     } catch (error) {
         console.log(error)
         console.error('Error en la solicitud:', error);
-
+        return { error: error };
     }
 }

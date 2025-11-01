@@ -67,9 +67,7 @@
             this.displayProducts(this.currentPage, this.limit);
           },
           async displayServices(page = 1, limit = 10) {
-            const token = getCookie('authToken');
-            
-            const servcices = await getServices(token, page, limit);
+            const servcices = await getServices(page, limit);
             // console.log(servcices)
             if (servcices.error) {
               errorToast('¡Error!', servcices.error);
@@ -81,13 +79,11 @@
           
           },
           async disabledAndEnabledService(id, enabled){
-            const token = getCookie('authToken');
-    
             if(!id){
               errorToast('¡Error!', 'Registro no valido')
             }else{
-              console.log(id, enabled, token)
-              const res = await enabledOrDisabledService(id, enabled, token);
+              console.log(id, enabled)
+              const res = await enabledOrDisabledService(id, enabled);
                 
               if(res.error){
                 errorToast('¡Error!', res.error);

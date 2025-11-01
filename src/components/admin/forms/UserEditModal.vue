@@ -194,8 +194,7 @@
     },
     methods: {
       async setComboBoxData(){
-        const token = getCookie('authToken');
-        this.comboOptions = await fetchDataForRoleComboBox(token);
+        this.comboOptions = await fetchDataForRoleComboBox();
       },
       getDataToUpdate(){
 

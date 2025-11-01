@@ -3,8 +3,6 @@ import { getApiUrl } from "@/utils/utils";
 
 export const handleLogin = async (email: string, password: string) => {
 
-    const tokenTime = 3600;
-
     try {
         const response = await fetch(`${getApiUrl()}/v1/auth`, {
             method: 'POST',
@@ -12,7 +10,7 @@ export const handleLogin = async (email: string, password: string) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ email, password }),
-            credentials: 'include',
+            credentials: 'include', // Importante: permite recibir cookies del servidor
         });
 
         const data = await response.json();
@@ -21,11 +19,18 @@ export const handleLogin = async (email: string, password: string) => {
             return errorToast('¡Error!', data.error);
         }
 
-        if (data.token) {
-            document.cookie = `authToken=${data.token}; path=/; max-age=${tokenTime}; SameSite=Strict; Secure;`;
+        // El servidor ahora envía las cookies httpOnly automáticamente
+        // Ya no necesitamos establecer la cookie manualmente
+        if (data.success && data.csrfToken) {
+            // Guardar CSRF token en localStorage para usarlo en requests
+            localStorage.setItem('csrfToken', data.csrfToken);
+
+            successToast('¡Éxito!', `Bienvenido ${data.user.name}`);
+
+            // Redirigir al dashboard
             return window.location.href = '/admin?message=authorized';
         } else {
-            throw new Error('Token no recibido');
+            throw new Error('Respuesta de autenticación inválida');
         }
     } catch (error) {
         if (error instanceof Error) {

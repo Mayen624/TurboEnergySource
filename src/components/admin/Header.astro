@@ -4,12 +4,22 @@ import ThemeIcon from "../ThemeIcon.astro";
 import jwt from "jsonwebtoken";
 
 interface userToken {
-  userInfo: {
-    email: string
-  }
+  userId: string;
+  roleId: string;
+  email: string;
 }
-const token = getCookieValue(Astro.request,'authToken');
-const decode = jwt.verify(token || '', import.meta.env.JWT_PRIVATE_KEY) as userToken;
+
+let decode: userToken | null = null;
+
+try {
+  const token = getCookieValue(Astro.request,'authToken');
+  if (token) {
+    decode = jwt.verify(token, import.meta.env.JWT_PRIVATE_KEY) as userToken;
+  }
+} catch (error) {
+  // Token expirado o inválido - el frontend manejará el refresh
+  decode = null;
+}
 ---
 
 <!-- ========== HEADER ========== -->
@@ -239,8 +249,8 @@ const decode = jwt.verify(token || '', import.meta.env.JWT_PRIVATE_KEY) as userT
               </p>
               <p
                 class="text-sm font-medium text-gray-800 dark:text-neutral-200"
-              > 
-                {decode.userInfo.email}
+              >
+                {decode?.email || 'Loading...'}
               </p>
             </div>
             <div class="space-y-0.5 p-1.5">
@@ -297,15 +307,32 @@ const decode = jwt.verify(token || '', import.meta.env.JWT_PRIVATE_KEY) as userT
 <!-- ========== END HEADER ========== -->
 
 <script>
-  import { deleteCookie } from "@utils/functions.ts";
+  import { getApiUrl } from "@/utils/utils";
 
   let logOut = document.getElementById("logOut");
 
   if (logOut) {
-    logOut.addEventListener("click", () => {
-      deleteCookie("authToken");
-      history.replaceState(null, "", "/");
-      window.location.replace("/?message=sessionClosed");
+    logOut.addEventListener("click", async (e) => {
+      e.preventDefault();
+
+      try {
+        // Llamar al endpoint de logout para limpiar cookies httpOnly del servidor
+        await fetch(`${getApiUrl()}/v1/auth/logout`, {
+          method: 'POST',
+          credentials: 'include'
+        });
+
+        // Limpiar localStorage
+        localStorage.removeItem('csrfToken');
+
+        // Redirigir al home
+        window.location.href = "/?message=sessionClosed";
+
+      } catch (error) {
+        console.error('Error during logout:', error);
+        // Aún así redirigir
+        window.location.href = "/";
+      }
     });
   }
 </script>

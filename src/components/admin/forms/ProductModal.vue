@@ -246,8 +246,7 @@ export default {
       event.preventDefault();
 
       const data = this.previewData;
-      const token = getCookie('authToken');
-      const res = await addProduct(data, this.img ,token);
+      const res = await addProduct(data, this.img);
 
 
       if (res.errors) {

@@ -71,9 +71,7 @@
           this.displayProducts(this.currentPage, this.limit);
         },
         async displayProducts(page = 1, limit = 10) {
-          const token = getCookie('authToken');
-          
-          const products = await getProducts(token, page, limit);
+          const products = await getProducts(page, limit);
           console.log(products.products)
           if (products.error) {
             errorToast('¡Error!', actions.error);
@@ -85,13 +83,11 @@
         
         },
         async disabledAndEnabledProduct(id, enabled){
-          const token = getCookie('authToken');
-  
           if(!id){
             errorToast('¡Error!', 'Registro no valido')
           }else{
-            console.log(id, enabled, token)
-            const res = await enabledOrDisabledProduct(id, enabled, token);
+            console.log(id, enabled)
+            const res = await enabledOrDisabledProduct(id, enabled);
               
             if(res.error){
               errorToast('¡Error!', res.error);

@@ -172,8 +172,7 @@ export default {
   },
   methods: {
     async setComboBoxData(){
-      const token = getCookie('authToken');
-      this.comboOptions = await fetchDataForActionsComboBox(token);
+      this.comboOptions = await fetchDataForActionsComboBox();
     },
     async saveNewAction(){
       event.preventDefault();
@@ -184,7 +183,7 @@ export default {
         actions: this.selectedOptions
       };
 
-      const res = await addRole(data, getCookie('authToken'));
+      const res = await addRole(data);
       
       if(res.errors){
         const concatenatedErrorMessages = res.errors.join(', <br/>');

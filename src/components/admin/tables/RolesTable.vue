@@ -69,9 +69,7 @@
           this.displayRoles(this.currentPage, this.limit); // Actualiza los datos con el nuevo límite
         },
         async displayRoles(page = 1, limit = 10) {
-          const token = getCookie('authToken');
-          
-          const roles = await getRoles(token, page, limit);
+          const roles = await getRoles(page, limit);
           if (roles.error) {
             errorToast('¡Error!', roles.error);
           } else {
@@ -82,12 +80,10 @@
         
         },
         async disabledAndEnabledRole(id, enabled){
-          const token = getCookie('authToken');
-  
           if(!id){
               errorToast('¡Error!', 'Registro no valido')
           }else{
-            const res = await enabledOrDisabledRole(id, enabled, token);
+            const res = await enabledOrDisabledRole(id, enabled);
               
             if(res.error){
               errorToast('¡Error!', res.error);

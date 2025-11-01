@@ -72,9 +72,7 @@ export default defineComponent({
     },
 
     async displayActions(page = 1, limit = 10) {
-      const token = getCookie('authToken');
-      
-      const actions = await getActions(token, page, limit);
+      const actions = await getActions(page, limit);
   
       if (actions.error) {
         errorToast('¡Error!', actions.error);
@@ -87,12 +85,11 @@ export default defineComponent({
     
     async disabledAndEnabledAction(id, enabled){
       console.log(id,enabled)
-      const token = getCookie('authToken');
 
       if(!id){
         return errorToast('¡Error!', 'Registro no valido')
       }else{
-        const res = await enabledOrDisabledAction(id, enabled, token);
+        const res = await enabledOrDisabledAction(id, enabled);
           
         if(res.error){
           errorToast('¡Error!', res.error);
