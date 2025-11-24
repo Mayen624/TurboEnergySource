@@ -102,6 +102,10 @@ export default defineConfig({
   adapter: node({
     mode: "standalone", // "standalone" para una aplicación Node.js independiente
   }),
+  server: {
+    port: 4321,
+    host: true, // Escucha en 0.0.0.0 (todas las interfaces)
+  },
   experimental: {
     clientPrerender: true,
     directRenderScript: true,
