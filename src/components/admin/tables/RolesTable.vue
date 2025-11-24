@@ -3,10 +3,11 @@
       :headers="['#','NOMBRE','DESCRIPCION','ESTADO', 'CREADO EN', 'ACTUALIZADO EN', 'ACCIONES']"
       :allowedFields="['_id','name', 'description', 'enabled', 'createdAt', 'updatedAt']"
       :add-button="AddButtonComponent"
+      :editButton="EditButtonComponent"
       :data="roles"
-      :currentPage="currentPage" 
-      :totalPages="totalPages"   
-      :itemsPerPage="limit"  
+      :currentPage="currentPage"
+      :totalPages="totalPages"
+      :itemsPerPage="limit"
       :displayData="displayRoles"
       :disabledOrEnabled="disabledAndEnabledRole"
       :button-props="{
@@ -16,26 +17,28 @@
       }"
       @update:currentPage="handlePageUpdate"
       @limit-changed="handleLimitChange"
+      @edit-row="handleEditRole"
     />
-  
+
     <RoleModal id="roleModal" modalTitle="Nuevo role" />
+    <RoleEditModal id="roleEditModal" modalTitle="Actualizar role" :roleId="selectedRoleId" />
   </template>
   
   <script>
-    import { defineComponent } from 'vue';
+    import { defineComponent, markRaw } from 'vue';
     import Table from '@components/ui/tables/Table.vue';
     import AddButton from '@components/admin/buttons/AddButton.vue';
     import EditButton from '@components/admin/buttons/EditButton.vue';
     import DisabledButton from '@components/admin/buttons/DisabledButton.vue';
     import WarningAlert from '@components/ui/alerts/WarningAlert.vue';
     import RoleModal from '@components/admin/forms/RoleModal.vue';
-    import UserEditModal from '@components/admin/forms/UserEditModal.vue';
+    import RoleEditModal from '@components/admin/forms/RoleEditModal.vue';
     import {successToast, errorToast} from '@utils/notify.ts'
     import {enabledOrDisabledRole} from '@/API/pushData.ts'
     import { getCookie } from '@/utils/functions.ts';
     import { getApiUrl } from "@/utils/utils";
     import {getRoles} from "@/API/fetchData.ts";
-  
+
     export default defineComponent({
       props: {
         titleCard: {type: String, required: true},
@@ -46,6 +49,7 @@
         DisabledButton,
         WarningAlert,
         RoleModal,
+        RoleEditModal,
         Table
       },
       data() {
@@ -54,7 +58,9 @@
           totalPages: 1,
           currentPage: 1,
           limit: 10,
-          AddButtonComponent: AddButton
+          selectedRoleId: null,
+          AddButtonComponent: markRaw(AddButton),
+          EditButtonComponent: markRaw(EditButton)
         };
       },
       mounted() {
@@ -84,17 +90,29 @@
               errorToast('¡Error!', 'Registro no valido')
           }else{
             const res = await enabledOrDisabledRole(id, enabled);
-              
+
             if(res.error){
               errorToast('¡Error!', res.error);
             }else if(res.success){
               successToast('¡Exito!', res.success);
             }
           }
-          
+
           setTimeout(() => {
-            location.reload();  
+            location.reload();
           }, 4000);
+        },
+        handleEditRole(roleId) {
+          this.selectedRoleId = roleId;
+          // Abrir el modal usando HSOverlay
+          setTimeout(() => {
+            const modalTrigger = document.querySelector('[data-hs-overlay="#roleEditModal"]');
+            if (modalTrigger) {
+              modalTrigger.click();
+            } else {
+              window.HSOverlay.open(document.getElementById('roleEditModal'));
+            }
+          }, 100);
         }
       }
     });

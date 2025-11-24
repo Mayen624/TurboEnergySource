@@ -35,10 +35,6 @@ if (!token) { return Astro.redirect('/?message=sessionExpired', 302); }
       document.documentElement.classList.remove("dark");
     }
   </script>
-  <script>
-    import 'preline/preline';
-    import "@scripts/lenisSmoothScroll.js";
-  </script>
 </head>
 
 <body class="bg-neutral-200 selection:bg-yellow-400 selection:text-neutral-700 dark:bg-neutral-800">
@@ -59,6 +55,19 @@ if (!token) { return Astro.redirect('/?message=sessionExpired', 302); }
   <script src="@node_modules/preline/dist/preline.js"></script>
   <script src="@node_modules/lodash/lodash.min.js"></script>
   <script src="@node_modules/dropzone/dist/dropzone-min.js"></script>
+
+  <!-- Reinicializar Preline después de que Vue haya hidratado -->
+  <script is:inline>
+    // Esperar a que la página esté completamente cargada y Vue hidratado
+    window.addEventListener('load', function() {
+      // Dar tiempo extra para que Vue complete la hidratación
+      setTimeout(function() {
+        if (window.HSStaticMethods && typeof window.HSStaticMethods.autoInit === 'function') {
+          window.HSStaticMethods.autoInit();
+        }
+      }, 100);
+    });
+  </script>
 </html>
 
 <script>

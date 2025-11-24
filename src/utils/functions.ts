@@ -52,16 +52,49 @@ export const isFormDataEmpty = (formData: FormData): boolean => {
   return false;
 };
 
-export const checkContactFormData = (email: string, phone: string): boolean => {
+export const checkContactFormData = (firstName: string, lastName: string, email: string, phone: string, details: string): {isValid: boolean, errors: string[]} => {
 
-  const emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-  const phoneRegex = /^\+\d{1,3}\s\d{7,15}$/;
+  const errors: string[] = [];
 
-  if (!emailRegex.test(email)) {
-    return true;
-  }else if(!phoneRegex.test(phone)){
-    return true;
+  // Validación de nombre (permite letras con acentos, espacios, guiones y apóstrofes)
+  const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+([\s'-][a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+)*$/;
+
+  if (!firstName || firstName.length < 2 || firstName.length > 50 || !nameRegex.test(firstName) || /\s{2,}/.test(firstName)) {
+    errors.push('Primer nombre debe tener entre 2 y 50 caracteres, solo letras');
   }
-  return false;
+
+  if (!lastName || lastName.length < 2 || lastName.length > 50 || !nameRegex.test(lastName) || /\s{2,}/.test(lastName)) {
+    errors.push('Apellido debe tener entre 2 y 50 caracteres, solo letras');
+  }
+
+  // Validación de email (RFC 5321 compliant)
+  const emailRegex = /^[a-zA-Z0-9]([a-zA-Z0-9._-]{0,63})[a-zA-Z0-9]@[a-zA-Z0-9]([a-zA-Z0-9.-]{0,253})[a-zA-Z0-9]\.[a-zA-Z]{2,}$/;
+
+  if (!email || email.length > 254 || email.includes('..') || email.split('@').length !== 2 || !emailRegex.test(email)) {
+    errors.push('Email inválido (ejemplo: usuario@dominio.com)');
+  } else {
+    const [localPart, domain] = email.split('@');
+    if (localPart.length > 64 || domain.length > 253) {
+      errors.push('Email inválido (ejemplo: usuario@dominio.com)');
+    }
+  }
+
+  // Validación de teléfono internacional (ITU-T E.164)
+  const phoneRegex = /^\+[1-9]\d{0,3}[\s.-]?(\(?\d{1,4}\)?[\s.-]?)?\d{4,14}$/;
+  const digitsOnly = phone.replace(/\D/g, '');
+
+  if (!phone || digitsOnly.length < 7 || digitsOnly.length > 15 || !phoneRegex.test(phone)) {
+    errors.push('Teléfono inválido (ejemplo: +1 2345678900, +52 1234567890)');
+  }
+
+  // Validación de detalles
+  if (!details || details.trim().length < 10 || details.trim().length > 300) {
+    errors.push('Los detalles deben tener entre 10 y 300 caracteres');
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors
+  };
 };
 

@@ -265,8 +265,8 @@ export default {
         onChange() {
             this.$emit('limit-changed', this.selectedLimit);
         },
-        handleEditButton(event){
-            console.log(event)
+        handleEditButton(rowId){
+            this.$emit('edit-row', rowId);
         }
     },
 };

@@ -1,16 +1,16 @@
 <template>
     <div
       :id='id'
-      class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none"
+      class="hs-overlay pointer-events-none fixed start-0 top-0 z-[80] hidden size-full overflow-y-auto overflow-x-hidden"
       role="dialog"
       tabindex="-1"
       aria-labelledby="hs-slide-down-animation-modal-label"
     >
       <div
-        class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 h-[calc(100%-3.5rem)] sm:mx-auto"
+        class="hs-overlay-animation-target m-3 mt-0 opacity-0 transition-all ease-out hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 sm:mx-auto sm:w-full sm:max-w-lg"
       >
         <div
-          class="max-h-full overflow-hidden flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:border-neutral-700 dark:bg-neutral-800 dark:shadow-neutral-700/70"
+          class="pointer-events-auto flex flex-col rounded-xl border bg-white shadow-sm dark:border-neutral-700 dark:bg-neutral-800 dark:shadow-neutral-700/70"
         >
           <div
             class="flex items-center justify-between border-b px-4 py-3 dark:border-neutral-700"
@@ -52,8 +52,9 @@
             >
               <div class="mx-auto max-w-xl">
                 <!-- Form -->
-                <form id="RolesForm" enctype="application/json">
+                <form id="ActionsEditForm" enctype="application/json">
                   <div class="grid gap-4 lg:gap-6">
+                    <input id="actionId" type="hidden" name="id" readonly>
                     <!-- Grid -->
                     <div
                       class="grid grid-cols-1 gap-4"
@@ -70,7 +71,7 @@
                           name="name"
                           v-model="name"
                           required=""
-                          id="name"
+                          id="nameEdit"
                           class="focus:border-blue-500 focus:ring-blue-500 block w-full rounded-lg border-gray-200 px-4 py-3 text-sm disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
                         />
                       </div>
@@ -83,29 +84,14 @@
                           Descripción:
                         </label>
                         <TextArea
-                          id="description"
+                          id="descriptionEdit"
                           name="description"
                           v-model="description"
                         />
                       </div>
-                      <div>
-                      <label
-                        for="hs-work-email-hire-us-2"
-                        class="mb-2 block text-sm font-medium text-gray-700 dark:text-white"
-                      >
-                        Acciónes:
-                      </label>
-                      <MultipleComboBoxInput
-                        :options="comboOptions"
-                        v-model="selectedOptions"
-                        name="actions"
-                        id="select-actions"
-                      />
-                    </div>
                     </div>
                   </div>
                   <!-- End Grid -->
-                   
                 </form>
                 <!-- End Form -->
               </div>
@@ -124,10 +110,10 @@
             </button>
             <button
               type="button"
-              @click="saveNewAction"
+              @click="updateActionData"
               class="bg-blue-600 hover:bg-blue-700 focus:bg-blue-700 inline-flex items-center gap-x-2 rounded-lg border border-transparent px-3 py-2 text-sm font-medium text-white focus:outline-none disabled:pointer-events-none disabled:opacity-50"
             >
-              Guardar cambios
+              Actualizar cambios
             </button>
           </div>
         </div>
@@ -135,74 +121,105 @@
     </div>
   </template>
 
-<script>
-import MultipleComboBoxInput from '@/components/ui/forms/input/MutipleComboBoxInput.vue';
-import { fetchDataForActionsComboBox } from '@/API/comboBoxDataAdapted.ts';
-import TextArea from '@/components/ui/forms/input/TextArea.vue';
-import {successToast, errorToast} from '@/utils/notify.ts'
-import { getCookie } from '@/utils/functions.ts';
-import {addRole} from '@/API/pushData.ts';
+  <script>
+  import TextArea from '@/components/ui/forms/input/TextArea.vue';
+  import {successToast, errorToast} from '@/utils/notify.ts'
+  import { getCookie } from '@/utils/functions.ts';
+  import {updateAction} from '@/API/pushData.ts';
+  import { getApiUrl } from "@/utils/utils";
 
-export default {
-  name: 'RoleModal',
-  components: {
-    TextArea,
-    MultipleComboBoxInput
-  },
-  props: {
-    id: {
-      type: String,
-      required: true
+  export default {
+    name: 'ActionEditModal',
+    components: {
+        TextArea
     },
-    modalTitle: {
-      type: String,
-      required: true
-    },
-  },
-  data() {
-    return {
-      comboOptions: [],
-      selectedOptions: [],
-      name: '',
-      description: ''
-    };
-  },
-  mounted() {
-    this.setComboBoxData();
-  },
-  methods: {
-    async setComboBoxData(){
-      this.comboOptions = await fetchDataForActionsComboBox();
-    },
-    async saveNewAction(){
-      event.preventDefault();
-      
-      const data = {
-        name: this.name,
-        description: this.description.trim(),
-        actions: this.selectedOptions
-      };
-
-      const res = await addRole(data);
-      
-      if(res.errors){
-        const concatenatedErrorMessages = res.errors.join(', <br/>');
-        return errorToast('Solucionar los siguientes errores: ', concatenatedErrorMessages, 10000, false, false);
-      }else if(res.error){
-        return errorToast('¡Error!', res.error);
-      }else if(res.success){
-        this.resetForm();
-        successToast('Exito!', res.success);
-        setTimeout(() => {
-          location.reload();  
-        }, 3500);
+    props: {
+      id: {
+        type: String,
+        required: true
+      },
+      modalTitle: {
+        type: String,
+        required: true
+      },
+      actionId: {
+        type: String,
+        default: null
       }
     },
-    resetForm() {
-      this.name = '';
-      this.description = '';
-      this.selectedActions = [];
-    }
-  },
-};
-</script>
+    data() {
+      return {
+        name: '',
+        description: ''
+      };
+    },
+    watch: {
+      actionId: {
+        immediate: true,
+        handler(newVal) {
+          if (newVal) {
+            this.loadActionData(newVal);
+          }
+        }
+      }
+    },
+    methods: {
+      async loadActionData(id){
+        try {
+          const csrfToken = localStorage.getItem('csrfToken');
+          const response = await fetch(`${getApiUrl()}/v1/actions/${id}`, {
+            method: 'GET',
+            headers: {
+              'X-CSRF-Token': csrfToken || '',
+            },
+            credentials: 'include',
+          });
+
+          const data = await response.json();
+
+          if (data.error) {
+            errorToast('Error', data.error);
+            return;
+          }
+
+          // Cargar datos en el formulario
+          this.name = data.action.name;
+          this.description = data.action.description;
+
+          // Establecer valores en input hidden
+          document.getElementById('actionId').value = data.action._id;
+
+        } catch (error) {
+          console.error('Error al cargar acción:', error);
+          errorToast('Error', 'Error al cargar datos de la acción');
+        }
+      },
+      async updateActionData(){
+        event.preventDefault();
+        let form = document.getElementById('ActionsEditForm');
+        let formData = new FormData(form);
+
+        const data = {
+          name: formData.get('name'),
+          description: formData.get('description'),
+        };
+
+        const actionId = formData.get('id');
+        const res = await updateAction(actionId, data);
+
+        if(res.errors){
+          const concatenatedErrorMessages = res.errors.join(', <br/>');
+          return errorToast('Solucionar los siguientes errores: ', concatenatedErrorMessages, 10000, false, false);
+        }else if(res.error){
+          return errorToast('Error: ', res.error, 10000, true, false);
+        }else if(res.success){
+          successToast('Exito!', res.success);
+          setTimeout(() => {
+            location.reload();
+          }, 3000);
+        }
+      },
+    },
+  };
+  </script>
+

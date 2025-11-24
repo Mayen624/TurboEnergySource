@@ -6,9 +6,9 @@
     :addButton="AddButtonComponent"
     :editButton="EditButtonComponent"
     :data="users"
-    :currentPage="currentPage" 
-    :totalPages="totalPages"   
-    :itemsPerPage="limit"  
+    :currentPage="currentPage"
+    :totalPages="totalPages"
+    :itemsPerPage="limit"
     :displayData="fetchUsers"
     :disabledOrEnabled="disabledAndEnabledUser"
     :button-props="{
@@ -18,14 +18,15 @@
     }"
     @update:currentPage="handlePageUpdate"
     @limit-changed="handleLimitChange"
+    @edit-row="handleEditUser"
   />
 
   <UserModal id="userModal" modalTitle="Nuevo usuario" />
-  <!-- <UserEditModal id="userEditModal" modalTitle="Actualizar usuario" /> -->
+  <UserEditModal id="userEditModal" modalTitle="Actualizar usuario" :userId="selectedUserId" />
 </template>
 
 <script>
-  import { defineComponent } from 'vue';
+  import { defineComponent, markRaw } from 'vue';
   import Table from '@/components/ui/tables/Table.vue';
   import AddButton from '@components/admin/buttons/AddButton.vue';
   import EditButton from '@components/admin/buttons/EditButton.vue';
@@ -58,8 +59,9 @@
         currentPage: 1,
         limit: 10,
         pollingInterval: null,
-        AddButtonComponent: AddButton,
-        EditButtonComponent : EditButton
+        selectedUserId: null,
+        AddButtonComponent: markRaw(AddButton),
+        EditButtonComponent: markRaw(EditButton)
       };
     },
     mounted() {
@@ -125,13 +127,26 @@
             errorToast('¡Error!', 'Registro no valido')
           }else{
             const res = await enabledOrDisabledUser(id, enabled);
-            
+
             if(res.error){
               errorToast('¡Error!', res.error);
             }else if(res.success){
               successToast('¡Exito!', res.success);
             }
           }
+      },
+      handleEditUser(userId) {
+        this.selectedUserId = userId;
+        // Abrir el modal usando HSOverlay
+        setTimeout(() => {
+          const modalTrigger = document.querySelector('[data-hs-overlay="#userEditModal"]');
+          if (modalTrigger) {
+            modalTrigger.click();
+          } else {
+            // Si no hay botón trigger, abrir manualmente
+            window.HSOverlay.open(document.getElementById('userEditModal'));
+          }
+        }, 100);
       }
     }
   });

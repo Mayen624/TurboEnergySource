@@ -1,4 +1,4 @@
-import { getUsers, getRoles, getActions } from '@/API/fetchData.ts';
+import { getUsers, getRoles, getAllActions } from '@/API/fetchData.ts';
 
 export const fetchDataForUserComboBox = async () => {
 
@@ -43,10 +43,10 @@ export const fetchDataForActionsComboBox = async () => {
 
     try {
 
-        const actionsData = await getActions();
-        const filteredActions = actionsData.actions.filter((action: any) => action.enabled === true);
+        const actionsData = await getAllActions();
+        // getAllActions ya filtra por enabled: true en el backend
 
-        const data = filteredActions.map((action: any) => ({
+        const data = actionsData.map((action: any) => ({
             textValue: action.name,
             idValue: action._id,
         }));
@@ -55,6 +55,7 @@ export const fetchDataForActionsComboBox = async () => {
 
     } catch (e) {
         console.error('Error fetching actions from comboBox:', e);
+        return [];
     }
 
 }

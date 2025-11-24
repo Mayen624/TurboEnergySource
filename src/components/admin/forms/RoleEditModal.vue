@@ -52,8 +52,9 @@
             >
               <div class="mx-auto max-w-xl">
                 <!-- Form -->
-                <form id="RolesForm" enctype="application/json">
+                <form id="RolesEditForm" enctype="application/json">
                   <div class="grid gap-4 lg:gap-6">
+                    <input id="roleId" type="hidden" name="id" readonly>
                     <!-- Grid -->
                     <div
                       class="grid grid-cols-1 gap-4"
@@ -70,7 +71,7 @@
                           name="name"
                           v-model="name"
                           required=""
-                          id="name"
+                          id="nameEdit"
                           class="focus:border-blue-500 focus:ring-blue-500 block w-full rounded-lg border-gray-200 px-4 py-3 text-sm disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
                         />
                       </div>
@@ -83,7 +84,7 @@
                           Descripción:
                         </label>
                         <TextArea
-                          id="description"
+                          id="descriptionEdit"
                           name="description"
                           v-model="description"
                         />
@@ -99,13 +100,13 @@
                         :options="comboOptions"
                         v-model="selectedOptions"
                         name="actions"
-                        id="select-actions"
+                        id="select-actions-edit"
                       />
                     </div>
                     </div>
                   </div>
                   <!-- End Grid -->
-                   
+
                 </form>
                 <!-- End Form -->
               </div>
@@ -124,10 +125,10 @@
             </button>
             <button
               type="button"
-              @click="saveNewAction"
+              @click="updateRoleData"
               class="bg-blue-600 hover:bg-blue-700 focus:bg-blue-700 inline-flex items-center gap-x-2 rounded-lg border border-transparent px-3 py-2 text-sm font-medium text-white focus:outline-none disabled:pointer-events-none disabled:opacity-50"
             >
-              Guardar cambios
+              Actualizar cambios
             </button>
           </div>
         </div>
@@ -141,10 +142,11 @@ import { fetchDataForActionsComboBox } from '@/API/comboBoxDataAdapted.ts';
 import TextArea from '@/components/ui/forms/input/TextArea.vue';
 import {successToast, errorToast} from '@/utils/notify.ts'
 import { getCookie } from '@/utils/functions.ts';
-import {addRole} from '@/API/pushData.ts';
+import {updateRole} from '@/API/pushData.ts';
+import { getApiUrl } from "@/utils/utils";
 
 export default {
-  name: 'RoleModal',
+  name: 'RoleEditModal',
   components: {
     TextArea,
     MultipleComboBoxInput
@@ -158,6 +160,10 @@ export default {
       type: String,
       required: true
     },
+    roleId: {
+      type: String,
+      default: null
+    }
   },
   data() {
     return {
@@ -170,38 +176,80 @@ export default {
   mounted() {
     this.setComboBoxData();
   },
+  watch: {
+    roleId: {
+      immediate: true,
+      handler(newVal) {
+        if (newVal) {
+          this.loadRoleData(newVal);
+        }
+      }
+    }
+  },
   methods: {
     async setComboBoxData(){
       this.comboOptions = await fetchDataForActionsComboBox();
     },
-    async saveNewAction(){
+    async loadRoleData(id){
+      try {
+        const csrfToken = localStorage.getItem('csrfToken');
+        const response = await fetch(`${getApiUrl()}/v1/roles/${id}`, {
+          method: 'GET',
+          headers: {
+            'X-CSRF-Token': csrfToken || '',
+          },
+          credentials: 'include',
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+          errorToast('Error', data.error);
+          return;
+        }
+
+        // Cargar datos en el formulario
+        this.name = data.role.name;
+        this.description = data.role.description;
+
+        // Cargar acciones seleccionadas (asumiendo que el backend devuelve un array de IDs)
+        if (data.role.actions && Array.isArray(data.role.actions)) {
+          this.selectedOptions = data.role.actions.map(action =>
+            typeof action === 'object' ? action._id : action
+          );
+        }
+
+        // Establecer valores en input hidden
+        document.getElementById('roleId').value = data.role._id;
+
+      } catch (error) {
+        console.error('Error al cargar rol:', error);
+        errorToast('Error', 'Error al cargar datos del rol');
+      }
+    },
+    async updateRoleData(){
       event.preventDefault();
-      
+
       const data = {
         name: this.name,
         description: this.description.trim(),
         actions: this.selectedOptions
       };
 
-      const res = await addRole(data);
-      
+      const roleId = document.getElementById('roleId').value;
+      const res = await updateRole(roleId, data);
+
       if(res.errors){
         const concatenatedErrorMessages = res.errors.join(', <br/>');
         return errorToast('Solucionar los siguientes errores: ', concatenatedErrorMessages, 10000, false, false);
       }else if(res.error){
         return errorToast('¡Error!', res.error);
       }else if(res.success){
-        this.resetForm();
         successToast('Exito!', res.success);
         setTimeout(() => {
-          location.reload();  
-        }, 3500);
+          location.reload();
+        }, 3000);
       }
-    },
-    resetForm() {
-      this.name = '';
-      this.description = '';
-      this.selectedActions = [];
     }
   },
 };

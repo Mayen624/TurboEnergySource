@@ -146,7 +146,7 @@
             </button>
             <button
               type="button"
-              @click=""
+              @click="updateUserData"
               class="bg-blue-600 hover:bg-blue-700 focus:bg-blue-700 inline-flex items-center gap-x-2 rounded-lg border border-transparent px-3 py-2 text-sm font-medium text-white focus:outline-none disabled:pointer-events-none disabled:opacity-50"
             >
               Actualizar cambios
@@ -164,8 +164,9 @@
   import { fetchDataForRoleComboBox } from '@/API/comboBoxDataAdapted.ts';
   import {successToast, errorToast} from '@/utils/notify.ts'
   import { getCookie } from '@/utils/functions.ts';
-  import {addUser} from '@/API/pushData.ts';
-  
+  import {updateUser} from '@/API/pushData.ts';
+  import { getApiUrl } from "@/utils/utils";
+
   export default {
     name: 'UserEditModal',
     components: {
@@ -182,26 +183,102 @@
         type: String,
         required: true
       },
+      userId: {
+        type: String,
+        default: null
+      }
     },
     data() {
       return {
         comboOptions: [],
-        selectedOption: null
+        selectedOption: null,
+        name: '',
+        email: '',
+        password: ''
       };
     },
     mounted() {
       this.setComboBoxData();
     },
+    watch: {
+      userId: {
+        immediate: true,
+        handler(newVal) {
+          if (newVal) {
+            this.loadUserData(newVal);
+          }
+        }
+      }
+    },
     methods: {
       async setComboBoxData(){
         this.comboOptions = await fetchDataForRoleComboBox();
       },
-      getDataToUpdate(){
+      async loadUserData(id){
+        try {
+          const csrfToken = localStorage.getItem('csrfToken');
+          const response = await fetch(`${getApiUrl()}/v1/users/${id}`, {
+            method: 'GET',
+            headers: {
+              'X-CSRF-Token': csrfToken || '',
+            },
+            credentials: 'include',
+          });
 
+          const data = await response.json();
+
+          if (data.error) {
+            errorToast('Error', data.error);
+            return;
+          }
+
+          // Cargar datos en el formulario
+          this.name = data.user.name;
+          this.email = data.user.email;
+          this.selectedOption = data.user.idRole._id;
+
+          // Establecer valores en inputs hidden
+          document.getElementById('id').value = data.user._id;
+          document.getElementById('nameEdit').value = data.user.name;
+          document.getElementById('emailEdit').value = data.user.email;
+
+        } catch (error) {
+          console.error('Error al cargar usuario:', error);
+          errorToast('Error', 'Error al cargar datos del usuario');
+        }
       },
-      async updateUser(idData){
-        //open modal & set data with request
-      }
+      async updateUserData(){
+        event.preventDefault();
+        let form = document.getElementById('UserEditForm');
+        let formData = new FormData(form);
+
+        const data = {
+          name: formData.get('name'),
+          email: formData.get('email'),
+          idRole: formData.get('idRole')
+        };
+
+        // Solo agregar password si se ingresó uno nuevo
+        const password = formData.get('password');
+        if (password && password.trim() !== '') {
+          data.password = password;
+        }
+
+        const userId = formData.get('id');
+        const res = await updateUser(userId, data);
+
+        if(res.errors){
+          const concatenatedErrorMessages = res.errors.join(', <br/>');
+          return errorToast('Solucionar los siguientes errores: ', concatenatedErrorMessages, 10000, false, false);
+        }else if (res.error){
+          return errorToast('Error: ', res.error, 10000, true, false);
+        }else if(res.success){
+          successToast('Exito!', res.success);
+          setTimeout(() => {
+            location.reload();
+          }, 3000);
+        }
+      },
     },
   };
   </script>

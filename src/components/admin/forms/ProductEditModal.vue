@@ -27,7 +27,7 @@
             <div class="grid grid-cols-2 gap-8">
               <!-- Form Column -->
               <div class="w-full">
-                <form id="productsForm" enctype="multipart/form-data">
+                <form id="productsEditForm" enctype="multipart/form-data">
                   <div class="grid gap-4 lg:gap-6">
                     <div class="grid grid-cols-1 gap-4">
 
@@ -53,7 +53,8 @@
 
                       <div>
                         <label for="image" class="mb-2 block text-sm font-medium text-gray-700 dark:text-white">Imagen del producto:</label>
-                        <UploadFileInput id="uploadFile" name="img" @change="onFileChange" selectFileText="Seleccione una imagen" />
+                        <p class="text-xs text-gray-500 mb-2">Deja en blanco para mantener la imagen actual</p>
+                        <UploadFileInput id="uploadFile" name="img" @change="onFileChange" selectFileText="Seleccione una nueva imagen (opcional)" />
                       </div>
 
                       <div id="descripcion-detallada">
@@ -113,8 +114,8 @@
             </div>
           </div>
           <div class="flex items-center justify-end gap-x-2 border-t px-4 py-3 dark:border-neutral-700">
-            <button type="button" @click="saveNewProduct" class="bg-blue-600 hover:bg-blue-700 inline-flex items-center gap-x-2 rounded-lg px-3 py-2 text-sm font-medium text-white">
-              Guardar cambios
+            <button type="button" @click="updateProductData" class="bg-blue-600 hover:bg-blue-700 inline-flex items-center gap-x-2 rounded-lg px-3 py-2 text-sm font-medium text-white">
+              Actualizar producto
             </button>
           </div>
         </div>
@@ -130,10 +131,11 @@ import UploadFileInput from '@/components/ui/forms/input/UploadFileInput.vue';
 import ProductPreviewCard from '../cards/ProductPreviewCard.vue';
 import { successToast, errorToast } from '@/utils/notify.ts'
 import { getCookie } from '@/utils/functions.ts';
-import { addProduct } from '@/API/pushData.ts';
+import { updateProduct } from '@/API/pushData.ts';
+import { getApiUrl } from '@/utils/utils.ts';
 
 export default {
-  name: 'ProductModal',
+  name: 'ProductEditModal',
   components: {
     TextArea,
     UploadFileInput,
@@ -148,6 +150,10 @@ export default {
       type: String,
       required: true
     },
+    productId: {
+      type: String,
+      default: null
+    }
   },
   data() {
     return {
@@ -167,7 +173,7 @@ export default {
         btnURL: ""
       },
       descriptionList: [
-      {
+        {
           title: '',
           subTitle: ''
         },
@@ -206,7 +212,8 @@ export default {
       ],
       blueprints: "",
       slug: "",
-      img: ''
+      img: null,
+      newImageSelected: false
     };
   },
   computed: {
@@ -227,26 +234,138 @@ export default {
       };
     }
   },
+  watch: {
+    productId: {
+      immediate: true,
+      handler(newVal) {
+        if (newVal) {
+          this.loadProductData(newVal);
+        }
+      }
+    },
+    haveSpecification() {
+      this.$emit('update-preview-data', this.previewData);
+    },
+    haveluePrints() {
+      this.$emit('update-preview-data', this.previewData);
+    }
+  },
   mounted() {
     this.previewData.longDescription.btnURL = '/contact';
   },
   methods: {
+    async loadProductData(id) {
+      try {
+        const csrfToken = localStorage.getItem('csrfToken');
+        const response = await fetch(`${getApiUrl()}/v1/products/${id}`, {
+          method: 'GET',
+          headers: {
+            'X-CSRF-Token': csrfToken || '',
+          },
+          credentials: 'include',
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+          errorToast('Error', data.error);
+          return;
+        }
+
+        const product = data.product;
+
+        // Load all product data
+        this.title = product.title || '';
+        this.description = product.description || '';
+        this.mainContent.introduction = product.mainContent?.introduction || '';
+        this.mainContent.img = product.mainContent?.img?.src || '';
+        this.haveSpecification = product.haveSpecification || false;
+        this.haveluePrints = product.haveBluePrints || false;
+
+        // Load long description
+        if (product.longDescription) {
+          this.longDescription.longDescriptionTitle = product.longDescription.longDescriptionTitle || '';
+          this.longDescription.longDescriptionSubTitle = product.longDescription.longDescriptionSubTitle || '';
+          this.longDescription.btnTitle = product.longDescription.btnTitle || '';
+          this.longDescription.btnURL = product.longDescription.btnURL || '/contact';
+        }
+
+        // Load description list
+        if (product.descriptionList && Array.isArray(product.descriptionList)) {
+          this.descriptionList = product.descriptionList.length > 0
+            ? product.descriptionList
+            : [{ title: '', subTitle: '' }, { title: '', subTitle: '' }, { title: '', subTitle: '' }];
+        }
+
+        // Load specifications left
+        if (product.specificationsLeft && Array.isArray(product.specificationsLeft)) {
+          this.specificationsLeft = product.specificationsLeft.length > 0
+            ? product.specificationsLeft
+            : [
+                { title: 'Material', subTitle: 'Según requerimientos' },
+                { title: 'Cantidad', subTitle: 'Según requerimientos' },
+                { title: 'Tamaño', subTitle: 'Según requerimientos' }
+              ];
+        }
+
+        // Load specification table data
+        if (product.specificationTableData && Array.isArray(product.specificationTableData)) {
+          this.specificationTableData = product.specificationTableData.length > 0
+            ? product.specificationTableData
+            : [
+                {
+                  feature: ["Especificacion", "Valor"],
+                  description: [
+                    ["Material", "Acero/Hierro/Aluminio"],
+                    ["Cantidad", "N/A"],
+                    ["Tamaño", "mm/m/in/ft"]
+                  ]
+                }
+              ];
+        }
+
+        this.blueprints = product.blueprints || '';
+        this.slug = product.slug || '';
+
+        // Reset new image flag
+        this.newImageSelected = false;
+
+      } catch (error) {
+        console.error('Error al cargar producto:', error);
+        errorToast('Error', 'No se pudo cargar el producto');
+      }
+    },
     onFileChange(event) {
       const file = event.target.files[0];
       if (file) {
-        // Crear URL temporal para la imagen seleccionada
+        // Create temporary URL for the selected image
         this.mainContent.img = URL.createObjectURL(file);
         this.img = file;
-      }else{
-        this.mainContent.img = null;
+        this.newImageSelected = true;
       }
     },
-    async saveNewProduct() {
+    async updateProductData() {
       event.preventDefault();
 
-      const data = this.previewData;
-      const res = await addProduct(data, this.img);
+      const data = {
+        title: this.title,
+        description: this.description,
+        mainContent: {
+          introduction: this.mainContent.introduction
+        },
+        haveSpecification: this.haveSpecification,
+        haveluePrints: this.haveluePrints,
+        longDescription: this.longDescription,
+        tabs: this.tabs,
+        descriptionList: this.descriptionList,
+        specificationsLeft: this.specificationsLeft,
+        specificationTableData: this.specificationTableData,
+        blueprints: this.blueprints
+      };
 
+      // Only send new image if one was selected
+      const imageFile = this.newImageSelected ? this.img : undefined;
+      const res = await updateProduct(this.productId, data, imageFile);
 
       if (res.errors) {
         const concatenatedErrorMessages = res.errors.join(', <br/>');
@@ -257,17 +376,9 @@ export default {
         successToast('Exito!', res.success);
         setTimeout(() => {
           location.reload();
-        }, 6000);
+        }, 3000);
       }
     }
-  },
-  watch: {
-    haveSpecification() {
-      this.$emit('update-preview-data', this.previewData);
-    },
-    haveluePrints() {
-      this.$emit('update-preview-data', this.previewData);
-    }
-  },
+  }
 };
 </script>

@@ -156,6 +156,8 @@ export default {
   },
   mounted() {
     this.tabs.push({ id: "tabs-with-card-item-1", title: 'Descripcion', dataTab: '#tabs-with-card-1' });
+    // Establecer el primer tab como activo por defecto
+    this.activeTab = '#tabs-with-card-1';
   },
   data() {
     return {

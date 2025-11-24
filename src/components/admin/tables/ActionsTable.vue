@@ -3,10 +3,11 @@
     :headers="['#','NOMBRE','DESCRIPCION','ESTADO', 'CREADO EN', 'ACTUALIZADO EN', 'ACCIONES']"
     :allowedFields="['_id','name', 'description', 'enabled', 'createdAt', 'updatedAt']"
     :add-button="AddButtonComponent"
+    :editButton="EditButtonComponent"
     :data="actions"
-    :currentPage="currentPage" 
-    :totalPages="totalPages"   
-    :itemsPerPage="limit"  
+    :currentPage="currentPage"
+    :totalPages="totalPages"
+    :itemsPerPage="limit"
     :displayData="displayActions"
     :disabledOrEnabled="disabledAndEnabledAction"
     :button-props="{
@@ -16,20 +17,22 @@
     }"
     @update:currentPage="handlePageUpdate"
     @limit-changed="handleLimitChange"
+    @edit-row="handleEditAction"
   />
-  
+
   <ActionsModal id="actionModal" modalTitle="Nueva acción" />
+  <ActionEditModal id="actionEditModal" modalTitle="Actualizar acción" :actionId="selectedActionId" />
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, markRaw } from 'vue';
 import Table from '@/components/ui/tables/Table.vue';
 import AddButton from '@components/admin/buttons/AddButton.vue';
 import EditButton from '@components/admin/buttons/EditButton.vue';
 import DisabledButton from '@components/admin/buttons/DisabledButton.vue';
 import WarningAlert from '@components/ui/alerts/WarningAlert.vue';
 import ActionsModal from '@components/admin/forms/ActionsModal.vue';
-import UserEditModal from '@components/admin/forms/UserEditModal.vue';
+import ActionEditModal from '@components/admin/forms/ActionEditModal.vue';
 import {successToast, errorToast} from '@utils/notify.ts';
 import {enabledOrDisabledAction} from '@/API/pushData.ts';
 import { getCookie } from '@/utils/functions.ts';
@@ -45,7 +48,7 @@ export default defineComponent({
     DisabledButton,
     WarningAlert,
     ActionsModal,
-    UserEditModal,
+    ActionEditModal,
     Table
   },
   data() {
@@ -54,12 +57,13 @@ export default defineComponent({
       totalPages: 1,
       currentPage: 1,
       limit: 10,
-      AddButtonComponent: AddButton
+      selectedActionId: null,
+      AddButtonComponent: markRaw(AddButton),
+      EditButtonComponent: markRaw(EditButton)
     };
   },
   mounted() {
     this.displayActions();
-    console.log()
   },
   methods: {
 
@@ -90,7 +94,7 @@ export default defineComponent({
         return errorToast('¡Error!', 'Registro no valido')
       }else{
         const res = await enabledOrDisabledAction(id, enabled);
-          
+
         if(res.error){
           errorToast('¡Error!', res.error);
         }else if(res.success){
@@ -99,8 +103,20 @@ export default defineComponent({
       }
 
       setTimeout(() => {
-        location.reload();  
+        location.reload();
       }, 4000);
+    },
+    handleEditAction(actionId) {
+      this.selectedActionId = actionId;
+      // Abrir el modal usando HSOverlay
+      setTimeout(() => {
+        const modalTrigger = document.querySelector('[data-hs-overlay="#actionEditModal"]');
+        if (modalTrigger) {
+          modalTrigger.click();
+        } else {
+          window.HSOverlay.open(document.getElementById('actionEditModal'));
+        }
+      }, 100);
     }
   }
 });

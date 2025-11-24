@@ -4,10 +4,11 @@
     :headers="['#','IMAGEN','TITULO','DESCRIPCION','ESTADO', 'CREADO POR', 'ACTUALIZADO POR','CREADO EN', 'ACTUALZADO EN', 'ACCIONES']"
     :allowedFields="['_id','mainContent','title', 'description','enabled', 'createdBy', 'updatedBy', 'createdAt', 'updatedAt']"
     :add-button="AddButtonComponent"
+    :edit-button="EditButtonComponent"
     :data="products"
-    :currentPage="currentPage" 
-    :totalPages="totalPages"   
-    :itemsPerPage="limit"  
+    :currentPage="currentPage"
+    :totalPages="totalPages"
+    :itemsPerPage="limit"
     :displayData="displayProducts"
     :disabledOrEnabled="disabledAndEnabledProduct"
     :button-props="{
@@ -17,26 +18,28 @@
     }"
     @update:currentPage="handlePageUpdate"
     @limit-changed="handleLimitChange"
+    @edit-row="handleEditProduct"
   />
-  
+
     <ProductModal id="productModal" modalTitle="Nuevo producto" />
+    <ProductEditModal id="productEditModal" modalTitle="Editar producto" :productId="selectedProductId" />
   </template>
   
   <script>
-    import { defineComponent } from 'vue';
+    import { defineComponent, markRaw } from 'vue';
     import Table from '@/components/ui/tables/Table.vue';
     import AddButton from '@components/admin/buttons/AddButton.vue';
     import EditButton from '@components/admin/buttons/EditButton.vue';
     import DisabledButton from '@components/admin/buttons/DisabledButton.vue';
     import WarningAlert from '@components/ui/alerts/WarningAlert.vue';
     import ProductModal from '@components/admin/forms/ProductModal.vue';
-    import UserEditModal from '@components/admin/forms/UserEditModal.vue';
+    import ProductEditModal from '@components/admin/forms/ProductEditModal.vue';
     import {successToast, errorToast} from '@utils/notify.ts'
     import {enabledOrDisabledProduct} from '@/API/pushData.ts'
     import { getCookie } from '@/utils/functions.ts';
     import { getApiUrl } from "@/utils/utils";
     import {getProducts} from "@/API/fetchData.ts";
-  
+
     export default defineComponent({
       props: {
         titleCard: {type: String, required: true},
@@ -47,7 +50,7 @@
         DisabledButton,
         WarningAlert,
         ProductModal,
-        UserEditModal,
+        ProductEditModal,
         Table
       },
       data() {
@@ -56,7 +59,9 @@
           totalPages: 1,
           currentPage: 1,
           limit: 10,
-          AddButtonComponent: AddButton
+          AddButtonComponent: markRaw(AddButton),
+          EditButtonComponent: markRaw(EditButton),
+          selectedProductId: null
         };
       },
       mounted() {
@@ -72,7 +77,6 @@
         },
         async displayProducts(page = 1, limit = 10) {
           const products = await getProducts(page, limit);
-          console.log(products.products)
           if (products.error) {
             errorToast('¡Error!', actions.error);
           } else {
@@ -88,18 +92,24 @@
           }else{
             console.log(id, enabled)
             const res = await enabledOrDisabledProduct(id, enabled);
-              
+
             if(res.error){
               errorToast('¡Error!', res.error);
             }else if(res.success){
               successToast('¡Exito!', res.success);
               setTimeout(() => {
-                location.reload();  
+                location.reload();
               }, 4000);
             }
           }
+        },
+        handleEditProduct(productId) {
+          this.selectedProductId = productId;
+          setTimeout(() => {
+            window.HSOverlay.open(document.getElementById('productEditModal'));
+          }, 100);
         }
-        
+
       }
     });
   </script>

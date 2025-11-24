@@ -137,41 +137,64 @@ const formSubTitle: string = "Lo contactaremos en 1-2 días hábiles.";
 
     if (form) {
       const formData = new FormData(form);
+      const firstName = formData.get('firstName') as string;
+      const lastName = formData.get('lastName') as string;
       const email = formData.get('email') as string;
       const phone = formData.get('phone') as string;
+      const details = formData.get('details') as string;
 
       const captchaResponse = grecaptcha.getResponse();
       if (!captchaResponse) {
         return errorToast("Error", "Por favor, complete el reCAPTCHA.", undefined, true, false);
       }
 
-      if (!isFormDataEmpty(formData) && !checkContactFormData(email, phone)) {
+      // Verificar campos vacíos
+      if (isFormDataEmpty(formData)) {
+        grecaptcha.reset();
+        return errorToast("Error", "Todos los campos son requeridos.", undefined, true, false);
+      }
 
-        const data = {
-          firstName : formData.get('firstName'),
-          lastName  : formData.get('lastName'),
-          email     : email,
-          phone     : phone,
-          details   : formData.get('details'),
-          captchaResponse: captchaResponse
-        }
-        const res = await sendContactForm(data);
+      // Validación completa del formulario
+      const validation = checkContactFormData(firstName, lastName, email, phone, details);
 
-        try {
-          if (res.success) {
-            return successToast("¡Solicitud enviada!", res.success);
-          } else if (res.error) {
-            return errorToast("¡Ha acurrido un error inesperado!", res.error);
-          }
-        } catch (e) {
-          const errorMessage = (e as Error).message;
-          return errorToast("¡Ha acurrido un error inesperado!", errorMessage);
+      if (!validation.isValid) {
+        grecaptcha.reset();
+        const errorList = validation.errors.join('\n• ');
+        return errorToast("Corrija lo siguiente:", `• ${errorList}`, undefined, true, false);
+      }
+
+      // Si pasa todas las validaciones, enviar el formulario
+      const data = {
+        firstName,
+        lastName,
+        email,
+        phone,
+        details,
+        captchaResponse
+      }
+
+      const res = await sendContactForm(data);
+
+      try {
+        if (res.success) {
+          // Resetear el reCAPTCHA después de envío exitoso
+          grecaptcha.reset();
+          // Resetear el formulario
+          form.reset();
+          return successToast("¡Solicitud enviada!", res.success);
+        } else if (res.error) {
+          // Resetear el reCAPTCHA en caso de error para permitir reintentos
+          grecaptcha.reset();
+          return errorToast("¡Ha ocurrido un error inesperado!", res.error);
         }
-      }else{
-        return errorToast("Corrigue lo siguiente:", 'Formato de correo/telefono invalidos o campos requeridos faltanes.', undefined, true, false);
+      } catch (e) {
+        const errorMessage = (e as Error).message;
+        // Resetear el reCAPTCHA en caso de excepción
+        grecaptcha.reset();
+        return errorToast("¡Ha ocurrido un error inesperado!", errorMessage);
       }
     } else {
-      return errorToast("¡Error!", "Ha acurrido un error inesperado.");
+      return errorToast("¡Error!", "Ha ocurrido un error inesperado.");
     }
   });
 </script>
