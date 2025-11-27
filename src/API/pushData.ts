@@ -181,12 +181,8 @@ export const addProduct = async (data: object, img: File) => {
         formData.append('img', img);
         formData.append('product', JSON.stringify(data));
 
-        const csrfToken = localStorage.getItem('csrfToken');
         const response = await apiFetch('/v1/products/new_product', {
             method: 'POST',
-            headers: {
-                'X-CSRF-Token': csrfToken || '',
-            },
             body: formData
         });
 
@@ -206,12 +202,8 @@ export const updateProduct = async (id: string, data: object, img?: File) => {
         }
         formData.append('product', JSON.stringify(data));
 
-        const csrfToken = localStorage.getItem('csrfToken');
         const response = await apiFetch(`/v1/products/${id}`, {
             method: 'PUT',
-            headers: {
-                'X-CSRF-Token': csrfToken || '',
-            },
             body: formData
         });
 
@@ -243,12 +235,8 @@ export const addService = async (data: object, img: File) => {
         formData.append('img', img);
         formData.append('product', JSON.stringify(data));
 
-        const csrfToken = localStorage.getItem('csrfToken');
         const response = await apiFetch('/v1/services/new_service', {
             method: 'POST',
-            headers: {
-                'X-CSRF-Token': csrfToken || '',
-            },
             body: formData
         });
 
@@ -268,12 +256,8 @@ export const updateService = async (id: string, data: object, img?: File) => {
         }
         formData.append('product', JSON.stringify(data));
 
-        const csrfToken = localStorage.getItem('csrfToken');
         const response = await apiFetch(`/v1/services/${id}`, {
             method: 'PUT',
-            headers: {
-                'X-CSRF-Token': csrfToken || '',
-            },
             body: formData
         });
 

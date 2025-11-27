@@ -8,11 +8,16 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
     const csrfToken = localStorage.getItem('csrfToken');
 
     // Preparar headers con CSRF
-    const headers = {
-        'Content-Type': 'application/json',
+    const headers: Record<string, string> = {
         ...(csrfToken && { 'X-CSRF-Token': csrfToken }),
         ...options.headers,
     };
+
+    // Solo agregar Content-Type si NO es FormData
+    // FormData establece su propio Content-Type con boundary
+    if (!(options.body instanceof FormData)) {
+        headers['Content-Type'] = 'application/json';
+    }
 
     // Hacer la llamada con credentials para enviar cookies
     const response = await fetch(`${getApiUrl()}${endpoint}`, {

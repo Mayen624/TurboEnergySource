@@ -1,8 +1,8 @@
 <template>
-  <div id="uploadFile" :data-hs-file-upload="fileUploadConfig">
+  <div id="uploadFile">
     <template v-if="selectedFile">
       <div class="flex items-center w-full">
-       
+
       </div>
     </template>
 
@@ -58,13 +58,6 @@ export default {
     },
     selectedFileExt() {
       return this.selectedFileName ? this.selectedFileName.split('.').pop() : '';
-    },
-    fileUploadConfig() {
-      return {
-        url: '/',
-        maxFiles: 1,
-        singleton: true,
-      };
     },
   },
   methods: {

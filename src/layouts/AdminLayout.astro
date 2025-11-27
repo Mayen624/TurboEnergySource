@@ -23,6 +23,8 @@ if (!token) { return Astro.redirect('/?message=sessionExpired', 302); }
 <head>
   <meta charset={codec}>
   <title>{title}</title>
+
+  <!-- Configuración de tema -->
   <script is:inline>
     if (
       localStorage.getItem("hs_theme") === "dark" ||
@@ -51,22 +53,46 @@ if (!token) { return Astro.redirect('/?message=sessionExpired', 302); }
   </main>
   <!-- End Main Content -->
 </body>
-  <script src="@node_modules/preline/dist/preline.js"></script>
-  <script src="@node_modules/lodash/lodash.min.js"></script>
-  <script src="@node_modules/dropzone/dist/dropzone-min.js"></script>
 
-  <!-- Reinicializar Preline después de que Vue haya hidratado -->
-  <script is:inline>
-    // Esperar a que la página esté completamente cargada y Vue hidratado
-    window.addEventListener('load', function() {
-      // Dar tiempo extra para que Vue complete la hidratación
-      setTimeout(function() {
-        if (window.HSStaticMethods && typeof window.HSStaticMethods.autoInit === 'function') {
-          window.HSStaticMethods.autoInit();
-        }
-      }, 100);
+<!-- Cargar scripts necesarios DESPUÉS del body -->
+<script is:inline>
+  // Deshabilitar auto-init de Preline
+  window.HSConfig = { autoInit: false };
+</script>
+
+<script>
+  // Importar dependencias de Preline
+  import 'preline/dist/preline.js';
+</script>
+
+<!-- Inicializar Preline después de que Vue haya completado la hidratación -->
+<script is:inline>
+  function initPreline() {
+    if (window.HSStaticMethods && typeof window.HSStaticMethods.autoInit === 'function') {
+      try {
+        window.HSStaticMethods.autoInit();
+      } catch (e) {
+        // Silenciar errores si el DOM no está listo
+        console.debug('Preline init deferred:', e.message);
+      }
+    }
+  }
+
+  // Esperar a que la página esté completamente cargada
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(initPreline, 200);
     });
-  </script>
+  } else {
+    // DOM ya está listo
+    setTimeout(initPreline, 200);
+  }
+
+  // También manejar navegación de Astro
+  document.addEventListener('astro:page-load', function() {
+    setTimeout(initPreline, 200);
+  });
+</script>
 </html>
 
 <script>
