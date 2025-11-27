@@ -37,7 +37,7 @@
   import {successToast, errorToast} from '@utils/notify.ts'
   import {enabledOrDisabledUser} from '@/API/pushData.ts'
   import { getCookie } from '@/utils/functions.ts';
-  import { getApiUrl } from "@/utils/utils";
+  import { apiGet } from "@/utils/api";
 
   export default defineComponent({
     props: {
@@ -82,16 +82,7 @@
       },
       async fetchUsers(page = 1, limit = 10) {
         try {
-          const csrfToken = localStorage.getItem('csrfToken');
-
-          const response = await fetch(`${getApiUrl()}/v1/users?page=${page}&limit=${limit}`, {
-            method: 'GET',
-            headers: {
-              'X-CSRF-Token': csrfToken || '',
-            },
-            credentials: 'include',
-          });
-
+          const response = await apiGet(`/v1/users?page=${page}&limit=${limit}`);
           const data = await response.json();
 
           if (data.error) {

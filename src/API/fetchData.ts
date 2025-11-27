@@ -1,23 +1,9 @@
-import { getApiUrl } from "@/utils/utils";
-
-// Función auxiliar para obtener CSRF token
-const getCsrfToken = (): string | null => {
-    return localStorage.getItem('csrfToken');
-};
+import { apiGet } from "@/utils/api";
 
 //======================== Users ======================== //
 export const getUsers = async () => {
     try {
-        const csrfToken = getCsrfToken();
-
-        const response = await fetch(`${getApiUrl()}/v1/users`, {
-            method: 'GET',
-            headers: {
-                'X-CSRF-Token': csrfToken || '',
-            },
-            credentials: 'include', // Envía cookies httpOnly automáticamente
-        });
-
+        const response = await apiGet('/v1/users');
         const data = await response.json();
 
         if (!response.ok || data.error) {
@@ -36,16 +22,7 @@ export const getUsers = async () => {
 
 export const getActions = async (page: number = 1, limit: number = 10) => {
     try {
-        const csrfToken = getCsrfToken();
-
-        const response = await fetch(`${getApiUrl()}/v1/actions?page=${page}&limit=${limit}`, {
-            method: 'GET',
-            headers: {
-                'X-CSRF-Token': csrfToken || '',
-            },
-            credentials: 'include',
-        });
-
+        const response = await apiGet(`/v1/actions?page=${page}&limit=${limit}`);
         const data = await response.json();
 
         if (!response.ok || data.error) {
@@ -62,16 +39,7 @@ export const getActions = async (page: number = 1, limit: number = 10) => {
 
 export const getAllActions = async () => {
     try {
-        const csrfToken = getCsrfToken();
-
-        const response = await fetch(`${getApiUrl()}/v1/actions/all`, {
-            method: 'GET',
-            headers: {
-                'X-CSRF-Token': csrfToken || '',
-            },
-            credentials: 'include',
-        });
-
+        const response = await apiGet('/v1/actions/all');
         const data = await response.json();
 
         if (!response.ok || data.error) {
@@ -90,16 +58,7 @@ export const getAllActions = async () => {
 
 export const getRoles = async (page: number = 1, limit: number = 10) => {
     try {
-        const csrfToken = getCsrfToken();
-
-        const response = await fetch(`${getApiUrl()}/v1/roles?page=${page}&limit=${limit}`, {
-            method: 'GET',
-            headers: {
-                'X-CSRF-Token': csrfToken || '',
-            },
-            credentials: 'include',
-        });
-
+        const response = await apiGet(`/v1/roles?page=${page}&limit=${limit}`);
         const data = await response.json();
 
         if (!response.ok || data.error) {
@@ -118,16 +77,7 @@ export const getRoles = async (page: number = 1, limit: number = 10) => {
 
 export const getProducts = async (page: number = 1, limit: number = 10) => {
     try {
-        const csrfToken = getCsrfToken();
-
-        const response = await fetch(`${getApiUrl()}/v1/products?page=${page}&limit=${limit}`, {
-            method: 'GET',
-            headers: {
-                'X-CSRF-Token': csrfToken || '',
-            },
-            credentials: 'include',
-        });
-
+        const response = await apiGet(`/v1/products?page=${page}&limit=${limit}`);
         const data = await response.json();
 
         if (!response.ok || data.error) {
@@ -146,16 +96,7 @@ export const getProducts = async (page: number = 1, limit: number = 10) => {
 
 export const getContacts = async () => {
     try {
-        const csrfToken = getCsrfToken();
-
-        const response = await fetch(`${getApiUrl()}/v1/contacts`, {
-            method: 'GET',
-            headers: {
-                'X-CSRF-Token': csrfToken || '',
-            },
-            credentials: 'include',
-        });
-
+        const response = await apiGet('/v1/contacts');
         const data = await response.json();
 
         if (!response.ok || data.error) {
@@ -173,16 +114,7 @@ export const getContacts = async () => {
 
 export const getContactById = async (id: string) => {
     try {
-        const csrfToken = getCsrfToken();
-
-        const response = await fetch(`${getApiUrl()}/v1/contacts/${id}`, {
-            method: 'GET',
-            headers: {
-                'X-CSRF-Token': csrfToken || '',
-            },
-            credentials: 'include',
-        });
-
+        const response = await apiGet(`/v1/contacts/${id}`);
         const data = await response.json();
 
         if (!response.ok || data.error) {
@@ -199,16 +131,7 @@ export const getContactById = async (id: string) => {
 
 export const getContactStats = async () => {
     try {
-        const csrfToken = getCsrfToken();
-
-        const response = await fetch(`${getApiUrl()}/v1/contacts/stats`, {
-            method: 'GET',
-            headers: {
-                'X-CSRF-Token': csrfToken || '',
-            },
-            credentials: 'include',
-        });
-
+        const response = await apiGet('/v1/contacts/stats');
         const data = await response.json();
 
         if (!response.ok || data.error) {
@@ -227,16 +150,7 @@ export const getContactStats = async () => {
 
 export const getServices = async (page: number = 1, limit: number = 10) => {
     try {
-        const csrfToken = getCsrfToken();
-
-        const response = await fetch(`${getApiUrl()}/v1/services?page=${page}&limit=${limit}`, {
-            method: 'GET',
-            headers: {
-                'X-CSRF-Token': csrfToken || '',
-            },
-            credentials: 'include',
-        });
-
+        const response = await apiGet(`/v1/services?page=${page}&limit=${limit}`);
         const data = await response.json();
 
         if (!response.ok || data.error) {

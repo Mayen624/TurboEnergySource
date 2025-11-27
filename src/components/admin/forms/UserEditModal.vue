@@ -165,7 +165,7 @@
   import {successToast, errorToast} from '@/utils/notify.ts'
   import { getCookie } from '@/utils/functions.ts';
   import {updateUser} from '@/API/pushData.ts';
-  import { getApiUrl } from "@/utils/utils";
+  import { apiGet } from "@/utils/api";
 
   export default {
     name: 'UserEditModal',
@@ -216,15 +216,7 @@
       },
       async loadUserData(id){
         try {
-          const csrfToken = localStorage.getItem('csrfToken');
-          const response = await fetch(`${getApiUrl()}/v1/users/${id}`, {
-            method: 'GET',
-            headers: {
-              'X-CSRF-Token': csrfToken || '',
-            },
-            credentials: 'include',
-          });
-
+          const response = await apiGet(`/v1/users/${id}`);
           const data = await response.json();
 
           if (data.error) {

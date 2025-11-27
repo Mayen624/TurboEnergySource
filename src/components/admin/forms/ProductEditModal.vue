@@ -132,7 +132,7 @@ import ProductPreviewCard from '../cards/ProductPreviewCard.vue';
 import { successToast, errorToast } from '@/utils/notify.ts'
 import { getCookie } from '@/utils/functions.ts';
 import { updateProduct } from '@/API/pushData.ts';
-import { getApiUrl } from '@/utils/utils.ts';
+import { apiGet } from '@/utils/api';
 
 export default {
   name: 'ProductEditModal',
@@ -256,15 +256,7 @@ export default {
   methods: {
     async loadProductData(id) {
       try {
-        const csrfToken = localStorage.getItem('csrfToken');
-        const response = await fetch(`${getApiUrl()}/v1/products/${id}`, {
-          method: 'GET',
-          headers: {
-            'X-CSRF-Token': csrfToken || '',
-          },
-          credentials: 'include',
-        });
-
+        const response = await apiGet(`/v1/products/${id}`);
         const data = await response.json();
 
         if (data.error) {

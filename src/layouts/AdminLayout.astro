@@ -1,5 +1,6 @@
 ---
 import 'simple-notify/dist/simple-notify.css';
+import '@/assets/styles/preline-main.min.css';
 import Header from "@/components/admin/Header.astro";
 import Breadcrumb from "@components/admin/Breadcrumb.astro"
 import Sidebar from "@/components/admin/Sidebar.astro";
@@ -22,8 +23,6 @@ if (!token) { return Astro.redirect('/?message=sessionExpired', 302); }
 <head>
   <meta charset={codec}>
   <title>{title}</title>
-  <!-- CSS Preline -->
-  <link rel="stylesheet" href="/src/assets/styles/preline-main.min.css">
   <script is:inline>
     if (
       localStorage.getItem("hs_theme") === "dark" ||

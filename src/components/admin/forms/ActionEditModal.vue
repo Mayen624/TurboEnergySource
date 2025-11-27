@@ -126,7 +126,7 @@
   import {successToast, errorToast} from '@/utils/notify.ts'
   import { getCookie } from '@/utils/functions.ts';
   import {updateAction} from '@/API/pushData.ts';
-  import { getApiUrl } from "@/utils/utils";
+  import { apiGet } from "@/utils/api";
 
   export default {
     name: 'ActionEditModal',
@@ -166,15 +166,7 @@
     methods: {
       async loadActionData(id){
         try {
-          const csrfToken = localStorage.getItem('csrfToken');
-          const response = await fetch(`${getApiUrl()}/v1/actions/${id}`, {
-            method: 'GET',
-            headers: {
-              'X-CSRF-Token': csrfToken || '',
-            },
-            credentials: 'include',
-          });
-
+          const response = await apiGet(`/v1/actions/${id}`);
           const data = await response.json();
 
           if (data.error) {

@@ -1,26 +1,10 @@
-import {getApiUrl} from '@utils/utils.ts'
-
-// Función auxiliar para obtener CSRF token
-const getCsrfToken = (): string | null => {
-    return localStorage.getItem('csrfToken');
-};
+import { apiPost, apiPut, apiFetch } from '@/utils/api';
 
 //======================== Users ======================== //
 
 export const addUser = async (data: object) => {
     try {
-        const csrfToken = getCsrfToken();
-
-        const response = await fetch(`${getApiUrl()}/v1/users/new_user`, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-Token': csrfToken || '',
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify(data)
-        });
-
+        const response = await apiPost('/v1/users/new_user', data);
         const res = await response.json();
         return res;
 
@@ -32,18 +16,7 @@ export const addUser = async (data: object) => {
 
 export const updateUser = async (id: string, data: object) => {
     try {
-        const csrfToken = getCsrfToken();
-
-        const response = await fetch(`${getApiUrl()}/v1/users/${id}`, {
-            method: 'PUT',
-            headers: {
-                'X-CSRF-Token': csrfToken || '',
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify(data)
-        });
-
+        const response = await apiPut(`/v1/users/${id}`, data);
         const res = await response.json();
         return res;
 
@@ -55,18 +28,7 @@ export const updateUser = async (id: string, data: object) => {
 
 export const enabledOrDisabledUser = async (id: string, enabled: boolean) => {
     try {
-        const csrfToken = getCsrfToken();
-
-        const response = await fetch(`${getApiUrl()}/v1/users/enabledOrDesabled/${id}`, {
-            method: 'PUT',
-            headers: {
-                'X-CSRF-Token': csrfToken || '',
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify({enabled: enabled})
-        });
-
+        const response = await apiPut(`/v1/users/enabledOrDesabled/${id}`, {enabled: enabled});
         const res = await response.json();
         return res;
 
@@ -80,18 +42,7 @@ export const enabledOrDisabledUser = async (id: string, enabled: boolean) => {
 
 export const addAction = async (data: object) => {
     try {
-        const csrfToken = getCsrfToken();
-
-        const response = await fetch(`${getApiUrl()}/v1/actions/new_action`, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-Token': csrfToken || '',
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify(data)
-        });
-
+        const response = await apiPost('/v1/actions/new_action', data);
         const res = await response.json();
         return res;
 
@@ -103,18 +54,7 @@ export const addAction = async (data: object) => {
 
 export const updateAction = async (id: string, data: object) => {
     try {
-        const csrfToken = getCsrfToken();
-
-        const response = await fetch(`${getApiUrl()}/v1/actions/${id}`, {
-            method: 'PUT',
-            headers: {
-                'X-CSRF-Token': csrfToken || '',
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify(data)
-        });
-
+        const response = await apiPut(`/v1/actions/${id}`, data);
         const res = await response.json();
         return res;
 
@@ -126,18 +66,7 @@ export const updateAction = async (id: string, data: object) => {
 
 export const enabledOrDisabledAction = async (id: string, enabled: boolean) => {
     try {
-        const csrfToken = getCsrfToken();
-
-        const response = await fetch(`${getApiUrl()}/v1/actions/enabledOrDesabled/${id}`, {
-            method: 'PUT',
-            headers: {
-                'X-CSRF-Token': csrfToken || '',
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify({enabled: enabled})
-        });
-
+        const response = await apiPut(`/v1/actions/enabledOrDesabled/${id}`, {enabled: enabled});
         const res = await response.json();
         return res;
 
@@ -151,18 +80,7 @@ export const enabledOrDisabledAction = async (id: string, enabled: boolean) => {
 
 export const addRole = async (data: object) => {
     try {
-        const csrfToken = getCsrfToken();
-
-        const response = await fetch(`${getApiUrl()}/v1/roles/new_role`, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-Token': csrfToken || '',
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify(data)
-        });
-
+        const response = await apiPost('/v1/roles/new_role', data);
         const res = await response.json();
         return res;
 
@@ -174,18 +92,7 @@ export const addRole = async (data: object) => {
 
 export const updateRole = async (id: string, data: object) => {
     try {
-        const csrfToken = getCsrfToken();
-
-        const response = await fetch(`${getApiUrl()}/v1/roles/${id}`, {
-            method: 'PUT',
-            headers: {
-                'X-CSRF-Token': csrfToken || '',
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify(data)
-        });
-
+        const response = await apiPut(`/v1/roles/${id}`, data);
         const res = await response.json();
         return res;
 
@@ -197,18 +104,7 @@ export const updateRole = async (id: string, data: object) => {
 
 export const enabledOrDisabledRole = async (id: string, enabled: boolean) => {
     try {
-        const csrfToken = getCsrfToken();
-
-        const response = await fetch(`${getApiUrl()}/v1/roles/enabledOrDesabled/${id}`, {
-            method: 'PUT',
-            headers: {
-                'X-CSRF-Token': csrfToken || '',
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify({enabled: enabled})
-        });
-
+        const response = await apiPut(`/v1/roles/enabledOrDesabled/${id}`, {enabled: enabled});
         const res = await response.json();
         return res;
 
@@ -240,18 +136,7 @@ export const sendContactForm = async (data: object) => {
 
 export const updateContactStatus = async (id: string, status: string) => {
     try {
-        const csrfToken = getCsrfToken();
-
-        const response = await fetch(`${getApiUrl()}/v1/contacts/update_status/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-Token': csrfToken || '',
-            },
-            credentials: 'include',
-            body: JSON.stringify({ status })
-        });
-
+        const response = await apiPut(`/v1/contacts/update_status/${id}`, { status });
         const res = await response.json();
         return res;
 
@@ -262,18 +147,7 @@ export const updateContactStatus = async (id: string, status: string) => {
 
 export const addContactNote = async (id: string, noteData: { content: string, createdBy?: string }) => {
     try {
-        const csrfToken = getCsrfToken();
-
-        const response = await fetch(`${getApiUrl()}/v1/contacts/add_note/${id}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-Token': csrfToken || '',
-            },
-            credentials: 'include',
-            body: JSON.stringify(noteData)
-        });
-
+        const response = await apiPost(`/v1/contacts/add_note/${id}`, noteData);
         const res = await response.json();
         return res;
 
@@ -290,18 +164,7 @@ export const sendClientEmail = async (emailData: {
     contactId?: string
 }) => {
     try {
-        const csrfToken = getCsrfToken();
-
-        const response = await fetch(`${getApiUrl()}/v1/contacts/send_email`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-Token': csrfToken || '',
-            },
-            credentials: 'include',
-            body: JSON.stringify(emailData)
-        });
-
+        const response = await apiPost('/v1/contacts/send_email', emailData);
         const res = await response.json();
         return res;
 
@@ -313,18 +176,16 @@ export const sendClientEmail = async (emailData: {
 //======================== Products ======================== //
 export const addProduct = async (data: object, img: File) => {
     try {
-        const csrfToken = getCsrfToken();
-
         const formData = new FormData();
         formData.append('img', img);
         formData.append('product', JSON.stringify(data));
 
-        const response = await fetch(`${getApiUrl()}/v1/products/new_product`, {
+        const csrfToken = localStorage.getItem('csrfToken');
+        const response = await apiFetch('/v1/products/new_product', {
             method: 'POST',
             headers: {
                 'X-CSRF-Token': csrfToken || '',
             },
-            credentials: 'include',
             body: formData
         });
 
@@ -338,20 +199,18 @@ export const addProduct = async (data: object, img: File) => {
 
 export const updateProduct = async (id: string, data: object, img?: File) => {
     try {
-        const csrfToken = getCsrfToken();
-
         const formData = new FormData();
         if (img) {
             formData.append('img', img);
         }
         formData.append('product', JSON.stringify(data));
 
-        const response = await fetch(`${getApiUrl()}/v1/products/${id}`, {
+        const csrfToken = localStorage.getItem('csrfToken');
+        const response = await apiFetch(`/v1/products/${id}`, {
             method: 'PUT',
             headers: {
                 'X-CSRF-Token': csrfToken || '',
             },
-            credentials: 'include',
             body: formData
         });
 
@@ -365,18 +224,7 @@ export const updateProduct = async (id: string, data: object, img?: File) => {
 
 export const enabledOrDisabledProduct = async (id: string, enabled: boolean) => {
     try {
-        const csrfToken = getCsrfToken();
-
-        const response = await fetch(`${getApiUrl()}/v1/products/enabledOrDesabled/${id}`, {
-            method: 'PUT',
-            headers: {
-                'X-CSRF-Token': csrfToken || '',
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify({enabled: enabled})
-        });
-
+        const response = await apiPut(`/v1/products/enabledOrDesabled/${id}`, {enabled: enabled});
         const res = await response.json();
         return res;
 
@@ -390,18 +238,16 @@ export const enabledOrDisabledProduct = async (id: string, enabled: boolean) => 
 //======================== Services ======================== //
 export const addService = async (data: object, img: File) => {
     try {
-        const csrfToken = getCsrfToken();
-
         const formData = new FormData();
         formData.append('img', img);
         formData.append('product', JSON.stringify(data));
 
-        const response = await fetch(`${getApiUrl()}/v1/services/new_service`, {
+        const csrfToken = localStorage.getItem('csrfToken');
+        const response = await apiFetch('/v1/services/new_service', {
             method: 'POST',
             headers: {
                 'X-CSRF-Token': csrfToken || '',
             },
-            credentials: 'include',
             body: formData
         });
 
@@ -415,20 +261,18 @@ export const addService = async (data: object, img: File) => {
 
 export const updateService = async (id: string, data: object, img?: File) => {
     try {
-        const csrfToken = getCsrfToken();
-
         const formData = new FormData();
         if (img) {
             formData.append('img', img);
         }
         formData.append('product', JSON.stringify(data));
 
-        const response = await fetch(`${getApiUrl()}/v1/services/${id}`, {
+        const csrfToken = localStorage.getItem('csrfToken');
+        const response = await apiFetch(`/v1/services/${id}`, {
             method: 'PUT',
             headers: {
                 'X-CSRF-Token': csrfToken || '',
             },
-            credentials: 'include',
             body: formData
         });
 
@@ -442,18 +286,7 @@ export const updateService = async (id: string, data: object, img?: File) => {
 
 export const enabledOrDisabledService = async (id: string, enabled: boolean) => {
     try {
-        const csrfToken = getCsrfToken();
-
-        const response = await fetch(`${getApiUrl()}/v1/service/enabledOrDesabled/${id}`, {
-            method: 'PUT',
-            headers: {
-                'X-CSRF-Token': csrfToken || '',
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify({enabled: enabled})
-        });
-
+        const response = await apiPut(`/v1/service/enabledOrDesabled/${id}`, {enabled: enabled});
         const res = await response.json();
         return res;
 
