@@ -1,4 +1,5 @@
 import { apiPost, apiPut, apiFetch } from '@/utils/api';
+import { getApiUrl } from '@/utils/utils';
 
 //======================== Users ======================== //
 
