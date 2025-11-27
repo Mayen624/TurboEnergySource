@@ -7,6 +7,12 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
     // Obtener CSRF token de localStorage
     const csrfToken = localStorage.getItem('csrfToken');
 
+    // Obtener CSRF token de cookie para comparar
+    const csrfCookie = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('csrfToken='))
+        ?.split('=')[1];
+
     // Preparar headers con CSRF
     const headers = {
         'Content-Type': 'application/json',
