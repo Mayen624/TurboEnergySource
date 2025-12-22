@@ -5,7 +5,7 @@ import NavLink from "@components/ui/links/NavLink.astro";
 import Authentication from "../misc/Authentication.astro";
 import enStrings from "@utils/navigation.ts";
 // import frStrings from "@utils/fr/navigation.ts";
-import BrandLogo from "@components/BrandLogo.astro";
+import TurboEnergyLogo from "@components/TurboEnergyLogo.astro";
 import LanguagePicker from "@components/ui/LanguagePicker.astro";
 
 // Select the correct translation based on the page's lang prop:
@@ -27,9 +27,9 @@ const homeUrl = "/";
       <a
         class="flex-none rounded-lg text-xl font-bold outline-none ring-zinc-500 focus-visible:ring dark:ring-zinc-200 dark:focus:outline-none"
         href={homeUrl}
-        aria-label="Brand"
+        aria-label="TurboEnergy"
       >
-        <BrandLogo class="h-auto w-24" />
+        <TurboEnergyLogo class="h-auto w-24" />
       </a>
       <!-- Collapse toggle for smaller screens -->
       <div class="ml-auto mr-5 md:hidden">

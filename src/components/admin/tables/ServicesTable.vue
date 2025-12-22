@@ -1,11 +1,11 @@
 <template>
 
     <Table
-      :headers="['#','IMAGEN/ES','TITULO','DESCRIPCION','ESTADO', 'CREADO POR', 'ACTUALIZADO POR','CREADO EN', 'ACTUALZADO EN', 'ACCIONES']"
-      :allowedFields="['_id','images','title', 'description','enabled', 'createdBy', 'updatedBy', 'createdAt', 'updatedAt']"
+      :headers="[,'IMAGEN/ES','TITULO','DESCRIPCION','ESTADO', 'CREADO POR', 'ACTUALIZADO POR','CREADO EN', 'ACTUALZADO EN', 'ACCIONES']"
+      :allowedFields="['','images','title', 'description','enabled', 'createdBy', 'updatedBy', 'createdAt', 'updatedAt']"
       :add-button="AddButtonComponent"
       :editButton="EditButtonComponent"
-      :data="servcices"
+      :data="services"
       :currentPage="currentPage"
       :totalPages="totalPages"
       :itemsPerPage="limit"
@@ -21,10 +21,10 @@
       @edit-row="handleEditService"
     />
 
-      <ProductModal id="serviceModal" modalTitle="Nuevo servicio" />
+      <ServiceModal id="serviceModal" modalTitle="Nuevo servicio" />
       <ServiceEditModal id="serviceEditModal" modalTitle="Actualizar servicio" :serviceId="selectedServiceId" />
     </template>
-    
+
     <script>
       import { defineComponent, markRaw } from 'vue';
       import Table from '@/components/ui/tables/Table.vue';
@@ -32,7 +32,7 @@
       import EditButton from '@components/admin/buttons/EditButton.vue';
       import DisabledButton from '@components/admin/buttons/DisabledButton.vue';
       import WarningAlert from '@components/ui/alerts/WarningAlert.vue';
-      import ProductModal from '@components/admin/forms/ProductModal.vue';
+      import ServiceModal from '@components/admin/forms/ServiceModal.vue';
       import ServiceEditModal from '@components/admin/forms/ServiceEditModal.vue';
       import {successToast, errorToast} from '@utils/notify.ts'
       import {enabledOrDisabledService} from '@/API/pushData.ts'
@@ -45,13 +45,13 @@
           EditButton,
           DisabledButton,
           WarningAlert,
-          ProductModal,
+          ServiceModal,
           ServiceEditModal,
           Table
         },
         data() {
           return {
-            servcices: [],
+            services: [],
             totalPages: 1,
             currentPage: 1,
             limit: 10,
@@ -72,16 +72,16 @@
             this.displayProducts(this.currentPage, this.limit);
           },
           async displayServices(page = 1, limit = 10) {
-            const servcices = await getServices(page, limit);
-            // console.log(servcices)
-            if (servcices.error) {
-              errorToast('¡Error!', servcices.error);
+            const data = await getServices(page, limit);
+            // console.log(data)
+            if (data.error) {
+              errorToast('¡Error!', data.error);
             } else {
-              this.servcices = servcices.servcices;
+              this.services = data.services;
               this.currentPage = page;
-              this.totalPages = servcices.totalPages;
+              this.totalPages = data.totalPages;
             }
-          
+
           },
           async disabledAndEnabledService(id, enabled){
             if(!id){

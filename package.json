@@ -21,6 +21,7 @@
     "@preline/accordion": "^2.3.0",
     "@preline/collapse": "^2.3.0",
     "@preline/dropdown": "^2.3.0",
+    "@preline/file-upload": "^3.2.3",
     "@preline/overlay": "^2.3.0",
     "@preline/tabs": "^2.3.0",
     "@vitejs/plugin-vue": "^5.1.4",

@@ -261,7 +261,8 @@ export default defineComponent({
         if (response.success) {
           console.log('✅ [Frontend] Mostrando toast de éxito');
           await successToast('¡Email enviado!', 'El email fue enviado exitosamente al cliente.');
-          this.$emit('email-sent');
+          // Emitir evento con el contactId para actualizar el estado
+          this.$emit('email-sent', this.contactData._id);
           this.resetForm();
           // Cerrar modal
           const modal = document.getElementById(this.id);
@@ -293,6 +294,9 @@ export default defineComponent({
 
       // Abrir en nueva ventana
       window.open(whatsappUrl, '_blank');
+
+      // Emitir evento con el contactId para actualizar el estado
+      this.$emit('whatsapp-sent', this.contactData._id);
 
       // Cerrar modal
       this.resetForm();

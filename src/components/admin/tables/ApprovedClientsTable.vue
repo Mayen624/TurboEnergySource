@@ -1,73 +1,5 @@
 <template>
   <div class="flex flex-col space-y-4">
-    <!-- Stats Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-      <!-- Nuevos - Borde Verde -->
-      <div class="bg-zinc-100 dark:bg-zinc-900/30 border-2 border-green-500 dark:border-green-500 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-xs font-semibold text-zinc-600 dark:text-zinc-400 uppercase tracking-wide">Nuevos</p>
-            <p class="text-2xl font-bold text-zinc-700 dark:text-zinc-300">{{ stats.nuevo || 0 }}</p>
-          </div>
-          <div class="w-12 h-12 bg-zinc-400 dark:bg-zinc-700 rounded-full flex items-center justify-center shadow-lg">
-            <span class="text-2xl">🟢</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Contactados - Borde Amarillo -->
-      <div class="bg-zinc-100 dark:bg-zinc-900/30 border-2 border-yellow-400 dark:border-yellow-400 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-xs font-semibold text-zinc-600 dark:text-zinc-400 uppercase tracking-wide">Contactados</p>
-            <p class="text-2xl font-bold text-zinc-700 dark:text-zinc-300">{{ stats.contactado || 0 }}</p>
-          </div>
-          <div class="w-12 h-12 bg-zinc-400 dark:bg-zinc-700 rounded-full flex items-center justify-center shadow-lg">
-            <span class="text-2xl">🟡</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- En Proceso - Borde Azul -->
-      <div class="bg-zinc-100 dark:bg-zinc-900/30 border-2 border-blue-500 dark:border-blue-500 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-xs font-semibold text-zinc-600 dark:text-zinc-400 uppercase tracking-wide">En Proceso</p>
-            <p class="text-2xl font-bold text-zinc-700 dark:text-zinc-300">{{ stats.en_proceso || 0 }}</p>
-          </div>
-          <div class="w-12 h-12 bg-zinc-400 dark:bg-zinc-700 rounded-full flex items-center justify-center shadow-lg">
-            <span class="text-2xl">🔵</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Cerrados Éxito - Borde Verde -->
-      <div class="bg-zinc-100 dark:bg-zinc-900/30 border-2 border-green-500 dark:border-green-500 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-xs font-semibold text-zinc-600 dark:text-zinc-400 uppercase tracking-wide">Cerrados</p>
-            <p class="text-2xl font-bold text-zinc-700 dark:text-zinc-300">{{ stats.cerrado_exitoso || 0 }}</p>
-          </div>
-          <div class="w-12 h-12 bg-zinc-400 dark:bg-zinc-700 rounded-full flex items-center justify-center shadow-lg">
-            <span class="text-2xl">✅</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Sin Interés - Borde Rojo -->
-      <div class="bg-zinc-100 dark:bg-zinc-900/30 border-2 border-red-500 dark:border-red-500 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-xs font-semibold text-zinc-600 dark:text-zinc-400 uppercase tracking-wide">Sin Interés</p>
-            <p class="text-2xl font-bold text-zinc-700 dark:text-zinc-300">{{ stats.cerrado_sin_interes || 0 }}</p>
-          </div>
-          <div class="w-12 h-12 bg-zinc-400 dark:bg-zinc-700 rounded-full flex items-center justify-center shadow-lg">
-            <span class="text-2xl">❌</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- Table -->
     <div class="-m-1.5 overflow-x-auto">
       <div class="inline-block min-w-full p-1.5 align-middle">
@@ -75,29 +7,12 @@
           class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-neutral-700 dark:bg-neutral-800">
           <!-- Header -->
           <div
-            class="grid gap-3 border-b border-gray-200 px-6 py-4 dark:border-neutral-700 md:flex md:items-center md:justify-between">
+            class="grid gap-3 border-b border-gray-200 px-6 py-4 dark:border-neutral-700">
             <div>
               <h2 class="text-xl font-semibold text-gray-800 dark:text-neutral-200">
                 {{ titleCard }}
               </h2>
-              <p class="text-sm text-gray-600 dark:text-neutral-400">Total: {{ stats.total || 0 }} contactos</p>
-            </div>
-
-            <!-- Filter by Status -->
-            <div class="flex items-center gap-2">
-              <label class="text-sm text-gray-600 dark:text-neutral-400">Filtrar:</label>
-              <select
-                v-model="filterStatus"
-                @change="filterContacts"
-                class="py-2 px-3 rounded-lg border border-gray-200 text-sm dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400"
-              >
-                <option value="all">Todos</option>
-                <option value="nuevo">Nuevos</option>
-                <option value="contactado">Contactados</option>
-                <option value="en_proceso">En Proceso</option>
-                <option value="cerrado_exitoso">Cerrados - Éxito</option>
-                <option value="cerrado_sin_interes">Sin Interés</option>
-              </select>
+              <p class="text-sm text-gray-600 dark:text-neutral-400">Total: {{ clients.length || 0 }} clientes aprobados</p>
             </div>
           </div>
           <!-- End Header -->
@@ -260,17 +175,6 @@
                         <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                       </svg>
                     </button>
-                    <button
-                      @click="approveAsClient(contact._id)"
-                      title="Aprobar como cliente"
-                      type="button"
-                      class="inline-flex items-center gap-x-2 rounded-lg border border-transparent bg-orange-600 px-3 py-2 text-sm font-medium text-white hover:bg-orange-700"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                      </svg>
-                    </button>
                     <!-- WhatsApp Button (Pendiente) -->
                     <!--
                     <button
@@ -355,8 +259,8 @@
   import AddNoteModal from '@components/admin/forms/AddNoteModal.vue';
   import ContactClientModal from '@components/admin/forms/ContactClientModal.vue';
 
-  import { getContacts, getContactStats } from '@/API/fetchData';
-  import { updateContactStatus, approveContact } from '@/API/pushData';
+  import { getApprovedContacts } from '@/API/fetchData';
+  import { updateContactStatus } from '@/API/pushData';
 
   export default defineComponent({
     props: {
@@ -401,28 +305,19 @@
     },
     methods: {
       async loadData() {
-        await Promise.all([
-          this.displayContact(),
-          this.loadStats()
-        ]);
+        await this.displayContact();
       },
       async displayContact(page = 1, limit = 10) {
-        const response = await getContacts(page, limit);
+        const response = await getApprovedContacts(page, limit);
         if (response.error) {
-          console.error('Error loading contacts:', response.error);
+          console.error('Error loading approved contacts:', response.error);
           this.clients = [];
         } else {
           this.clients = response.contacts;
           this.currentPage = response.currentPage;
           this.totalPages = response.totalPages;
         }
-        this.filterContacts();
-      },
-      async loadStats() {
-        const stats = await getContactStats();
-        if (stats) {
-          this.stats = stats;
-        }
+        this.filteredClients = this.clients; // Mostrar todos los aprobados
       },
       filterContacts() {
         if (this.filterStatus === 'all') {
@@ -517,21 +412,6 @@
           await this.updateStatus(contactId, 'contactado');
         }
         await this.loadData();
-      },
-      async approveAsClient(contactId) {
-        // Confirmar con el usuario
-        if (!confirm('¿Aprobar este contacto como cliente? Se moverá a la sección de Contactos.')) {
-          return;
-        }
-
-        const response = await approveContact(contactId);
-
-        if (response.success) {
-          alert('Cliente aprobado exitosamente');
-          await this.loadData();
-        } else {
-          alert('Error al aprobar el contacto: ' + (response.error || 'Error desconocido'));
-        }
       },
       formatDate(date) {
         if (!date) return 'N/A';

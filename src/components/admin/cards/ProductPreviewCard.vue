@@ -1,7 +1,7 @@
 <template>
   <div>
     <section class="mx-auto flex max-w-[85rem] flex-col px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full">
-      <div>
+      <div v-if="data.mainContent.introduction">
         <p id="fadeText"
           class="mb-8 max-w-prose text-pretty font-light text-neutral-700 dark:text-neutral-300 sm:text-xl">
           {{ data.mainContent.introduction }}
@@ -16,6 +16,9 @@
           <p class="text-lg text-neutral-600 dark:text-neutral-400">
             {{ data.description }}
           </p>
+          <div v-if="data.btnExists" class="mt-5">
+            <PrimaryCTA :title="data.btnTitle || 'Contactar'" :url="data.btnURL || '/contact'" />
+          </div>
         </div>
         <div>
           <img id="fadeInMoveRight" :src="imagenSrc" class="w-[250px]" alt="img" loading="eager" />
@@ -23,7 +26,7 @@
       </div>
     </section>
 
-    <div class="mx-auto max-w-[85rem] px-4 pt-10 sm:px-6 lg:px-8 lg:pt-14">
+    <div v-if="tabs.length > 0" class="mx-auto max-w-[85rem] px-4 pt-10 sm:px-6 lg:px-8 lg:pt-14">
       <nav class="mx-auto grid max-w-6xl gap-y-px sm:flex sm:gap-x-4 sm:gap-y-0" aria-label="Tabs" role="tablist">
         <ProductTabBtn v-for="(tab, index) in tabs" :key="tab.id" :title="tab.title" :id="tab.id" :dataTab="tab.dataTab"
           :first="index === 0" :active="activeTab === tab.dataTab" @click="setActiveTab(tab.dataTab)" />
@@ -155,9 +158,7 @@ export default {
     },
   },
   mounted() {
-    this.tabs.push({ id: "tabs-with-card-item-1", title: 'Descripcion', dataTab: '#tabs-with-card-1' });
-    // Establecer el primer tab como activo por defecto
-    this.activeTab = '#tabs-with-card-1';
+    // No agregar tabs por defecto, se manejan en el watcher
   },
   data() {
     return {
@@ -212,20 +213,33 @@ export default {
   watch: {
     data: {
       handler(newData) {
-        // añade o eliminar tabs según el valor de haveSpecification y haveluePrints
+        // Agregar tab de Descripción solo si hay datos de longDescription
+        if (newData.longDescription && (newData.longDescription.longDescriptionTitle || newData.longDescription.longDescriptionSubTitle)) {
+          this.addTab('Descripcion', 'tabs-with-card-item-1', '#tabs-with-card-1');
+        } else {
+          this.removeTab('tabs-with-card-item-1');
+        }
+
+        // Añade o eliminar tabs según el valor de haveSpecification y haveluePrints
         if (newData.haveSpecification) {
           this.addTab('Especificaciones', 'tabs-with-card-item-2', '#tabs-with-card-2');
         } else {
           this.removeTab('tabs-with-card-item-2');
         }
-        
+
         if (newData.haveluePrints) {
           this.addTab('Planos', 'tabs-with-card-item-3', '#tabs-with-card-3');
         } else {
           this.removeTab('tabs-with-card-item-3');
         }
+
+        // Establecer el primer tab como activo si hay tabs disponibles
+        if (this.tabs.length > 0 && !this.activeTab) {
+          this.activeTab = this.tabs[0].dataTab;
+        }
       },
-      deep: true
+      deep: true,
+      immediate: true
     }
   },
 };

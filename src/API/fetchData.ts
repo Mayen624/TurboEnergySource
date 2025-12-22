@@ -94,9 +94,9 @@ export const getProducts = async (page: number = 1, limit: number = 10) => {
 
 //======================== Contact ======================== //
 
-export const getContacts = async () => {
+export const getContacts = async (page: number = 1, limit: number = 10) => {
     try {
-        const response = await apiGet('/v1/contacts');
+        const response = await apiGet(`/v1/contacts?page=${page}&limit=${limit}`);
         const data = await response.json();
 
         if (!response.ok || data.error) {
@@ -104,7 +104,7 @@ export const getContacts = async () => {
             return { error: data.error == undefined || null ? 'Error fetching contact' : data.error };
         }
 
-        return data.contacts;
+        return data;
 
     } catch (error) {
         console.error('Error fetching contact:', error);
@@ -146,6 +146,24 @@ export const getContactStats = async () => {
     }
 };
 
+export const getApprovedContacts = async (page: number = 1, limit: number = 10) => {
+    try {
+        const response = await apiGet(`/v1/contacts/approved?page=${page}&limit=${limit}`);
+        const data = await response.json();
+
+        if (!response.ok || data.error) {
+            console.log(data.error);
+            return { error: data.error == undefined || null ? 'Error fetching approved contacts' : data.error };
+        }
+
+        return data;
+
+    } catch (error) {
+        console.error('Error fetching approved contacts:', error);
+        return { error: error };
+    }
+};
+
 //======================== Services ======================== //
 
 export const getServices = async (page: number = 1, limit: number = 10) => {
@@ -157,7 +175,7 @@ export const getServices = async (page: number = 1, limit: number = 10) => {
             return { error: data.error == undefined || null ? 'Error fetching services' : data.error };
         }
 
-        return data.services;
+        return data;
 
     } catch (error) {
         console.error('Error fetching services:', error);

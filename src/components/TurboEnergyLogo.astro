@@ -1,0 +1,13 @@
+---
+// Logo de TurboEnergy con soporte para modo oscuro/claro
+const { class: className = "h-auto w-28" } = Astro.props;
+
+// Importar el logo SVG
+import logoSrc from "@images/LOGO-Turbo_Energy.svg";
+---
+
+<img
+  src={logoSrc.src}
+  alt="TurboEnergy Logo"
+  class={className}
+/>

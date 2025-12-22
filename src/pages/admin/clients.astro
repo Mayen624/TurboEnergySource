@@ -1,7 +1,7 @@
 ---
 import AdminLayout from "@/layouts/AdminLayout.astro"
+import ApprovedClientsTable from "@/components/admin/tables/ApprovedClientsTable.vue";
 import { authMiddleware } from "@/middleware/auth";
-import ServicesTable from "@/components/admin/tables/ServicesTable.vue";
 export const prerender = false;
 
 const response = await authMiddleware(Astro, async () => {
@@ -14,6 +14,8 @@ if (response instanceof Response && response.headers.get('Location')) {
 ---
 
 
-<AdminLayout title="TES - Services">
-  <ServicesTable titleCard="Productos del sistema" client:only="vue"/>
+<AdminLayout title="TES - Clients">
+
+
+    <ApprovedClientsTable titleCard="Contactos (Clientes aprobados)" client:only="vue"/>
 </AdminLayout>

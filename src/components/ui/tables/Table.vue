@@ -80,6 +80,11 @@
                                             <img :src="row.mainContent.img.src" alt="img" style="height: 55px;">
                                         </div>
                                     </span>
+                                    <span v-else-if="key === 'images'">
+                                        <div class="flex items-center gap-x-2">
+                                            <img v-for="(image, idx) in row.images" :key="idx" :src="image.src" :alt="image.alt" style="height: 55px;" class="rounded">
+                                        </div>
+                                    </span>
                                     <span v-else-if="key === 'enabled'">
                                         <span
                                             :class="['py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium rounded-full', row[key] ? 'bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500' : 'bg-red-100 text-red-800 dark:bg-red-500/10 dark:text-red-500']">

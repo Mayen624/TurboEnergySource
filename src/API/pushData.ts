@@ -174,6 +174,17 @@ export const sendClientEmail = async (emailData: {
     }
 }
 
+export const approveContact = async (id: string) => {
+    try {
+        const response = await apiPut(`/v1/contacts/approve/${id}`, {});
+        const res = await response.json();
+        return res;
+
+    } catch (e) {
+        return {error: e};
+    }
+}
+
 //======================== Products ======================== //
 export const addProduct = async (data: object, img: File) => {
     try {
@@ -229,10 +240,13 @@ export const enabledOrDisabledProduct = async (id: string, enabled: boolean) => 
 }
 
 //======================== Services ======================== //
-export const addService = async (data: object, img: File) => {
+export const addService = async (data: object, images: File[]) => {
     try {
         const formData = new FormData();
-        formData.append('img', img);
+        // Agregar múltiples imágenes con el mismo nombre de campo
+        images.forEach((img) => {
+            formData.append('images', img);
+        });
         formData.append('product', JSON.stringify(data));
 
         const response = await apiFetch('/v1/services/new_service', {
@@ -248,11 +262,13 @@ export const addService = async (data: object, img: File) => {
     }
 }
 
-export const updateService = async (id: string, data: object, img?: File) => {
+export const updateService = async (id: string, data: object, images?: File[]) => {
     try {
         const formData = new FormData();
-        if (img) {
-            formData.append('img', img);
+        if (images && images.length > 0) {
+            images.forEach((img) => {
+                formData.append('images', img);
+            });
         }
         formData.append('product', JSON.stringify(data));
 
