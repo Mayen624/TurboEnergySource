@@ -4,8 +4,8 @@ import { getApiUrl } from "@/utils/utils";
  * Utilidad para hacer llamadas HTTP con CSRF token automático
  */
 export async function apiFetch(endpoint: string, options: RequestInit = {}) {
-    // Obtener CSRF token de localStorage
-    const csrfToken = localStorage.getItem('csrfToken');
+    // Obtener CSRF token de localStorage (solo en el navegador)
+    const csrfToken = typeof window !== 'undefined' ? localStorage.getItem('csrfToken') : null;
 
     // Preparar headers base
     const headers: HeadersInit = {

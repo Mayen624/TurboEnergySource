@@ -92,6 +92,24 @@ export const getProducts = async (page: number = 1, limit: number = 10) => {
     }
 };
 
+// Public endpoint for landing page - no authentication required
+export const getPublicProducts = async (page: number = 1, limit: number = 100) => {
+    try {
+        const response = await apiGet(`/v1/products/public?page=${page}&limit=${limit}`);
+        const data = await response.json();
+
+        if (!response.ok || data.error) {
+            return { error: data.error == undefined || null ? 'Error fetching products' : data.error };
+        }
+
+        return data;
+
+    } catch (error) {
+        console.error('Error fetching public products:', error);
+        return { error: error };
+    }
+};
+
 //======================== Contact ======================== //
 
 export const getContacts = async (page: number = 1, limit: number = 10) => {
@@ -179,6 +197,138 @@ export const getServices = async (page: number = 1, limit: number = 10) => {
 
     } catch (error) {
         console.error('Error fetching services:', error);
+        return { error: error };
+    }
+};
+
+// Public endpoint for landing page - no authentication required
+export const getPublicServices = async (page: number = 1, limit: number = 100) => {
+    try {
+        const response = await apiGet(`/v1/services/public?page=${page}&limit=${limit}`);
+        const data = await response.json();
+
+        if (!response.ok || data.error) {
+            return { error: data.error == undefined || null ? 'Error fetching services' : data.error };
+        }
+
+        return data;
+
+    } catch (error) {
+        console.error('Error fetching public services:', error);
+        return { error: error };
+    }
+};
+
+//======================== Settings ======================== //
+
+// Get settings (authenticated - for admin panel)
+export const getSettings = async () => {
+    try {
+        const response = await apiGet('/v1/settings');
+        const data = await response.json();
+
+        if (!response.ok || data.error) {
+            return { error: data.error == undefined || null ? 'Error fetching settings' : data.error };
+        }
+
+        return data.settings;
+
+    } catch (error) {
+        console.error('Error fetching settings:', error);
+        return { error: error };
+    }
+};
+
+// Get public settings (no auth - for landing page visibility)
+export const getPublicSettings = async () => {
+    try {
+        const response = await apiGet('/v1/settings/public');
+        const data = await response.json();
+
+        if (!response.ok || data.error) {
+            return { error: data.error == undefined || null ? 'Error fetching public settings' : data.error };
+        }
+
+        return data.settings;
+
+    } catch (error) {
+        console.error('Error fetching public settings:', error);
+        return { error: error };
+    }
+};
+
+//======================== Contact Page ======================== //
+
+// Get contact page content (authenticated - for admin panel)
+export const getContactPage = async () => {
+    try {
+        const response = await apiGet('/v1/contact-page');
+        const data = await response.json();
+
+        if (!response.ok || data.error) {
+            return { error: data.error == undefined || null ? 'Error fetching contact page' : data.error };
+        }
+
+        return data.data;
+
+    } catch (error) {
+        console.error('Error fetching contact page:', error);
+        return { error: error };
+    }
+};
+
+// Get public contact page content (no auth - for landing page)
+export const getPublicContactPage = async () => {
+    try {
+        const response = await apiGet('/v1/contact-page/public');
+        const data = await response.json();
+
+        if (!response.ok || data.error) {
+            return { error: data.error == undefined || null ? 'Error fetching contact page' : data.error };
+        }
+
+        return data.data;
+
+    } catch (error) {
+        console.error('Error fetching public contact page:', error);
+        return { error: error };
+    }
+};
+
+//======================== About Page ======================== //
+
+// Get about page content (authenticated - for admin panel)
+export const getAboutPage = async () => {
+    try {
+        const response = await apiGet('/v1/about-page');
+        const data = await response.json();
+
+        if (!response.ok || data.error) {
+            return { error: data.error == undefined || null ? 'Error fetching about page' : data.error };
+        }
+
+        return data.data;
+
+    } catch (error) {
+        console.error('Error fetching about page:', error);
+        return { error: error };
+    }
+};
+
+// Get public about page content (no auth - for landing page)
+export const getPublicAboutPage = async () => {
+    try {
+        const response = await apiGet('/v1/about-page/public');
+        const data = await response.json();
+
+        if (!response.ok || data.error) {
+            return { error: data.error == undefined || null ? 'Error fetching about page' : data.error };
+        }
+
+        return data.data;
+
+    } catch (error) {
+        console.error('Error fetching public about page:', error);
         return { error: error };
     }
 };

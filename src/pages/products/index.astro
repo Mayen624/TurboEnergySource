@@ -2,28 +2,33 @@
 // Importing necessary components
 import MainLayout from "@/layouts/MainLayout.astro";
 import PrimaryCTA from "@components/ui/buttons/PrimaryCTA.astro";
-import CardSmall from "@components/ui/cards/CardSmall.astro";
-import CardWide from "@components/ui/cards/CardWide.astro";
 import FeaturesStatsAlt from "@components/sections/features/FeaturesStatsAlt.astro";
 import TestimonialsSectionAlt from "@components/sections/testimonials/TestimonialsSectionAlt.astro";
-
-// Importing necessary functions from Astro
-import { getCollection } from "astro:content";
-import type { CollectionEntry } from "astro:content";
+import ProductsGrid from "@components/sections/products/ProductsGrid.vue";
 import { SITE } from "@data/constants";
+import { getPublicSettings } from '@/API/fetchData';
 
-// Fetching all the product related content and sorting it by main.id
-const product: CollectionEntry<"products">[] = (
-  await getCollection("products")
-).sort(
-  (a: CollectionEntry<"products">, b: CollectionEntry<"products">) =>
-    a.data.main.id - b.data.main.id,
-);
+export const prerender = false;
 
 // Define variables for page content
 const title: string = "Productos";
 const subTitle: string =
-  "Explore la durabilidad y precisión de las herramientas ScrewFast, diseñadas tanto para profesionales como para entusiastas. Cada uno de nuestros productos está elaborado con precisión y diseñado para durar, lo que garantiza que tenga la herramienta adecuada para cada trabajo.";
+  "Proveemos servicios de fabricación, distribución, venta, reparación y mantenimiento, tales como cabinas de aire forzado, radiadores de alta resistencia, así como también obras de metal mecánica e ingeniería civil en las empresas dedicadas a la generación y transmisión eléctrica.";
+
+// Fetch visibility settings from API
+let visibility = {
+  featuresStatsAlt: true,
+  testimonialsSectionAlt: true
+};
+
+try {
+  const settings = await getPublicSettings();
+  if (settings && settings.landing && settings.landing.productsPage) {
+    visibility = settings.landing.productsPage;
+  }
+} catch (error) {
+  console.error('Error loading settings:', error);
+}
 
 // Testimonial data that will be rendered in the component
 const testimonials = [
@@ -96,36 +101,28 @@ const pageTitle: string = `Products | ${SITE.title}`;
           )
         }
       </div>
-      <PrimaryCTA title="Customer Stories" url="#testimonials" noArrow={true} />
+      <PrimaryCTA title="Testimonios de nuestros clientes" url="#testimonials" noArrow={true} />
     </div>
-    <!--Displaying products in alternating styles. Alternative product gets different card styling.-->
-    <!--Maps through all product entries and displays them with either CardSmall or CardWide based on their position.-->
-    <section class="grid grid-cols-1 gap-4 sm:grid-cols-3 md:gap-6 xl:gap-8">
-      {
-        product.map((product, index) => {
-          const position = index % 4;
-          if (position === 0 || position === 3) {
-            return <CardSmall product={product} />;
-          } else {
-            return <CardWide product={product} />;
-          }
-        })
-      }
-    </section>
+    <!--Products grid with real-time data from API-->
+    <ProductsGrid client:load />
   </div>
   <!--Features statistics section-->
-  <FeaturesStatsAlt
-    title="Porque escoger Screwfast?"
-    subTitle="Transforme sus ideas en resultados tangibles con las herramientas ScrewFast. Ya sea que esté comenzando con un boceto en una servilleta o sumergiéndose en un proyecto de construcción integral, nuestras herramientas están diseñadas para ayudarlo a construir con confianza."
-    benefits={[
-      "Herramientas robustas y confiables para un rendimiento duradero.",
-      "Soluciones innovadoras adaptadas a las necesidades de la construcción moderna.",
-      "Atención al cliente dedicada al éxito de su proyecto.",
-    ]}
-  />
+  {visibility.featuresStatsAlt && (
+    <FeaturesStatsAlt
+      title="Porque escoger Screwfast?"
+      subTitle="Transforme sus ideas en resultados tangibles con las herramientas ScrewFast. Ya sea que esté comenzando con un boceto en una servilleta o sumergiéndose en un proyecto de construcción integral, nuestras herramientas están diseñadas para ayudarlo a construir con confianza."
+      benefits={[
+        "Herramientas robustas y confiables para un rendimiento duradero.",
+        "Soluciones innovadoras adaptadas a las necesidades de la construcción moderna.",
+        "Atención al cliente dedicada al éxito de su proyecto.",
+      ]}
+    />
+  )}
   <!--Testimonials section-->
-  <TestimonialsSectionAlt
-    title="Lo que dicen nuestros clientes"
-    testimonials={testimonials}
-  />
+  {visibility.testimonialsSectionAlt && (
+    <TestimonialsSectionAlt
+      title="Lo que dicen nuestros clientes"
+      testimonials={testimonials}
+    />
+  )}
 </MainLayout>

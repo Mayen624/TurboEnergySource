@@ -1,0 +1,18 @@
+---
+import AdminLayout from "@/layouts/AdminLayout.astro"
+import { authMiddleware } from "@/middleware/auth";
+import ContactPageEditor from "@/components/admin/pages/ContactPageEditor.vue";
+export const prerender = false;
+
+const response = await authMiddleware(Astro, async () => {
+  return new Response(null, {status: 200});
+});
+
+if (response instanceof Response && response.headers.get('Location')) {
+  return Astro.redirect(response.headers.get('Location') || '/', response.status);
+}
+---
+
+<AdminLayout title="TES - Editar Página de Contacto">
+    <ContactPageEditor client:only="vue"/>
+</AdminLayout>

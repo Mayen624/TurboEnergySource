@@ -1,72 +1,28 @@
 ---
 import MainLayout from "@/layouts/MainLayout.astro";
-import Image from "astro/components/Image.astro";
-import RightSection from "@components/ui/blocks/RightSection.astro";
-import blueprints from "@images/blueprints-image.avif";
-import personWorking from "@images/person-working.avif";
-import Team from "@images/Team.jpg";
-import mision1 from "@images/mision1.png";
-import mision2 from "@images/mision2.png";
+import AboutSection from "@components/sections/misc/AboutSection.vue";
 import { SITE } from "@data/constants";
-type Section = {
-  isRightSection: boolean;
-  title: string;
-  subtitle: string;
-  
-  single ?: boolean;
-  image ?: any;
-  imageAlt ?: any;
-  imgTwo ?: any;
-  imgTwoAlt ?: any;
 
-};
-
-const sections: Section[] = [
-  {
-    single: true,
-    isRightSection: true,
-    title: "Sobre Nosotros",
-    subtitle: "En Ferretería La Solución, nos dedicamos a ofrecer productos de alta calidad y soluciones integrales para todas tus necesidades de construcción, reparación y mantenimiento. Con más de 20 años de experiencia en el mercado.",
-   image: Team,
-   imageAlt: "team",
-  
-  },
-  {
-    isRightSection: true,
-    single : false,
-    title: "Mision y Vision",
-    subtitle:
-      "Nuestra misión es ofrecer productos de alta calidad y soluciones integrales para todas tus necesidades de construcción, reparación y mantenimiento. Nuestra visión es ser la ferretería líder en el mercado, reconocida por la calidad de nuestros productos y servicios.",
-    image: mision1,
-    imageAlt: "mision1",
-    imgTwo: mision2,
-    imgTwoAlt: "mision2",
-  },
-  
-];
-
-const pagetitle = `Sobre Nosotros | ${SITE.title}`;
-
-
+const pageTitle = `Sobre Nosotros | ${SITE.title}`;
 ---
 
-<MainLayout title={pagetitle}>
-
-
-{
-sections.map(section => {
-  return section.isRightSection && (
-    <RightSection
-      title={section.title}
-      subTitle={section.subtitle}
-      single={section.single}
-      imgOne={section.image}
-     imgOneAlt={section.imageAlt}
-     imgTwo={section.imgTwo}
-    imgTwoAlt={section.imgTwoAlt}     
-    />
-  ) ;
-})
-}
-
+<MainLayout
+  title={pageTitle}
+  structuredData={{
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "@id": "https://turboenergysource.com/about",
+    "url": "https://turboenergysource.com/about",
+    "name": "Sobre Nosotros | Turbo Energy Source",
+    "description": "Conoce a Turbo Energy Source, empresa 100% salvadoreña dedicada a la generación y transmisión de energía eléctrica. Soluciones industriales de calidad.",
+    "isPartOf": {
+      "@type": "WebSite",
+      "url": "https://turboenergysource.com",
+      "name": "Turbo Energy Source",
+      "description": "Soluciones eléctricas industriales de alta calidad en El Salvador.",
+    },
+    "inLanguage": "es-SV"
+  }}
+>
+  <AboutSection client:load />
 </MainLayout>

@@ -1,11 +1,16 @@
 ---
 // Import the necessary components
 import MainLayout from "@/layouts/MainLayout.astro";
-import ContactSection from "@components/sections/misc/ContactSection.astro";
+import ContactSectionDynamic from "@components/sections/misc/ContactSectionDynamic.vue";
 import { SITE } from "@data/constants";
 
+export const prerender = false;
+
 const pageTitle: string = `Contact | ${SITE.title}`;
+const reCaptchaPublicKey = import.meta.env.RE_CAPTCHA_PUBLIC_KEY;
 ---
+
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 <!--Utilizing MainLayout for the outer layout of the page, and defining meta for SEO purposes-->
 <MainLayout
@@ -28,5 +33,5 @@ const pageTitle: string = `Contact | ${SITE.title}`;
     "inLanguage": "en-US"
   }}
 >
-  <ContactSection/>
+  <ContactSectionDynamic client:load reCaptchaKey={reCaptchaPublicKey} />
 </MainLayout>

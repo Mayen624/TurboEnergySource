@@ -297,3 +297,58 @@ export const enabledOrDisabledService = async (id: string, enabled: boolean) => 
         return { error: error };
     }
 }
+
+//======================== Settings ======================== //
+
+export const updateSettings = async (data: { system?: object, landing?: object }) => {
+    try {
+        const response = await apiPut('/v1/settings', data);
+        const res = await response.json();
+        return res;
+
+    } catch (error) {
+        console.error('Error updating settings:', error);
+        return { error: error };
+    }
+}
+
+//======================== Contact Page ======================== //
+
+export const updateContactPage = async (data: {
+    title?: string,
+    subTitle?: string,
+    knowledgeBase?: object,
+    faq?: object,
+    office?: object,
+    email?: object
+}) => {
+    try {
+        const response = await apiPut('/v1/contact-page', data);
+        const res = await response.json();
+        return res;
+
+    } catch (error) {
+        console.error('Error updating contact page:', error);
+        return { error: error };
+    }
+}
+
+//======================== About Page ======================== //
+
+export const updateAboutPage = async (data: {
+    quienesSomos?: object,
+    misionVision?: object,
+    compromisos?: object,
+    politicaCalidad?: object,
+    porQueElegirnos?: object
+}) => {
+    try {
+        const response = await apiPut('/v1/about-page', data);
+        const res = await response.json();
+        return res;
+
+    } catch (error) {
+        console.error('Error updating about page:', error);
+        return { error: error };
+    }
+}
